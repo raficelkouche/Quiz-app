@@ -40,34 +40,90 @@ Lecture and slides covered:
   So I can share it with friends
 
 Wireframes
-Data - ERD
+# Data - ERD
+
+***************
+|    users    |
+***************
+| id          | PK
+| name        |
+| email       |
+| password    |
+***************
+
+***************
+|   quizes    |
+***************
+| id          | PK
+| user_id     | FK
+| title       |
+| des         |
+| public      | Boolean To show if public or not
+***************
+
+***************
+| questions   |
+***************
+| id          | PK
+| quiz_id     | FK
+| question    | TEXT
+***************
+
+***************
+| answers     |
+***************
+| id          | PK
+| question_id | FK
+| correct     | Boolean DEFAULT FALSE
+***************
+
+// submission to quiz? what about submission per question
+***************
+|   attemps   |
+***************
+| id          | PK
+| quiz_id     | FK
+| user_id     | FK
+| score       | COUNT()
+***************
+
 # Creating routes
 
   - /
 
 Dividing Tasks
 Communication and teamwork
-Project Setup - Git repo set up and access
-Database Setup
+Project Setup - Git repo set up and access - WIP 
+Database Setup 
 
 
-Share result should be ajax request
+Navbar
+ - Logo (link to Homepage)
+ - Link to user profile (login, logout, register)
+ - Link to Build a quiz (only when login)
+ - MyQuizes
 
-Navbar - Logo (link to Homepage), Link to user profile (login, logout, register), Link to Build a quiz (only when login), MyQuizes
-Footer - creator info
+Footer 
+ - creator info
 
-Home page - to see all public quiz, link to create a quiz by logging in first, Set limit
+Home page
+ - to see all public quiz
+ - link to create a quiz by logging in first
+ - Set limit to quiz shown
 
 MyQuizzes 
  - Show user created quizes (list)
  - Link to share quiz
-
+ - Remove quiz
+ - indicate if quiz is public or unlisted
+ - (stretch) Edit quiz
 
 Individual quiz page (info) - public anyone can take
  - description, title, creator, category
  - actual quiz with submit button to redirect to results page
  - time limit (stretch, option for creator)
  - link to share quiz
+ - Remove quiz if owner
 
 Results page for submitted quiz
  - show score and answers
