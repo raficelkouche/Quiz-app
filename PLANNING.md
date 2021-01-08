@@ -55,9 +55,10 @@ Wireframes
 |   quizes    |
 ***************
 | id          | PK
-| user_id     | FK
+| owner_id    | FK JOIN users(id)
 | title       |
 | des         |
+| photo_url   | TEXT
 | public      | Boolean To show if public or not
 ***************
 
@@ -74,7 +75,8 @@ Wireframes
 ***************
 | id          | PK
 | question_id | FK
-| correct     | Boolean DEFAULT FALSE
+| is_correct  | Boolean DEFAULT FALSE
+| value       | TEXT
 ***************
 
 // submission to quiz? what about submission per question
@@ -103,13 +105,14 @@ Navbar
  - Link to Build a quiz (only when login)
  - MyQuizes
 
-Footer 
- - creator info
-
 Home page
  - to see all public quiz
  - link to create a quiz by logging in first
  - Set limit to quiz shown
+
+Registration Page
+ - form to create new account
+ - link to login field if user already has account
 
 MyQuizzes 
  - Show user created quizes (list)
