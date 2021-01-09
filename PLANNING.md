@@ -49,52 +49,52 @@ git for version control
 
 # Data - ERD
 
-***************
+
 |    users    |
-***************
+|-------------|
 | id          | PK
 | name        |
 | email       |
 | password    |
-***************
 
-***************
-|   quizes    |
-***************
+
+
+|   quizzes   |
+|-------------|
 | id          | PK
 | owner_id    | FK JOIN users(id)
 | title       |
 | des         |
 | photo_url   | TEXT
 | public      | Boolean To show if public or not
-***************
 
-***************
+
+
 | questions   |
-***************
+|-------------|
 | id          | PK
 | quiz_id     | FK
 | question    | TEXT
-***************
 
-***************
+
+
 | answers     |
-***************
+|-------------|
 | id          | PK
 | question_id | FK
 | is_correct  | Boolean DEFAULT FALSE
 | value       | TEXT
-***************
+
 
 // submission to quiz? what about submission per question
-***************
+
 |   attemps   |
-***************
+|-------------|
 | id          | PK
 | quiz_id     | FK
 | user_id     | FK
 | score       | COUNT()
-***************
+
 
 # Wireframes
 Navbar
@@ -151,8 +151,24 @@ Error Page
 
 # Creating routes
 
-  - /
-
+| Route                                | HTTP Verb          | Description|
+| -------------------------------------|:------------------:| ---------: |
+| /                                    | GET                | HomePage   |
+| /quizzes                             | GET                | LoadQuizzes  |
+| /quizzes                             | POST               | create a quiz  |
+| /quizzes/:quiz_id                    | GET                | get quiz to take |
+| /quizzes/:quiz_id                    | PUT                | edit quiz  |
+| /quizzes/:quiz_id                    | POST(DELETE)       | delete a quiz  |
+| /quizzes/:quiz_id/:attempt_id        | GET                | Results for the attempt |
+| /users                               | GET                | get the users collection data |
+| /users                               | POST               | make new account |
+| /users/new                           | GET                | register page |
+| /users/:user_id                      | GET                | get user, and their attempted history |
+| /users/:user_id                      | DELET              | delete user |
+| /users/:user_id                      | PUT                | edit user |
+| /users/:user_id/edit                 | GET                | edit user |
+| /users/:user_id/quizzes              | GET                | get all quizzes status make by user |
+| /users/:user_id/quizzes/:quiz_id     | GET                | view quiz with creator access|
 
 Dividing Tasks
 Communication and teamwork
