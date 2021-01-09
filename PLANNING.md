@@ -1,6 +1,4 @@
-As per Francis Lecture
-
-## Option 2: Quiz App
+## Quiz App
 An app that lets you create quizzes and share them between friends. The creator of the quiz can view and share all the results at the end of the quiz.
 
 # Requirements:
@@ -13,8 +11,18 @@ users can attempt a quiz
 users can see the results of their recent attempt
 users can share a link to the result of their attempt
 
+# Stack Requirements
+ES6 for server-side (NodeJS) code
+NodeJS
+Express
+RESTful routes
+One or more CSS or UI "framework"s:
+jQuery
+A CSS preprocessor such as SASS, Stylus, or PostCSS for styling -- or CSS Custom properties and no CSS preprocessor
+PostgreSQL and pg (with promises) for DBMS
+git for version control
+
 ## Project Planning
-Lecture and slides covered:
 
 # Users Stories
 
@@ -39,7 +47,6 @@ Lecture and slides covered:
   I want to see the quizes that I have taken
   So I can share it with friends
 
-Wireframes
 # Data - ERD
 
 ***************
@@ -89,16 +96,7 @@ Wireframes
 | score       | COUNT()
 ***************
 
-# Creating routes
-
-  - /
-
-Dividing Tasks
-Communication and teamwork
-Project Setup - Git repo set up and access - WIP 
-Database Setup 
-
-
+# Wireframes
 Navbar
  - Logo (link to Homepage)
  - Link to user profile (login, logout, register)
@@ -141,3 +139,13 @@ Make a Quiz page
  - individual choice answer
  - add question button 
  - create quiz button - redirect to MyQuizzes
+
+# Creating routes
+
+  - /
+
+
+Dividing Tasks
+Communication and teamwork
+Project Setup - Git repo set up and access - WIP 
+Database Setup 
