@@ -140,6 +140,10 @@ Make a Quiz page
  - add question button 
  - create quiz button - redirect to MyQuizzes
 
+Error Page
+ - redirect page for all errors
+ - specific error message
+
 # Creating routes
 
   - /
