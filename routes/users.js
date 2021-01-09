@@ -24,9 +24,23 @@ module.exports = (db) => {
       });
   });
 
-  // need the following routes
+  // PROJECT: need the following routes:
+  // update Jan 9: routes made, to be tested for functionaility, test helper functions, test req.session calls and db query results
+  // re-organized routes by groups
 
-  // users POST - create new account
+  // ---- NEW USER ------------------
+
+  // users/new GET - goes to registration page
+  router.get("/new", (req, res) =>  {
+    // if user is already logged in
+    if (req.session.user_id) {
+      res.redirect('../'); // redirect to homepage?
+    }
+    const templateVars = {user_id: req.session.user_id};
+    res.render("users_new", templateVars);
+  })
+
+  // users POST - create new account, add to users db, redirect to homepage
   router.post("/", (req, res) => {
     const user = req.body;
     // user.password = bycrypt.hashSync(user.password, #) // if we are encrypting
@@ -45,20 +59,11 @@ module.exports = (db) => {
     .catch(e => res.send(e));
   })
 
-  // users/new GET - registration page
-  // goes to the registration page
-  router.get("/new", (req, res) =>  {
-    // if user is already logged in
-    if (req.session.user_id) {
-      res.redirect('../'); // redirect to homepage?
-    }
-    const templateVars = {user_id: req.session.user_id};
-    res.render("users_new", templateVars);
-  })
+  // ---- USER INFO AND MANAGEMENT (DELETE & EDIT) --------
 
-  // users/:user_id  GET - get user page with their attempt history
+  // users/:user_id  GET - get user page with their info and attempt history
   router.get("/:user_id", (req, res) => {
-    // do we need access control for this?
+    // do we need access control for this? -- this will affect how we declare the nav bar user logged in and the templateVars for the user info rendered
     db.getUserWithID(user_id)
     .then(user => {
       const templateVars = {
@@ -73,7 +78,7 @@ module.exports = (db) => {
     .catch(e => res.send(e));
   })
 
-  // users/:user_id DELETE - delete user
+  // users/:user_id DELETE - delete user by removing from users db and redirect to homepage
   router.get("/:user_id/delete", (req, res) => {
     // if the user is logged in as and is deleting own account
     if (db.getUserWithID(user_id) === req.session) {
@@ -87,7 +92,15 @@ module.exports = (db) => {
     }
   })
 
-  // users/:user_id PUT - edit user
+  // users/:user_id/edit GET - goes to user edit page
+  router.get('/:user_id/edit', (req, res) => {
+    // this line is for the nav bar with user logged in
+    const templateVars = {user_id: req.session.user_id};
+    // render the page with the fields for edit
+    res.render('user_edit', templateVars)
+  })
+
+  // users/:user_id PUT - edit user info by update user db and refresh page to show updated user info
   // STRETCH
   router.put('/:user_id', (req, res) => {
     // check if correct user is logged in to edit
@@ -107,19 +120,13 @@ module.exports = (db) => {
     }
   })
 
-  // users/:user_id/edit GET - get user edit page
-  router.get('/:user_id/edit', (req, res) => {
-    // this line is for the nav bar with user logged in
-    const templateVars = {user_id: req.session.user_id};
-    // render the page with the fields for edit
-    res.render('user_edit', templateVars)
-  })
+  // ----- USER QUIZ ACCESS (ALL QUIZ LIST OR SINGLE QUIZ INFO) -------
 
-  // users/:user_id/quizzes GET - get all quizzes by the user
+  // users/:user_id/quizzes GET - goes to user all quizzes page, have all quizzes displayed in table
   router.get('/:user_id/quizzes', (req, res) => {
     db.getQuizzesStats(user_id)
     .then (quizzes => {
-      // quizzes should be all the quiz that belogs to the user_id
+      // quizzes should be all the quiz that belongs to the user_id
       // depending on the structure, may have to manipulate to work
 
       const templateVars = {user_id: req.session.user_id, quizzes: quizzes};
@@ -130,7 +137,7 @@ module.exports = (db) => {
     .catch(e => res.send(e));
   })
 
-  // users/:users_id/quizzes/:quiz_id GET - view quiz with creator access
+  // users/:user_id/quizzes/:quiz_id GET - goes to quiz page with creator access
   router.get('/:user_id/quizzes/:quiz_id', (req, res) => {
     // get the quiz info
     db.getQuizWithId(quiz_id)
