@@ -140,6 +140,11 @@ Make a Quiz page
  - add question button 
  - create quiz button - redirect to MyQuizzes
 
+View Quiz Page
+ - only for creator access
+ - see all details and question on load
+ - edit function available
+
 Error Page
  - redirect page for all errors
  - specific error message
