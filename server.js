@@ -2,13 +2,18 @@
 require('dotenv').config();
 
 // Web server config
-const PORT       = process.env.PORT || 8080;
-const ENV        = process.env.ENV || "development";
-const express    = require("express");
-const bodyParser = require("body-parser");
-const sass       = require("node-sass-middleware");
-const app        = express();
-const morgan     = require('morgan');
+const PORT           = process.env.PORT || 8080;
+const ENV            = process.env.ENV || "development";
+const express        = require("express");
+const bodyParser     = require("body-parser");
+const sass           = require("node-sass-middleware");
+const cookieSession  = require("cookie-session");
+const methodOverride = require("method-override");
+const app            = express();
+const morgan         = require('morgan');
+
+//Temp files
+const { getQuizzes } = require('./testFiles/database');
 
 // PG database client/connection setup
 const { Pool } = require('pg');
@@ -31,23 +36,29 @@ app.use("/styles", sass({
 }));
 app.use(express.static("public"));
 
+//setup cookies
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2']
+}));
+
+app.use(methodOverride('_method'));
+
 // Separated Routes for each Resource
-// Note: Feel free to replace the example routes below with your own
 const usersRoutes = require("./routes/users");
-const widgetsRoutes = require("./routes/widgets");
+const quizzesRoutes = require("./routes/quizzes");
 
 // Mount all resource routes
-// Note: Feel free to replace the example routes below with your own
-app.use("/api/users", usersRoutes(db));
-app.use("/api/widgets", widgetsRoutes(db));
-// Note: mount other resources here, using the same pattern above
-
+app.use("/users", usersRoutes(db));
+app.use("/quizzes", quizzesRoutes(db));
 
 // Home page
-// Warning: avoid creating more routes in this file!
-// Separate them into separate routes files (see above).
 app.get("/", (req, res) => {
-  res.render("index");
+  const templateVars = {
+    quizzes: getQuizzes(),
+    userID: req.session.userID
+  };
+  res.render("index", templateVars);
 });
 
 app.listen(PORT, () => {
