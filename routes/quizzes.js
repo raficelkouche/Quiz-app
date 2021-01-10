@@ -6,16 +6,18 @@
  */
 
 const express = require('express');
-const router  = express.Router();
+const router = express.Router();
 
 module.exports = (db) => {
+  // returns a json object containing all the quizzes
   router.get("/", (req, res) => {
-    let query = `SELECT * FROM widgets`;
-    console.log(query);
-    db.query(query)
+    //call getQuizzes(range) here
+    const queryString = `SELECT * FROM quizzes;`;
+    console.log(queryString);
+    db.query(queryString)
       .then(data => {
-        const widgets = data.rows;
-        res.json({ widgets });
+        const quizzes = data.rows;
+        res.json({ quizzes });
       })
       .catch(err => {
         res
@@ -23,5 +25,19 @@ module.exports = (db) => {
           .json({ error: err.message });
       });
   });
+  // inserts a new quiz and redirects to "my quizzes" page
+  router.post("/", (req, res) => {
+    const userID = req.session.userID;
+    if (userID) {
+      //all the information will be passed from the html form except the userID and quiz_url
+      addQuiz({ userID, title, description, visibility, photo_url, quiz_url, category })
+      res.render("user_quizzes", {userID});
+    } else {
+      //redirecting is not necessary since this case won't occur in a browser
+      res.status(403).send('Forbidden');
+    }
+  })
+
+
   return router;
 };
