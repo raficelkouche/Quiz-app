@@ -9,7 +9,7 @@ const express = require('express');
 const router = express.Router();
 
 module.exports = (db) => {
-  // returns a json object containing all the quizzes
+  //returns a json object containing all the quizzes. Could be used by homepage & view_all page
   router.get("/", (req, res) => {
     //call getQuizzes(range) here
     const queryString = `SELECT * FROM quizzes;`;
@@ -25,8 +25,8 @@ module.exports = (db) => {
           .json({ error: err.message });
       });
   });
-  // inserts a new quiz and redirects to "my quizzes" page
-  // test once db helper methods are available
+
+  //inserts a new quiz and redirects to "my quizzes" page
   router.post("/", (req, res) => {
     const userID = req.session.userID;
     if (userID) {
@@ -40,6 +40,7 @@ module.exports = (db) => {
     }
   });
 
+  //loads a quiz to be taken by any user/guest
   router.get("/:quiz_URL", (req, res) => {
     //quiz can be taken by anyone as long as they have the URL
     //call getQuizWithURL(quizURL) here, should return quiz details, questions and answers
@@ -100,7 +101,7 @@ module.exports = (db) => {
         res.render("error", { error: "Operation Failed!" });
       });
   });
-
+  //edit an existing quiz
   //could be either quiz_id or quiz_URL for consistency ...to be discussed
   router.put("/:quiz_id", (req, res) => {
       const userID = req.session.userID
@@ -129,6 +130,7 @@ module.exports = (db) => {
         });
   });
 
+  //delete an existing quiz
   router.delete("/:quiz_id", (req, res) => {
     const userID = req.session.userID;
     /*check if this user is the owner of the quiz:
@@ -158,7 +160,24 @@ module.exports = (db) => {
         res.statusCode = 404;
         res.render("error", { error: "Operation Failed!" });
       });
-  })
+  });
+
+  /* Continue this after discussion with team
+  load the results for a given quiz-attempt
+  router.get("/:quiz_id/:attempt_id", (req, res) => {
+    //call getAttempt()
+    const queryString = `
+      SELECT *
+      FROM attempts
+      WHERE attempts.id = ${req.params.attempt_id};
+    `;
+    db.query(queryString)
+      .then(result => {
+
+      })
+  });
+  */
+
 
 
 
