@@ -23,7 +23,7 @@ const getUserWithId = function(id) {
 } // will return Object of 1 user with all info, return null if not found.  Object Key [id, name, email, password]
 exports.getUserWithId = getUserWithId;
 
-const addUser = function(quiz) {
+const addUser = function(user) {
   return pool.query(`
   INSERT INTO users (name, email, password)
   VALUES ($1, '$2', '$3')
@@ -170,8 +170,6 @@ exports.getAttempt = getAttempt;
 editQuiz(newQuizInfo)
  - should pass all question / answer even when they are the same
  - will provide (res): all info from quiz
-removeQuiz(quizId)
- - will provide (res): boolean(True)
 addAttemp(attempInfo)
  - will provide (res): all info of attemp
 */
