@@ -37,13 +37,14 @@ module.exports = (db) => {
       res.redirect('../'); // redirect to homepage?
     }
     const templateVars = {user_id: req.session.user_id};
-    res.render("users_new", templateVars);
+    res.render("user_new", templateVars);
   })
 
   // users POST - create new account, add to users db, redirect to homepage
   router.post("/", (req, res) => {
     const user = req.body;
     // user.password = bycrypt.hashSync(user.password, #) // if we are encrypting
+    console.log(user)
     db.addUser(user)
     .then(user => {
       // if user was not returned from db.addUser
@@ -54,9 +55,10 @@ module.exports = (db) => {
       // if sucessful, user will be logged in and cookie assigned with user_id
       req.session.userID = user.id;
       // do we require a message here or redirect?
-      res.redirect('../');
+      res.redirect('/');
     })
     .catch(e => res.send(e));
+
   })
 
   // ---- USER INFO AND MANAGEMENT (USER, LOGIN, LOGOUT, DELETE & EDIT) --------
@@ -64,18 +66,29 @@ module.exports = (db) => {
   // users/:user_id  GET - get user page with their info and attempt history
   router.get("/:user_id", (req, res) => {
     // do we need access control for this? -- this will affect how we declare the nav bar user logged in and the templateVars for the user info rendered
-    db.getUserWithID(user_id)
-    .then(user => {
+    // db.getUserWithID(user_id)
+    // .then(user => {
+    //   const templateVars = {
+          // this user object will have all info from users db
+    //     user: user
+    //   }
+    //   // shows user_page with the user info based on templateVars
+    //   res.render("user_page", templateVars);
+    // })
+    // .catch(e => res.send(e));
+
+    // TESTING CODE FOR THIS FUNCTION - HARDCODE QUERY
+    db.query(`SELECT * FROM users
+    WHERE id = ${req.params.user_id};`)
+    .then(data => {
+      const user = data.rows[0];
+      // res.json(user);
       const templateVars = {
-        user_id: user.id,
-        name: user.name,
-        email: user.email,
-        // dont think we need to show the password
+        user: user
       }
-      // shows user_page with the user info based on templateVars
       res.render("user_page", templateVars);
     })
-    .catch(e => res.send(e));
+
   })
 
   // users/:user_id DELETE - delete user by removing from users db and redirect to homepage
