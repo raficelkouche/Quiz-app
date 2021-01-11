@@ -215,7 +215,7 @@ module.exports = (db) => {
   })
 
   // users/:user_id/quizzies/:quiz_id/delete - deletes quiz from quizzes db
-  router.get('/:user_id/quizzes/:quiz_id/delete', (req, res) => {
+  router.delete('/:user_id/quizzes/:quiz_id/delete', (req, res) => {
     // check if the cookie user = quiz creator id
     db.getQuizWithQuizId(quiz_id)
     .then (quiz => {
