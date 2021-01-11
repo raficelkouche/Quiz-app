@@ -59,6 +59,22 @@ module.exports = (db) => {
     })
     .catch(e => res.send(e));
 
+    // TESTING CODE - new user will be added to db - redirecting not working
+    // const user = req.body;
+    // db.query(`
+    // INSERT INTO users (name, email, password)
+    // VALUES ($1, $2, $3)
+    // RETURNING *;
+    // `, [user.name, user.email, user.password])
+    // .then(res => {
+    //   console.log("new user added to users db")
+    //   console.log(res.rows[0])
+    //   const user_id = res.rows[0].id
+    //   console.log(user_id)
+    //   res.redirect(`/`) // not redirecting properly
+    // })
+    // .catch(e => res.send(e))
+
   })
 
   // ---- USER INFO AND MANAGEMENT (USER, LOGIN, LOGOUT, DELETE & EDIT) --------
@@ -66,28 +82,28 @@ module.exports = (db) => {
   // users/:user_id  GET - get user page with their info and attempt history
   router.get("/:user_id", (req, res) => {
     // do we need access control for this? -- this will affect how we declare the nav bar user logged in and the templateVars for the user info rendered
-    // db.getUserWithID(user_id)
-    // .then(user => {
-    //   const templateVars = {
-          // this user object will have all info from users db
-    //     user: user
-    //   }
-    //   // shows user_page with the user info based on templateVars
-    //   res.render("user_page", templateVars);
-    // })
-    // .catch(e => res.send(e));
-
-    // TESTING CODE FOR THIS FUNCTION - HARDCODE QUERY
-    db.query(`SELECT * FROM users
-    WHERE id = ${req.params.user_id};`)
-    .then(data => {
-      const user = data.rows[0];
-      // res.json(user);
+    db.getUserWithID(user_id)
+    .then(user => {
       const templateVars = {
+          // this user object will have all info from users db
         user: user
       }
+      // shows user_page with the user info based on templateVars
       res.render("user_page", templateVars);
     })
+    .catch(e => res.send(e));
+
+    // TESTING CODE FOR THIS FUNCTION - HARDCODE QUERY
+    // db.query(`SELECT * FROM users
+    // WHERE id = ${req.params.user_id};`)
+    // .then(data => {
+    //   const user = data.rows[0];
+    //   // res.json(user);
+    //   const templateVars = {
+    //     user: user
+    //   }
+    //   res.render("user_page", templateVars);
+    // })
 
   })
 
@@ -100,7 +116,7 @@ module.exports = (db) => {
         // clear cookie
         req.session = null;
         // redirect to homepage
-        return res.redirect('../');
+        res.redirect('../');
       })
     }
   })

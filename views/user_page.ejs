@@ -18,5 +18,18 @@
       <h2>Email: <%= user.email %></h2>
       <h2>Password: <%= user.password %></h2>
     </div>
+    <div>
+      <h1>Account Management</h1>
+      <form method="POST" action="/users/<%= user.id %>/delete" style="padding: 1em">
+        <button type="submit">DELETE</button>
+      </form>
+      <form method="PUT" action="/users/<%= user.id %>" style="padding: 1em">
+        <button type="submit">EDIT</button>
+      </form>
+      <form method="POST" action="/users/logout" style="padding: 1em">
+        <button type="submit">LOGOUT</button>
+      </form>
+    </div>
+
   </body>
 </html>
