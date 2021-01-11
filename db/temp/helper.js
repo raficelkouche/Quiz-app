@@ -44,7 +44,7 @@ exports.editUser = editUser;
 
 const removeUser =  function(id) { // user id shall be pass
   return pool.query(`
-  DELETE FROM users
+  DELETE FROM users CASCADE
   WHERE id = $1
   RETURNING *;
   `, [id])
@@ -93,10 +93,9 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
   JOIN answers ON question_id = questions.id
   JOIN users ON users.id = owner_id
   WHERE quizzes.id = 14
-  ;
-  `, [quizId]) // this will shown newest first as default
+  ;`, [quizId])
   .then(res => res.rows);
-} //TBC
+} //return creator, title, des, photo_url, categotu, questions, questionsNumber, answers and is_correct
 exports.getQuizWithQuizId = getQuizWithQuizId;
 
 const addQuiz = function(quiz) {
@@ -142,6 +141,16 @@ const addQuiz = function(quiz) {
   .then(res => true); //return true
 }
 exports.addQuiz = addQuiz;
+
+const removeQuiz =  function(quizId) { // user id shall be pass
+  return pool.query(`
+  DELETE FROM quizzes CASCADE
+  WHERE id = $1
+  RETURNING *;
+  `, [quizId])
+  .then(res => res.rows[0]);
+} // will return Object of the removed user with all info
+exports.removeQuiz = removeQuiz;
 
 const getAttempt =  function(attemptId) { //get the attempt result with id
   return pool.query(`
