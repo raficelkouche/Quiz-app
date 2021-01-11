@@ -82,7 +82,10 @@ module.exports = (db) => {
       console.log(res.rows[0])
       const user_id = res.rows[0].id
       console.log(user_id)
-      res.redirect(`/`) // not redirecting properly
+      req.session.user_id = user_id;
+      console.log('req.session:')
+      console.log(req.session);
+      res.redirect(`../`) // not redirecting properly
     })
     .catch(e => res.send(e))
 
@@ -135,19 +138,41 @@ module.exports = (db) => {
 
   // users/:user_id/login POST - verify login field with user db, update session cookie if info correct
   router.post("/login", (req, res) => {
-    // collect login info
+
+    // helper function to login user with given creds
+    const login = function(email, password) {
+      return db.query(`
+      SELECT * FROM users
+      WHERE email = $1;
+      `, [email])
+      .then (res => {
+        const user = res.rows[0]
+        if (user.password === password) {
+          console.log('user:')
+          console.log(user)
+          return user;
+        }
+        return null;
+      })
+    }
+
     const email = req.body.email;
     const password = req.body.password;
-    // get user id based on email provided
-    db.getUserWithEmail(email)
-    .then(user => {
-      // verify if password entered matches user db
-      if (user.password === password) {
-        // on successful login, session cookie updated with user info
-        req.session.user_id = user;
-        res.redirect('../'); // redirect to homepage
-      }
-    })
+    login(email, password)
+      // login function to return user info if creds correct
+      .then( user => {
+        // if creds not correct, null is returned from login
+        if (!user) {
+          res.send({error: 'error'});
+          return;
+        }
+        // on success, cookie assigned with user_id
+        req.session.user_id = user.id;
+        console.log(req.session)
+        // post request currently not redirecting
+        res.send({user: {name: user.name, email: user.email, id: user.id}});
+      })
+
   })
 
   // users/:user_id/logout POST - logout user by erasing session cookie
