@@ -148,7 +148,7 @@ module.exports = (db) => {
 
   // users/:user_id/quizzes GET - goes to user all quizzes page, have all quizzes displayed in table
   router.get('/:user_id/quizzes', (req, res) => {
-    db.getQuizzesStats(user_id)
+    db.getQuizzesByUserID(user_id)
     .then (quizzes => {
       // quizzes should be all the quiz that belongs to the user_id
       // depending on the structure, may have to manipulate to work
@@ -181,6 +181,50 @@ module.exports = (db) => {
           templateVars.creator = creator.name
           // page rendering for quiz to be viewed by creator
           res.render('user_quiz', templateVars)
+        })
+      }
+    })
+  })
+
+  // ROUTES TO BE ADDED - JAN 11
+
+  // users/:user_id/quizzes/:quiz_id/edit GET - goes to quiz edit page with creator access
+  router.get('/:user_id/quizzes/:quiz_id/edit', (req, res) => {
+    // this line is for the nav bar with user logged in
+    const templateVars = {user_id: req.session.user_id};
+    // render the page with the fields for edit
+    res.render('user_quiz_edit', templateVars)
+  })
+
+  // users/:user_id/quizzes/:quiz_id PUT - update quiz info from edit page
+  router.put('/:user_id/quizzes/:quiz_id', (req, res) => {
+    // check if the cookie user = quiz user id (creator looking at the quiz)
+    db.getQuizWithQuizId(quiz_id)
+    .then (quiz => {
+      if (quiz.owner_id === req.session.user_id) {
+        // store new quiz info
+        const newQuizInfo = req.body;
+        // updates quiz info in db
+        db.editQuiz(newQuizInfo)
+        .then( quiz => {
+          // on success, redirect to quiz page
+          res.redirect(`/${req.params.user_id}/quizzes/${quiz.id}`)
+        })
+      }
+    })
+  })
+
+  // users/:user_id/quizzies/:quiz_id/delete - deletes quiz from quizzes db
+  router.get('/:user_id/quizzes/:quiz_id/delete', (req, res) => {
+    // check if the cookie user = quiz creator id
+    db.getQuizWithQuizId(quiz_id)
+    .then (quiz => {
+      if (quiz.owner_id === req.session.user_id) {
+        // remove the quiz from quizzes db
+        db.removeQuiz(quiz.id)
+        .then ( result => {
+          // redirect to user's quizzes page
+          res.redirect(`/${req.params.user_id}/quizzes`)
         })
       }
     })
