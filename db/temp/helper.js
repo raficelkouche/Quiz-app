@@ -152,6 +152,22 @@ const removeQuiz =  function(quizId) { // user id shall be pass
 } // will return Object of the removed user with all info
 exports.removeQuiz = removeQuiz;
 
+const addAttempt = function(attempt) {
+  let queryString = `INSERT INTO attempts (quiz_id, `;
+  let queryParams = [attempt.quizId];
+  if (attempt.userId) {
+    queryString += `user_id, `;
+    queryParams.push(attempt.userId);
+  }
+  queryString += `score)
+  VALUES ($1, $2, $3)
+  RETURNING *;`;
+  queryParams.push(attempt.score);
+  return pool.query(queryString, queryParams)
+  .then(res => res.rows[0]);
+} // will return Object of the newly added user with all info, Info shall be check if valid before using this function.  Object Key [id, name, email, password]
+exports.addAttempt = addAttempt;
+
 const getAttempt =  function(attemptId) { //get the attempt result with id
   return pool.query(`
   SELECT attempts.id, attempts.score, users.name AS user, quizzes.title AS quiz_title, quizzes.id as quiz_id
@@ -170,6 +186,4 @@ exports.getAttempt = getAttempt;
 editQuiz(newQuizInfo)
  - should pass all question / answer even when they are the same
  - will provide (res): all info from quiz
-addAttemp(attempInfo)
- - will provide (res): all info of attemp
 */
