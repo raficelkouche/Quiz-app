@@ -13,7 +13,7 @@ const app            = express();
 const morgan         = require('morgan');
 
 //Temp files
-const { getQuizzes } = require('./testFiles/database');
+// const { getQuizzes } = require('./testFiles/database');
 
 // PG database client/connection setup
 const { Pool } = require('pg');
