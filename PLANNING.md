@@ -10,7 +10,7 @@ users can see a list of public quizzes on the home page
 users can attempt a quiz
 users can see the results of their recent attempt
 users can share a link to the result of their attempt
-
+/
 # Stack Requirements
 ES6 for server-side (NodeJS) code
 NodeJS
@@ -149,28 +149,115 @@ Error Page
  - redirect page for all errors
  - specific error message
 
+View all Quizzes page
+ - show all quizzes that are public
+ - public access
+ - from homepage to show all quizzes
+
 # Creating routes
 
-| Route                                | HTTP Verb          | Description|
-| -------------------------------------|:------------------:| ---------: |
-| /                                    | GET                | HomePage   |
-| /quizzes                             | GET                | LoadQuizzes  |
-| /quizzes                             | POST               | create a quiz  |
-| /quizzes/:quiz_id                    | GET                | get quiz to take |
-| /quizzes/:quiz_id                    | PUT                | edit quiz  |
-| /quizzes/:quiz_id                    | POST(DELETE)       | delete a quiz  |
-| /quizzes/:quiz_id/:attempt_id        | GET                | Results for the attempt |
-| /users                               | GET                | get the users collection data |
-| /users                               | POST               | make new account |
-| /users/new                           | GET                | register page |
-| /users/:user_id                      | GET                | get user, and their attempted history |
-| /users/:user_id                      | DELET              | delete user |
-| /users/:user_id                      | PUT                | edit user |
-| /users/:user_id/edit                 | GET                | edit user |
-| /users/:user_id/quizzes              | GET                | get all quizzes status make by user |
-| /users/:user_id/quizzes/:quiz_id     | GET                | view quiz with creator access|
+| Route                                   | HTTP Verb          | Description|
+| ----------------------------------------|:------------------:| ---------: |
+| /                                       | GET                | HomePage   |
+| /quizzes                                | GET                | LoadQuizzes  |
+| /quizzes                                | POST               | create a quiz  |
+| /quizzes/:quiz_id                       | GET                | get quiz to take |
+| /quizzes/:quiz_id/attempts              | GET                | Results for the attempt |
+| /quizzes/:quiz_id/attempts              | POST               | add results for the attempts table |
+| /quizzes/:quiz_id/attempts/:attempt_id  | GET                | Results for the attempt |
+| /users                                  | GET                | get the users collection data |
+| /users                                  | POST               | make new account |
+| /users/new                              | GET                | register page |
+| /users/login                            | POST               | login user |
+| /users/logout                           | POST               | logout user |
+| /users/:user_id                         | GET                | get user, and their attempted history |
+| /users/:user_id                         | DELET              | delete user |
+| /users/:user_id                         | PUT                | edit user |
+| /users/:user_id/edit                    | GET                | edit user page |
+| /users/:user_id/quizzes                 | GET                | get all quizzes status make by user |
+| /users/:user_id/quizzes/:quiz_id        | GET                | view quiz page with creator access|
+| /users/:user_id/quizzes/:quiz_id        | PUT                | edit quiz submit with creator access  |
+| /users/:user_id/quizzes/:quiz_id/edit   | GET                | edit quiz page with creator access  |
+| /users/:user_id/quizzes/:quiz_id/delete | DELETE             | delete a quiz with creator access|
+
+
+# Database Helper
+getUserWithEmail(userEmail)
+ - will provide (res): Object of 1 user with all info, return null if not found. Object Key [id, name, email, password]
+getUserWithId(userId)
+ - will provide (res): Object of 1 user with all info, return null if not found.  Object Key [id, name, email, password]
+addUser(userInfo)
+ - will provide (res): Object of the newly added user with all info, Info shall be check if valid before using this function.  Object Key [id, name, email, password]
+editUser(newInfo)
+ - will provide (res): all info from users
+ - newInfo should include userID 
+removeUser(userId)
+ - will provide (res): boolean(True)
+getQuizzes(requestCounter)
+ - requestCounter tracks how many times you have requested to get quizzes
+ - requestCounter should be an integer
+ - will provide (res): 3 rows of quizzes title, des, photoUrl, id, ownersName, date  where the quizzes are set to visible
+getQuizzesByUserID(userId)
+ - will provide (res): all quizzes that is made by that userID
+getQuizWithQuizId(quizId)
+ - will provide (res): quiz assigned to that id
+addQuiz(quizInfo)
+ - will provide (res): all info from quiz
+ - {
+    title: ...
+    desc: ...
+    questions: {
+      questionA : {
+        text: what is ..?
+        answers: {
+          answerA: ['javaScript', true]
+          answerB: ['PYTHON', false]
+        }
+      }
+  }
+editQuiz(newQuizInfo)
+ - should pass all question / answer even when they are the same
+ - will provide (res): all info from quiz
+removeQuiz(quizId)
+ - will provide (res): boolean(True)
+addAttempt(attemptInfo)
+ - will provide (res): all info of attempt
+getAttempt(attemptID)
+ - will provide (res): all info of attempt
+checkQuizOwner(quiz_id,user_id)
+ - return boolean if user is the owner
 
 Dividing Tasks
 Communication and teamwork
 Project Setup - Git repo set up and access - WIP 
 Database Setup 
+
+
+JS
+QuizInfo
+db.addQuiz (given quiz parameters => quiz body)
+INSERT INTO QUIZ
+.then(quiz => {
+  for ( count how many questions are on page loop)
+  db.addQuestion(quiz.id, quuestion body)
+  .then (question => {
+    db.addAnswer(question.id, answer body)
+  })
+})
+
+{
+  title: ...
+  desc: ...
+  questions: {
+    questionA : {
+      text: what is ..?
+      answers: {
+        answerA: ['javaScript', true]
+        answerB: ['PYTHON', false]
+      }
+    }
+}
+
+addQuiz(Quiz_info)
+
+

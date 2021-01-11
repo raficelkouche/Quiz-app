@@ -54,10 +54,7 @@ app.use("/quizzes", quizzesRoutes(db));
 
 // Home page
 app.get("/", (req, res) => {
-  const templateVars = {
-    quizzes: getQuizzes(),
-    userID: req.session.userID
-  };
+  const templateVars = { userID: req.session.userID };
   res.render("index", templateVars);
 });
 
