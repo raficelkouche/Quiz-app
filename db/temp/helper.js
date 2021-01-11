@@ -86,7 +86,16 @@ const getQuizzesByUserId = function(userId) { // get all quiz from a certain use
 exports.getQuizzesByUserId = getQuizzesByUserId;
 
 const getQuizWithQuizId = function(quizId) { // get a quiz by id
-
+  return pool.query(`
+  SELECT users.name AS creator, quizzes.title, quizzes.description, quizzes.photo_url, quizzes.category, questions.question, questions.id AS questionNumber, answers.value as answers, answers.is_correct
+  FROM quizzes
+  JOIN questions ON quiz_id = quizzes.id
+  JOIN answers ON question_id = questions.id
+  JOIN users ON users.id = owner_id
+  WHERE quizzes.id = 14
+  ;
+  `, [quizId]) // this will shown newest first as default
+  .then(res => res.rows);
 } //TBC
 exports.getQuizWithQuizId = getQuizWithQuizId;
 
