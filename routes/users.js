@@ -59,7 +59,7 @@ module.exports = (db) => {
     .catch(e => res.send(e));
   })
 
-  // ---- USER INFO AND MANAGEMENT (DELETE & EDIT) --------
+  // ---- USER INFO AND MANAGEMENT (USER, LOGIN, LOGOUT, DELETE & EDIT) --------
 
   // users/:user_id  GET - get user page with their info and attempt history
   router.get("/:user_id", (req, res) => {
