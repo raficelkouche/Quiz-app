@@ -129,5 +129,38 @@ module.exports = (db) => {
         });
   });
 
+  router.delete("/:quiz_id", (req, res) => {
+    const userID = req.session.userID;
+    /*check if this user is the owner of the quiz:
+      call checkQuizOwner(userID, quizID)*/
+    const queryString = `
+        SELECT quizzes.owner_id, quizzes.id
+        FROM quizzes
+        JOIN users ON quizzes.owner_id = users.id
+        WHERE quizzes.owner_id = ${userID} AND quizzes.id = ${req.params.quiz_id};
+        `
+    db.query(queryString)
+      .then(result => {
+        if (result.length > 0) {
+          /*
+          confirm if the user wants to delete (optional) if yes then call removeQuiz(quizID).
+          After deletion, redirect to user's quizzes page
+          */
+         //call getQuizzesByUserID() and pass the results to user_quizzes.ejs
+         res.render("user_quizzes", templateVars)
+        } else {
+          res.statusCode = 403;
+          res.render("error", { error: "Access Denied!" });
+        }
+      })
+      .catch(err => {
+        console.log("query error", err.stack);
+        res.statusCode = 404;
+        res.render("error", { error: "Operation Failed!" });
+      });
+  })
+
+
+
   return router;
 };
