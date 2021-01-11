@@ -8,7 +8,7 @@ const pool = new Pool({
 const getUserWithEmail = function(email) {
   return pool.query(`
   SELECT * FROM users
-  WHERE LOWER(email) = LOWER($1);
+  WHERE LOWER(email) = LOWER('$1');
   `, [email])
   .then(res => res.rows[0] ? res.rows[0] : null);
 } // will return Object of 1 user with all info, return null if not found. Object Key [id, name, email, password]
@@ -26,7 +26,7 @@ exports.getUserWithId = getUserWithId;
 const addUser = function(quiz) {
   return pool.query(`
   INSERT INTO users (name, email, password)
-  VALUES ($1, $2, $3)
+  VALUES ($1, '$2', '$3')
   RETURNING *;
   `, [user.name, user.email, user.password])
   .then(res => res.rows[0]);
@@ -59,7 +59,7 @@ const getQuizzes = function(count = 0, category) { // count shall be the number 
   FROM quizzes
   LEFT JOIN attempts ON quiz_id = quizzes.id`
   if(category) { // get quizzes in this cate only, might break, not tested
-    queryString += `WHERE category LIKE %${category}%`;
+    queryString += `WHERE category LIKE '%${category}%'`;
   }
   queryString += `GROUP BY quizzes.id
   ORDER BY total_attempt DESC
@@ -94,50 +94,43 @@ const addQuiz = function(quiz) {
   let queryString = `
   WITH quiz AS (
     INSERT INTO quizzes (owner_id, title, description, visibility, photo_url, category)
-    VALUES ($1, $2, $3, $4, $5, $6)
+    VALUES ($1, '$2', '$3', $4, '$5', '$6')
     RETURNING id
     )
     `;
-    let queryString = `
-    WITH quiz AS (
-      INSERT INTO quizzes (owner_id, title, description, visibility, photo_url, category)
-      VALUES ($1, '$2', '$3', $4, '$5', '$6')
+  let queryParams = [ quiz.owner_id, quiz.title, quiz.description, quiz.visibility, quiz.photo_url, quiz.category ]
+  for (const question in quiz.questions) {
+    queryParams.push(quiz.questions[question].text);
+    queryString += `, q${question} AS(
+      INSERT INTO questions (quiz_id, question)
+      SELECT quiz.id, '$${queryParams.length}'
+      FROM   quiz
       RETURNING id
       )
       `;
-    let queryParams = [ quiz.owner_id, quiz.title, quiz.description, quiz.visibility, quiz.photo_url, quiz.category ]
-    for (const question in quiz.questions) {
-      queryParams.push(quiz.questions[question].text);
-      queryString += `, q${question} AS(
-        INSERT INTO questions (quiz_id, question)
-        SELECT quiz.id, '$${queryParams.length}'
-        FROM   quiz
-        RETURNING id
-        )
-        `;
-      for (const answer in quiz.questions[question].answers) {
-        queryParams.push(quiz.questions[question].answers[answer][0]);
-        if (!(quiz.questions[Number(question) + 1]) && !(quiz.questions[question].answers[Number(answer) + 1])) {
-          queryString += `
-            INSERT INTO answers (question_id, value, is_correct)
-            SELECT q${question}.id, '$${queryParams.length}', ${queryParams.length + 1}
-            FROM   q${question};
-            `;
-          queryParams.push(quiz.questions[question].answers[answer][1]);
-        }
-        else {
-        queryString += `, q${question}a${answer} AS(
+    for (const answer in quiz.questions[question].answers) {
+      queryParams.push(quiz.questions[question].answers[answer][0]);
+      if (!(quiz.questions[Number(question) + 1]) && !(quiz.questions[question].answers[Number(answer) + 1])) {
+        queryString += `
           INSERT INTO answers (question_id, value, is_correct)
           SELECT q${question}.id, '$${queryParams.length}', ${queryParams.length + 1}
-          FROM   q${question}
-          )
+          FROM   q${question};
           `;
         queryParams.push(quiz.questions[question].answers[answer][1]);
-        }
+      }
+      else {
+      queryString += `, q${question}a${answer} AS(
+        INSERT INTO answers (question_id, value, is_correct)
+        SELECT q${question}.id, '$${queryParams.length}', ${queryParams.length + 1}
+        FROM   q${question}
+        )
+        `;
+      queryParams.push(quiz.questions[question].answers[answer][1]);
       }
     }
+  }
   return pool.query(queryString, queryParams)
-  .then(res => res.rows[0]); //return
+  .then(res => true); //return true
 }
 exports.addQuiz = addQuiz;
 
@@ -154,7 +147,6 @@ const getAttempt =  function(attemptId) { //get the attempt result with id
 } // will return Object of the attempt.  Object Key [id, score, user (undefined if play as guest), quiz_title]
 exports.getAttempt = getAttempt;
 
-const
 
 /*
 editQuiz(newQuizInfo)
