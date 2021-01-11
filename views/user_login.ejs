@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Registration Page</title>
+    <title>Login Page</title>
 
     <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
     <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
@@ -14,12 +14,8 @@
   <body>
     <h1 style="margin: 1em"> Quiz App</h1>
     <main style="margin: 1em;">
-      <h3>Create Account</h3>
-      <form action="/users" method="POST" style="width: 400px">
-        <div>
-          <label>Name</label>
-          <input type="name" name="name" placeholder="Enter name">
-        </div>
+      <h3>Log into Account</h3>
+      <form action="/users/login" method="POST" style="width: 400px">
         <div class="form-group">
           <label>Email Address</label>
           <input type="email" name="email" placeholder="Enter email" class="form-control">
@@ -28,14 +24,10 @@
           <label>Password</label>
           <input type="password" name="password" placeholder="Password" class="form-control">
         </div>
-        <button type="submit" class="btn btn-primary">Register</button>
+        <button type="submit" class="btn btn-primary">Login</button>
       </form>
-      <div>
-        <h3>Already have an account?</h3>
-        <form method="GET" action="/users/login">
-          <button type="submit">LOGIN</button>
-        </form>
-      </div>
     </main>
   </body>
 </html>
+
+

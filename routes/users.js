@@ -40,40 +40,51 @@ module.exports = (db) => {
     res.render("user_new", templateVars);
   })
 
+  // users/:user_id/login GET - get login page - temp, will update to be more dynamci
+  // this is for validation purposes
+  router.get("/login", (req, res) =>  {
+    // if user is already logged in
+    if (req.session.user_id) {
+      res.redirect('../'); // redirect to homepage?
+    }
+    const templateVars = {user_id: req.session.user_id};
+    res.render("user_login", templateVars);
+  })
+
   // users POST - create new account, add to users db, redirect to homepage
   router.post("/", (req, res) => {
-    const user = req.body;
-    // user.password = bycrypt.hashSync(user.password, #) // if we are encrypting
-    console.log(user)
-    db.addUser(user)
-    .then(user => {
-      // if user was not returned from db.addUser
-      if (!user) {
-        res.send({error: 'error'});
-        return;
-      }
-      // if sucessful, user will be logged in and cookie assigned with user_id
-      req.session.userID = user.id;
-      // do we require a message here or redirect?
-      res.redirect('/');
-    })
-    .catch(e => res.send(e));
+    // const user = req.body;
+    // // user.password = bycrypt.hashSync(user.password, #) // if we are encrypting
+    // console.log(user)
+    // db.addUser(user)
+    // .then(user => {
+    //   // if user was not returned from db.addUser
+    //   if (!user) {
+    //     res.send({error: 'error'});
+    //     return;
+    //   }
+    //   // if sucessful, user will be logged in and cookie assigned with user_id
+    //   req.session.userID = user.id;
+    //   // do we require a message here or redirect?
+    //   res.redirect('/');
+    // })
+    // .catch(e => res.send(e));
 
     // TESTING CODE - new user will be added to db - redirecting not working
-    // const user = req.body;
-    // db.query(`
-    // INSERT INTO users (name, email, password)
-    // VALUES ($1, $2, $3)
-    // RETURNING *;
-    // `, [user.name, user.email, user.password])
-    // .then(res => {
-    //   console.log("new user added to users db")
-    //   console.log(res.rows[0])
-    //   const user_id = res.rows[0].id
-    //   console.log(user_id)
-    //   res.redirect(`/`) // not redirecting properly
-    // })
-    // .catch(e => res.send(e))
+    const user = req.body;
+    db.query(`
+    INSERT INTO users (name, email, password)
+    VALUES ($1, $2, $3)
+    RETURNING *;
+    `, [user.name, user.email, user.password])
+    .then(res => {
+      console.log("new user added to users db")
+      console.log(res.rows[0])
+      const user_id = res.rows[0].id
+      console.log(user_id)
+      res.redirect(`/`) // not redirecting properly
+    })
+    .catch(e => res.send(e))
 
   })
 
@@ -82,28 +93,29 @@ module.exports = (db) => {
   // users/:user_id  GET - get user page with their info and attempt history
   router.get("/:user_id", (req, res) => {
     // do we need access control for this? -- this will affect how we declare the nav bar user logged in and the templateVars for the user info rendered
-    db.getUserWithID(user_id)
-    .then(user => {
-      const templateVars = {
-          // this user object will have all info from users db
-        user: user
-      }
-      // shows user_page with the user info based on templateVars
-      res.render("user_page", templateVars);
-    })
-    .catch(e => res.send(e));
-
-    // TESTING CODE FOR THIS FUNCTION - HARDCODE QUERY
-    // db.query(`SELECT * FROM users
-    // WHERE id = ${req.params.user_id};`)
-    // .then(data => {
-    //   const user = data.rows[0];
-    //   // res.json(user);
+    // db.getUserWithID(user_id)
+    // .then(user => {
     //   const templateVars = {
+    //       // this user object will have all info from users db
     //     user: user
     //   }
+    //   // shows user_page with the user info based on templateVars
     //   res.render("user_page", templateVars);
     // })
+    // .catch(e => res.send(e));
+
+    // TESTING CODE FOR THIS FUNCTION - HARDCODE QUERY
+    db.query(`SELECT * FROM users
+    WHERE id = ${req.params.user_id};`)
+    .then(data => {
+      const user = data.rows[0];
+      // res.json(user);
+      const templateVars = {
+        user: user
+      }
+      res.render("user_page", templateVars);
+    })
+    .catch(e => res.send(e))
 
   })
 
