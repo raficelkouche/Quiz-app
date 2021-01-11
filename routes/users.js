@@ -85,7 +85,7 @@ module.exports = (db) => {
       req.session.user_id = user_id;
       console.log('req.session:')
       console.log(req.session);
-      res.redirect(`../`) // not redirecting properly
+      res.redirect('../') // not redirecting properly
     })
     .catch(e => res.send(e))
 
