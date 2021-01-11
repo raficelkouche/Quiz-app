@@ -92,7 +92,31 @@ module.exports = (db) => {
     }
   })
 
+  // users/:user_id/login POST - verify login field with user db, update session cookie if info correct
+  router.post("/login", (req, res) => {
+    // collect login info
+    const email = req.body.email;
+    const password = req.body.password;
+    // get user id based on email provided
+    db.getUserWithEmail(email)
+    .then(user => {
+      // verify if password entered matches user db
+      if (user.password === password) {
+        // on successful login, session cookie updated with user info
+        req.session.user_id = user;
+        res.redirect('../'); // redirect to homepage
+      }
+    })
+  })
+
+  // users/:user_id/logout POST - logout user by erasing session cookie
+  router.post("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("../");
+  })
+
   // users/:user_id/edit GET - goes to user edit page
+  // STRETCH
   router.get('/:user_id/edit', (req, res) => {
     // this line is for the nav bar with user logged in
     const templateVars = {user_id: req.session.user_id};
