@@ -76,12 +76,12 @@ exports.getQuizzes = getQuizzes; //checked normal case
 
 const getQuizzesByUserId = function(userId) { // get all quiz from a certain user
   return pool.query(`
-  SELECT quizzes.id, users.name AS creator, quizzes.title, quizzes.description, quizzes.visibility, quizzes.photo_url, quizzes.category, COUNT(attempts.*) AS total_attempts, ROUND(AVG(attempts.score), 1) AS average_score
+  SELECT quizzes.id, users.name AS creator, users.id AS creator_id, quizzes.title, quizzes.description, quizzes.visibility, quizzes.photo_url, quizzes.category, COUNT(attempts.*) AS total_attempts, ROUND(AVG(attempts.score), 1) AS average_score
   FROM quizzes
   JOIN users ON owner_id = users.id
   LEFT JOIN attempts ON quiz_id = quizzes.id
   WHERE owner_id = $1
-  GROUP BY quizzes.id, users.name
+  GROUP BY quizzes.id, users.name, users.id
   ORDER BY quizzes.id DESC;
   `, [userId]) // this will shown newest first as default
   .then(res => res.rows);
@@ -119,6 +119,7 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
     json_build_object(
       'quiz', json_agg(
         json_build_object(
+          'creator_id', users.id,
           'creator', users.name,
           'quiz_id', quizzes.id,
           'title', quizzes.title,
