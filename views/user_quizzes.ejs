@@ -52,7 +52,7 @@
                     <button type="submit">Edit</button>
                   </form>
                   <!-- delete quiz from quizzes db -->
-                  <form method="DELETE" action="/users/:user_id/quizzes/:quiz_id/delete">
+                  <form method="GET" action="/users/<%= user_id %>/quizzes/<%= quiz.id %>/delete">
                     <button type="submit">Delete</button>
                   </form>
 
@@ -65,6 +65,9 @@
     <% }  else { %>
       <h1>Hello to your quizzes page!</h1>
       <p>You dont have any quizzes!</p>
+      <form method="GET" action="/">
+        <button type="submit">Go to Homepage</button>
+      </form>
     <% } %>
 
     </body>

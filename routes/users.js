@@ -274,19 +274,21 @@ module.exports = (db) => {
   })
 
   // users/:user_id/quizzies/:quiz_id/delete - deletes quiz from quizzes db
-  router.delete('/:user_id/quizzes/:quiz_id/delete', (req, res) => {
+  router.get('/:user_id/quizzes/:quiz_id/delete', (req, res) => {
     // check if the cookie user = quiz creator id
     const quiz_id = Number(req.params.quiz_id);
     hdb.getQuizWithQuizId(quiz_id)
     .then (quiz => {
-      if (quiz.owner_id === req.session.user_id) {
+      console.log(quiz)
+      // if (quiz.owner_id === req.session.user_id) {
         // remove the quiz from quizzes db
-        db.removeQuiz(quiz.id)
+        hdb.removeQuiz(quiz.quiz_id)
         .then ( result => {
           // redirect to user's quizzes page
-          res.redirect(`/${req.params.user_id}/quizzes`)
+          res.redirect(`../`)
         })
-      }
+        .catch(e => res.send(e));
+      // }
     })
   })
 
