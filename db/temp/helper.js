@@ -187,7 +187,7 @@ const addQuiz = function(quiz) {
     `; // use with to pass quizID for questions insert
   let queryParams = [ quiz.owner_id, quiz.title, quiz.description, quiz.visibility, quiz.photo_url, quiz.category ]
   for (const question in quiz.questions) {
-    queryParams.push(quiz.questions[question].question);
+    queryParams.push(quiz.questions[question].text);
     queryString += `, q${question} AS(
       INSERT INTO questions (quiz_id, question)
       SELECT quiz.id, $${queryParams.length}
@@ -220,7 +220,7 @@ const editQuiz =  function(newQuiz) {
   let queryString = ``;
   let queryParams = [];
   for (const question in newQuiz.questions) {
-    queryParams.push(newQuiz.questions[question].question);
+    queryParams.push(newQuiz.questions[question].text);
     queryString += `
     WITH u${queryParams.length} AS (
     UPDATE questions
