@@ -133,7 +133,7 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
   FROM quizzes
   JOIN que ON quizzes.id = quiz_id
   JOIN users ON owner_id = users.id
-  where quizzes.id = 18
+  where quizzes.id = $1
   ;`, [quizId])
   .then(res => res.rows);
 } //return JSON
