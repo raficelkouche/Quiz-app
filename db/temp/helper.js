@@ -13,7 +13,7 @@ const getUserWithEmail = function(email) {
   WHERE LOWER(email) = LOWER($1);
   `, [`${email}`])
   .then(res => res.rows[0] ?  res.rows[0] : null);
-} // will return Object of 1 user with all info, return null if not found. Object Key [id, name, email, password]
+} // will return Object of 1 user with all info, return null if not found. Object Key [register_on, id, name, email, password]
 exports.getUserWithEmail = getUserWithEmail; //checked, if not found will
 
 const getUserWithId = function(id) {
@@ -22,7 +22,7 @@ const getUserWithId = function(id) {
   WHERE id = $1;
   `, [id])
   .then(res => res.rows[0] ? res.rows[0] : null);
-} // will return Object of 1 user with all info, return null if not found.  Object Key [id, name, email, password]
+} // will return Object of 1 user with all info, return null if not found.  Object Key [register_on, id, name, email, password]
 exports.getUserWithId = getUserWithId; //checked , working, will sent null if not found
 
 const addUser = function(user) {
@@ -41,7 +41,7 @@ const editUser =  function(user) { //user shall be object contain id, email, pas
   WHERE id = $4
   RETURNING *;`, [user.name, user.email, user.password, user.id])
   .then(res => res.rows[0]);
-} // will return Object of the edited user with all info, Info shall be check if valid before using this function.  Object Key [id, name, email, password]
+} // will return Object of the edited user with all info, Info shall be check if valid before using this function.  Object Key [register_on, id, name, email, password]
 exports.editUser = editUser; // checked normal case
 
 const removeUser =  function(id) { // user id shall be pass
@@ -251,7 +251,7 @@ const removeQuiz =  function(quizId) { // user id shall be pass
   RETURNING *;
   `, [quizId])
   .then(res => res.rows[0]);
-} // will return Object of the removed user with all info
+} // will return Object of the removed quiz with all info
 exports.removeQuiz = removeQuiz; // checked normal case
 
 const addAttempt = function(attempt) {
@@ -270,17 +270,17 @@ const addAttempt = function(attempt) {
   queryParams.push(attempt.score);
   return pool.query(queryString, queryParams)
   .then(res => res.rows[0]);
-} // will return Object of the newly added user with all info, Info shall be check if valid before using this function.  Object Key [id, name, email, password]
+} // will return Object of the newly added user with all info, Info shall be check if valid before using this function.  Object Key [attempt_on, id, name, email, password]
 exports.addAttempt = addAttempt; //checked no userId and with userId
 
 const getAttempt =  function(attemptId) { //get the attempt result with id
   return pool.query(`
-  SELECT attempts.id, attempts.score, users.name AS user, quizzes.title AS quiz_title, quizzes.id as quiz_id
+  SELECT attempt_on, attempts.id, attempts.score, users.name AS user, quizzes.title AS quiz_title, quizzes.id as quiz_id
   FROM attempts
   LEFT JOIN users ON user_id = users.id
   JOIN quizzes ON quiz_id = quizzes.id
   WHERE attempts.id = $1;
   `, [attemptId])
   .then(res => res.rows);
-} // will return Object of the attempt.  Object Key [id, score, user (undefined if play as guest), quiz_title]
+} // will return Object of the attempt.  Object Key [attempt_on, id, score, user (undefined if play as guest), quiz_title]
 exports.getAttempt = getAttempt; //checked normal case
