@@ -220,14 +220,14 @@ const editQuiz =  function(newQuiz) {
     queryParams.push(newQuiz.questions[question].question);
     queryString += `
     UPDATE questions
-    SET question = '$${queryParams.length}'
+    SET question = $${queryParams.length}
     WHERE id = ${question};
       `;
     for (const answer in newQuiz.questions[question].answers) {
       queryParams.push(newQuiz.questions[question].answers[answer][0]);
       queryString += `
         UPDATE answers
-        SET value = '$${queryParams.length}', is_correct = ${queryParams.length + 1}
+        SET value = $${queryParams.length}, is_correct = ${queryParams.length + 1}
         WHERE id = ${answer};
         `;
       queryParams.push(newQuiz.questions[question].answers[answer][1]);
@@ -235,8 +235,8 @@ const editQuiz =  function(newQuiz) {
   }
   queryString += `
   UPDATE quizzes
-  SET title = '$${queryParams.length + 1}', description = '$${queryParams.length + 2}', visibility = $${queryParams.length + 3}, photo_url = '$${queryParams.length + 4}', category = '$${queryParams.length + 5}'
-  WHERE id = $${queryParams.length + 6}'
+  SET title = $${queryParams.length + 1}, description = $${queryParams.length + 2}, visibility = $${queryParams.length + 3}, photo_url = $${queryParams.length + 4}, category = $${queryParams.length + 5}
+  WHERE id = $${queryParams.length + 6}
   RETURNING *;
   `;
   queryParams.push( newQuiz.title, newQuiz.description, newQuiz.visibility, newQuiz.photo_url, newQuiz.category, newQuiz.quizId )
@@ -287,6 +287,17 @@ const getAttempt =  function(attemptId) { //get the attempt result with id
   .then(res => res.rows);
 } // will return Object of the attempt.  Object Key [attempt_on, id, score, user (undefined if play as guest), quiz_title]
 exports.getAttempt = getAttempt; //checked normal case
+
+const editVisibility =  function(quizId) { //togglt visibility of quiz
+  return pool.query(`
+  UPDATE quizzes
+  SET visibility = NOT visibility
+  WHERE id = $1
+  RETURNING *;
+  `, [quizId])
+  .then(res => res.rows[0]);
+} // return the new state of visibility of the quiz
+exports.editVisibility = editVisibility;
 
 // helper function to login user with given creds
 const login = function(email, password) {
