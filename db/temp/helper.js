@@ -288,19 +288,16 @@ const getAttempt =  function(attemptId) { //get the attempt result with id
 } // will return Object of the attempt.  Object Key [attempt_on, id, score, user (undefined if play as guest), quiz_title]
 exports.getAttempt = getAttempt; //checked normal case
 
-const editVisibility =  function(quizId) { //get the attempt result with id
+const editVisibility =  function(quizId) { //togglt visibility of quiz
   return pool.query(`
-  SELECT attempt_on, attempts.id, attempts.score, users.name AS user, quizzes.title AS quiz_title, quizzes.id as quiz_id, COUNT(questions.*) AS question_amount
-  FROM attempts
-  LEFT JOIN users ON user_id = users.id
-  JOIN quizzes ON attempts.quiz_id = quizzes.id
-  JOIN questions ON questions.quiz_id = quizzes.id
-  WHERE attempts.id = $1
-  GROUP BY 1, 2, 3, 4, 5, 6;
-  `, [attemptId])
-  .then(res => res.rows);
-} // will return Object of the attempt.  Object Key [attempt_on, id, score, user (undefined if play as guest), quiz_title]
-exports.getAttempt = getAttempt; //checked normal case
+  UPDATE quizzes
+  SET visibility = NOT visibility
+  WHERE id = $1
+  RETURNING *;
+  `, [quizId])
+  .then(res => res.rows[0]);
+} // return the new state of visibility of the quiz
+exports.editVisibility = editVisibility;
 
 // helper function to login user with given creds
 const login = function(email, password) {
