@@ -32,7 +32,7 @@ module.exports = () => {
   router.get("/new", (req, res) => {
     const userID = req.session.userID;
     //res.render((userID) ? "../testFiles/new_quiz" : "../testFiles/login")
-    res.render("../testFiles/new_quiz");
+    res.render("new_quiz");
   })
 
 
