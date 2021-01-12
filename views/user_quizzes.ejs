@@ -52,7 +52,7 @@
                     <button type="submit">Edit</button>
                   </form>
                   <!-- delete quiz from quizzes db -->
-                  <form method="GET" action="/users/<%= user_id %>/quizzes/<%= quiz.id %>/delete">
+                  <form method="POST" action="/users/<%= user_id %>/quizzes/<%= quiz.id %>/delete?_method=DELETE">
                     <button type="submit">Delete</button>
                   </form>
 

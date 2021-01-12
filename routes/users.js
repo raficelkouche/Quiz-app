@@ -100,7 +100,7 @@ module.exports = (db) => {
   })
 
   // users/:user_id DELETE - delete user by removing from users db and redirect to homepage
-  router.get("/:user_id/delete", (req, res) => {
+  router.delete("/:user_id/delete", (req, res) => {
     const user_id = Number(req.params.user_id);
     // check if logged user is trying to delete owns page
     if (user_id === req.session.user_id) {
@@ -112,9 +112,11 @@ module.exports = (db) => {
         // resets cookie session
         req.session = null;
         // redirect takes to JSON of users with correct update
-        res.redirect('../')
+        res.redirect('/')
       })
       .catch(e => {res.send(e)})
+    } else {
+      res.send("user not logged in ")
     }
 
   })
@@ -274,7 +276,7 @@ module.exports = (db) => {
   })
 
   // users/:user_id/quizzies/:quiz_id/delete - deletes quiz from quizzes db
-  router.get('/:user_id/quizzes/:quiz_id/delete', (req, res) => {
+  router.delete('/:user_id/quizzes/:quiz_id/delete', (req, res) => {
     // check if the cookie user = quiz creator id
     const quiz_id = Number(req.params.quiz_id);
     hdb.getQuizWithQuizId(quiz_id)
