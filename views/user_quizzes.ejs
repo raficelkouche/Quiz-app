@@ -39,16 +39,16 @@
 
                   <!-- Manage Quiz butttons (visibility, edit, delete, share) -->
                   <!-- Visibility function and route to be implemented a-->
-                  <form method="GET" action="/users/">
-                    <button type="submit">Public</button>
+                  <form method="GET" action="/users/<%= user_id %>/quizzes/<%= quiz.id %>">
+                    <button type="submit">View</button>
                   </form>
                   <!-- for now the share button will redirect to the ind quiz page -->
                   <!-- should get a copy of the quiz url -->
-                  <form method="GET" action="../quizzes/<%= quiz.id %>/edit">
+                  <form method="GET" action="../quizzes/<%= quiz.id %>">
                     <button type="submit">Share</button>
                   </form>
                   <!-- redirect to edit page -->
-                  <form method="GET" action="/users/:user_id/quizzes/:quiz_id/edit">
+                  <form method="GET" action="/users/<%= user_id %>/quizzes/<%= quiz.id %>/edit">
                     <button type="submit">Edit</button>
                   </form>
                   <!-- delete quiz from quizzes db -->

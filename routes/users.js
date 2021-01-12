@@ -215,36 +215,42 @@ module.exports = (db) => {
   // users/:user_id/quizzes/:quiz_id GET - goes to quiz page with creator access
   router.get('/:user_id/quizzes/:quiz_id', (req, res) => {
     // get the quiz info
+    const quiz_id = (req.params.quiz_id);
     hdb.getQuizWithQuizId(quiz_id)
     .then (quiz => {
+      // const quiz = res.quizzes.quiz[0];
       // check if the cookie user = quiz user id (creator looking at the quiz)
-      if (quiz.owner_id === req.session.user_id) {
-        // quiz info here to render
-        const templateVars = {
-          title: quiz.title,
-          photo_url: quiz.photo_url,
-          quiz_url: quiz.quiz_url,
-          category: quiz.category
-        }
-        // need the creator name
-        hdb.getUserWithId(quiz.owner_id)
-        .then (creator => {
-          templateVars.creator = creator.name
-          // page rendering for quiz to be viewed by creator
-          res.render('user_quiz', templateVars)
-        })
-      }
-    })
-  })
+      // if (quiz.owner_id === req.session.user_id) {
+        // need to get the owner_id not name
+
+      // quiz info here to render
+      const templateVars = { quiz: quiz };
+      // page rendering for quiz to be viewed by creator
+      res.render('user_quiz', templateVars);
+
+      })
+      .catch(e => res.send(e));
+    }
+  )
 
   // ROUTES TO BE ADDED - JAN 11
 
   // users/:user_id/quizzes/:quiz_id/edit GET - goes to quiz edit page with creator access
   router.get('/:user_id/quizzes/:quiz_id/edit', (req, res) => {
-    // this line is for the nav bar with user logged in
-    const templateVars = {user_id: req.session.user_id};
+    const quiz_id = (req.params.quiz_id);
+    hdb.getQuizWithQuizId(quiz_id)
+    .then (quiz => {
+      // const quiz = res.quizzes.quiz[0];
+      // check if the cookie user = quiz user id (creator looking at the quiz)
+      // if (quiz.owner_id === req.session.user_id) {
+        // need to get the owner_id not name
+
+      // quiz info here to render
+      const templateVars = { quiz: quiz };
     // render the page with the fields for edit
     res.render('user_quiz_edit', templateVars)
+    })
+    .catch(e => res.send(e));
   })
 
   // users/:user_id/quizzes/:quiz_id PUT - update quiz info from edit page

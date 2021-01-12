@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Edit Quiz Page</title>
+
+    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
+
+    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+    <script type="text/javascript" src="/scripts/homepage.js"></script>
+  </head>
+
+  <body>
+    <h1>Edit <%= quiz.title%></h1>
+    <div>
+      <h2> <%= quiz.title%> </h2>
+      <h3> Created by: <%= quiz.creator %> </h3>
+      <img class="quiz-photo" src=<%= quiz.photo_url %>>
+      <p> <%= quiz.description %> </p>
+      <p> Category: <%= quiz.category%> </p>
+    </div>
+    <div class="edit-quiz">
+      <div class="old-quiz">
+        <% for (let question of quiz.questions) { %>
+        <table>
+            <thead>
+              <tr>
+                <th>Question: <%= question.question %> </th>
+                <th>Correct Answer:</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let answer of question.answers)  { %>
+              <tr>
+                  <td> Choice: <%= answer.answer_value%> </td>
+                  <td> <%= answer.answer_is_correct%></td>
+              </tr>
+              <% } %>
+            </tbody>
+        </table>
+        <% } %>
+      </div>
+      <div class="new-quiz">
+        <% for (let question of quiz.questions) { %>
+          <table>
+              <thead>
+                <tr>
+                  <th> Update Question: </th>
+                  <th>
+                    <form>
+                      <input type="text" name="newQuestion">
+                    </form>
+                  </th>
+                  <th>Correct Answer</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for (let answer of question.answers)  { %>
+                <tr>
+                    <td> Update Choice: </td>
+                    <td>
+                      <form>
+                        <input type="text" name="newAnswer">
+                      </form>
+                    </td>
+                    <td>
+                      <form>
+                        <input type="radio" name="is_correct" value="true">
+                        <label>True</label>
+                        <input type="radio" name="is_correct" value="false">
+                        <label>False</label>
+                      </form>
+                    </td>
+                </tr>
+                <% } %>
+              </tbody>
+          </table>
+          <% } %>
+      </div>
+    </div>
+
+    <div style="margin: 1em">
+      <!-- submit edit quiz info to db, need to update helper function to get the creator id number -->
+      <!-- replace the quiz.quiz_id with quiz.creator_id -->
+      <form method="POST" action="/users/<%= quiz.quiz_id %>/quizzes/<%= quiz.quiz_id %>/edit">
+        <button type="submit">Edit Quiz</button>
+      </form>
+    </div>
+
+  </body>
+</html>
