@@ -200,13 +200,12 @@ module.exports = (db) => {
   // users/:user_id/quizzes GET - goes to user all quizzes page, have all quizzes displayed in table
   router.get('/:user_id/quizzes', (req, res) => {
     const user_id = Number(req.params.user_id);
-    hdb.getQuizzesByUserID(user_id)
+    hdb.getQuizzesByUserId(user_id)
     .then (quizzes => {
+      console.log(quizzes)
       // quizzes should be all the quiz that belongs to the user_id
-      // depending on the structure, may have to manipulate to work
-
+      // given back as an array of objects
       const templateVars = {user_id: req.session.user_id, quizzes: quizzes};
-
       // render page that will show all quizzes into table
       res.render("user_quizzes", templateVars);
     })

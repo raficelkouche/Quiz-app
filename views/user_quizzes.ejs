@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Home Page</title>
+
+    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
+
+    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+    <script type="text/javascript" src="/scripts/homepage.js"></script>
+  </head>
+
+  <body>
+    <% if (quizzes.length > 0) { %>
+    <h1>Hello <%= quizzes[0].creator %> to your quizzes page!</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Thumbnail</th>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Stats</th>
+            <th scope="col">Manage Quiz</th>
+          </tr>
+        </thead>
+        <tbody>
+            <% for(let quiz of quizzes) { %>
+            <tr>
+              <td> <img src=<%= quiz.photo_url %> width="100" height="100"> </td>
+              <td><%= quiz.title %></td>
+              <td><%= quiz.description %></td>
+              <td>
+                <div>Attempted Count: <%= quiz.total_attempts %></div>
+                <div>Average Score: <%= quiz.average_score %></div>
+              </td>
+              <td>
+                SOME BUTTONS
+              </td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+    <% }  else { %>
+      <h1>Hello to your quizzes page!</h1>
+      <p>You dont have any quizzes!</p>
+    <% } %>
+
+    </body>
+    </html>
