@@ -59,7 +59,8 @@ const getQuizzes = function(limit = 3, count = 0, category) { // count shall be 
   let queryString = `
   SELECT quizzes.*, COUNT(attempts.*) AS total_attempt
   FROM quizzes
-  LEFT JOIN attempts ON quiz_id = quizzes.id`
+  LEFT JOIN attempts ON quiz_id = quizzes.id
+  WHERE visibility = true`
   if(category) { // get quizzes in this cate only, might break, not tested
     queryString += `WHERE category LIKE '%${category}%'`;
   }
