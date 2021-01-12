@@ -107,6 +107,7 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
       quiz_id,
       json_agg(
         json_build_object(
+          'question_id', questions.id,
           'question', questions.question,
           'answers', ans.answer
         )
@@ -151,7 +152,8 @@ Here is a reference for output
     "visibility" : true,
     "photo_url" : "aa.aa",
     "questions" : [
-      { "question" : "44 + 0?",
+      { "question_id" : 1
+        "question" : "44 + 0?",
         "answers" : [
           {
             "answer_id" : 92,
@@ -219,16 +221,19 @@ const editQuiz =  function(newQuiz) {
   for (const question in newQuiz.questions) {
     queryParams.push(newQuiz.questions[question].question);
     queryString += `
+    WITH u${queryParams.length} AS (
     UPDATE questions
     SET question = $${queryParams.length}
-    WHERE id = ${question};
-      `;
+    WHERE id = ${question}
+    )
+    `;
     for (const answer in newQuiz.questions[question].answers) {
       queryParams.push(newQuiz.questions[question].answers[answer][0]);
-      queryString += `
+      queryString += `, u${queryParams.length} AS (
         UPDATE answers
-        SET value = $${queryParams.length}, is_correct = ${queryParams.length + 1}
-        WHERE id = ${answer};
+        SET value = $${queryParams.length}, is_correct = $${queryParams.length + 1}
+        WHERE id = ${answer}
+        )
         `;
       queryParams.push(newQuiz.questions[question].answers[answer][1]);
     }
@@ -239,7 +244,7 @@ const editQuiz =  function(newQuiz) {
   WHERE id = $${queryParams.length + 6}
   RETURNING *;
   `;
-  queryParams.push( newQuiz.title, newQuiz.description, newQuiz.visibility, newQuiz.photo_url, newQuiz.category, newQuiz.quizId )
+  queryParams.push( newQuiz.title, newQuiz.description, newQuiz.visibility, newQuiz.photo_url, newQuiz.category, newQuiz.quizId );
   return pool.query(queryString, queryParams)
   .then(res => getQuizWithQuizId(res.rows[0].id));
 } // will automatically call getQuizWithQuizId, so it should return the updated quiz. NOT TESTED YET
@@ -296,7 +301,7 @@ const editVisibility =  function(quizId) { //togglt visibility of quiz
   RETURNING *;
   `, [quizId])
   .then(res => res.rows[0]);
-} // return the new state of visibility of the quiz
+} // return the new state of the quiz
 exports.editVisibility = editVisibility;
 
 // helper function to login user with given creds
