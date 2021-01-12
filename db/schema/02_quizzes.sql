@@ -8,6 +8,5 @@ CREATE TABLE quizzes (
   description TEXT NOT NULL,
   visibility BOOLEAN DEFAULT TRUE,
   photo_url TEXT,
-  quiz_url TEXT NOT NULL,
   category VARCHAR(255)
 );
