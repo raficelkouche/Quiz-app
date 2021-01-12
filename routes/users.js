@@ -177,14 +177,15 @@ module.exports = (db) => {
   // users/:user_id PUT - edit user info by update user db and refresh page to show updated user info
   // STRETCH
   router.put('/:user_id', (req, res) => {
-    // check if correct user is logged in to edit
-    if (db.getUserWithID(user_id) === req.session) {
+    const user_id = Number(req.params.user_id);
+    // check if logged user is trying to edit owns page
+    if (user_id === req.session.user_id) {
       // need to save the form data as new info (will need to review
       // the req.body data structure)
       const new_info = req.body
       // editUser helper should take two parameters, user_id and new info
       // it then updates the db
-      db.editUser(user_id, [new_info])
+      hdb.editUser(new_info)
       .then ( newUser => {
         // with the new user info returned, cookie does not need to be updated
         // since user_id should remain the same
@@ -198,7 +199,8 @@ module.exports = (db) => {
 
   // users/:user_id/quizzes GET - goes to user all quizzes page, have all quizzes displayed in table
   router.get('/:user_id/quizzes', (req, res) => {
-    db.getQuizzesByUserID(user_id)
+    const user_id = Number(req.params.user_id);
+    hdb.getQuizzesByUserID(user_id)
     .then (quizzes => {
       // quizzes should be all the quiz that belongs to the user_id
       // depending on the structure, may have to manipulate to work
@@ -214,7 +216,7 @@ module.exports = (db) => {
   // users/:user_id/quizzes/:quiz_id GET - goes to quiz page with creator access
   router.get('/:user_id/quizzes/:quiz_id', (req, res) => {
     // get the quiz info
-    db.getQuizWithId(quiz_id)
+    hdb.getQuizWithQuizId(quiz_id)
     .then (quiz => {
       // check if the cookie user = quiz user id (creator looking at the quiz)
       if (quiz.owner_id === req.session.user_id) {
@@ -226,7 +228,7 @@ module.exports = (db) => {
           category: quiz.category
         }
         // need the creator name
-        db.getUserWithID(quiz.owner_id)
+        hdb.getUserWithId(quiz.owner_id)
         .then (creator => {
           templateVars.creator = creator.name
           // page rendering for quiz to be viewed by creator
@@ -247,15 +249,17 @@ module.exports = (db) => {
   })
 
   // users/:user_id/quizzes/:quiz_id PUT - update quiz info from edit page
+  // note: editQuiz function not yet defined
   router.put('/:user_id/quizzes/:quiz_id', (req, res) => {
     // check if the cookie user = quiz user id (creator looking at the quiz)
-    db.getQuizWithQuizId(quiz_id)
+    const quiz_id = Number(req.params.quiz_id);
+    hdb.getQuizWithQuizId(quiz_id)
     .then (quiz => {
       if (quiz.owner_id === req.session.user_id) {
         // store new quiz info
         const newQuizInfo = req.body;
         // updates quiz info in db
-        db.editQuiz(newQuizInfo)
+        hdb.editQuiz(newQuizInfo)
         .then( quiz => {
           // on success, redirect to quiz page
           res.redirect(`/${req.params.user_id}/quizzes/${quiz.id}`)
@@ -267,7 +271,8 @@ module.exports = (db) => {
   // users/:user_id/quizzies/:quiz_id/delete - deletes quiz from quizzes db
   router.delete('/:user_id/quizzes/:quiz_id/delete', (req, res) => {
     // check if the cookie user = quiz creator id
-    db.getQuizWithQuizId(quiz_id)
+    const quiz_id = Number(req.params.quiz_id);
+    hdb.getQuizWithQuizId(quiz_id)
     .then (quiz => {
       if (quiz.owner_id === req.session.user_id) {
         // remove the quiz from quizzes db
