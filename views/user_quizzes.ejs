@@ -26,7 +26,7 @@
         </thead>
         <tbody>
             <% for(let quiz of quizzes) { %>
-            <tr>
+            <tr class="quiz-row">
               <td> <img src=<%= quiz.photo_url %> width="100" height="100"> </td>
               <td><%= quiz.title %></td>
               <td><%= quiz.description %></td>
@@ -35,7 +35,28 @@
                 <div>Average Score: <%= quiz.average_score %></div>
               </td>
               <td>
-                SOME BUTTONS
+                <div class="quiz-manage-buttons">
+
+                  <!-- Manage Quiz butttons (visibility, edit, delete, share) -->
+                  <!-- Visibility function and route to be implemented a-->
+                  <form method="GET" action="/users/">
+                    <button type="submit">Public</button>
+                  </form>
+                  <!-- for now the share button will redirect to the ind quiz page -->
+                  <!-- should get a copy of the quiz url -->
+                  <form method="GET" action="../quizzes/<%= quiz.id %>/edit">
+                    <button type="submit">Share</button>
+                  </form>
+                  <!-- redirect to edit page -->
+                  <form method="GET" action="/users/:user_id/quizzes/:quiz_id/edit">
+                    <button type="submit">Edit</button>
+                  </form>
+                  <!-- delete quiz from quizzes db -->
+                  <form method="DELETE" action="/users/:user_id/quizzes/:quiz_id/delete">
+                    <button type="submit">Delete</button>
+                  </form>
+
+                </div>
               </td>
             </tr>
             <% } %>

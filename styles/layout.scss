@@ -7,3 +7,16 @@ body {
     color: #244751;
   }
 }
+
+
+.quiz-manage-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100px;
+  width: 150px;
+}
+
+table, th, td{
+  border: 2px solid black;
+  border-collapse: collapse;
+}
