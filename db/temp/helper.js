@@ -129,15 +129,49 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
           'questions', que.question
         )
       )
-    ) quiz
+    ) quizzes
   FROM quizzes
   JOIN que ON quizzes.id = quiz_id
   JOIN users ON owner_id = users.id
-  where quizzes.id = $1
+  where quizzes.id = 18
   ;`, [quizId])
   .then(res => res.rows);
-} //return creator, title, des, photo_url, categotu, questions, questionsNumber, answers and is_correct
-exports.getQuizWithQuizId = getQuizWithQuizId; // checked normal case, might wanna try to get it close to JSON format
+} //return JSON
+exports.getQuizWithQuizId = getQuizWithQuizId; // checked normal case
+/*
+Here is a reference for output
+[{"quiz" : [
+  {
+    "creator" : "Lloyd Jefferson",
+    "quiz_id" : 18,
+    "title" : "Math 4!",
+    "description" : "Math to Baisc",
+    "category" : "mAtH",
+    "visibility" : true,
+    "photo_url" : "aa.aa",
+    "questions" : [
+      { "question" : "44 + 0?",
+        "answers" : [
+          {
+            "answer_id" : 92,
+            "answer_value" : "9",
+            "answer_is_correct" : false
+          },
+          {
+            "answer_id" : 93,
+            "answer_value" : "44",
+            "answer_is_correct" : true
+          },
+          { "answer_id" : 94,
+            "answer_value" : "0",
+            "answer_is_correct" : false
+          }
+        ]
+      }, and goes on if there are more question.
+    }]
+  }]
+}]
+*/
 
 const addQuiz = function(quiz) {
   let queryString = `
