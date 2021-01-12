@@ -220,14 +220,14 @@ const editQuiz =  function(newQuiz) {
     queryParams.push(newQuiz.questions[question].question);
     queryString += `
     UPDATE questions
-    SET question = '$${queryParams.length}'
+    SET question = $${queryParams.length}
     WHERE id = ${question};
       `;
     for (const answer in newQuiz.questions[question].answers) {
       queryParams.push(newQuiz.questions[question].answers[answer][0]);
       queryString += `
         UPDATE answers
-        SET value = '$${queryParams.length}', is_correct = ${queryParams.length + 1}
+        SET value = $${queryParams.length}, is_correct = ${queryParams.length + 1}
         WHERE id = ${answer};
         `;
       queryParams.push(newQuiz.questions[question].answers[answer][1]);
@@ -235,8 +235,8 @@ const editQuiz =  function(newQuiz) {
   }
   queryString += `
   UPDATE quizzes
-  SET title = '$${queryParams.length + 1}', description = '$${queryParams.length + 2}', visibility = $${queryParams.length + 3}, photo_url = '$${queryParams.length + 4}', category = '$${queryParams.length + 5}'
-  WHERE id = $${queryParams.length + 6}'
+  SET title = $${queryParams.length + 1}, description = $${queryParams.length + 2}, visibility = $${queryParams.length + 3}, photo_url = $${queryParams.length + 4}, category = $${queryParams.length + 5}
+  WHERE id = $${queryParams.length + 6}
   RETURNING *;
   `;
   queryParams.push( newQuiz.title, newQuiz.description, newQuiz.visibility, newQuiz.photo_url, newQuiz.category, newQuiz.quizId )
@@ -275,6 +275,20 @@ const addAttempt = function(attempt) {
 exports.addAttempt = addAttempt; //checked no userId and with userId
 
 const getAttempt =  function(attemptId) { //get the attempt result with id
+  return pool.query(`
+  SELECT attempt_on, attempts.id, attempts.score, users.name AS user, quizzes.title AS quiz_title, quizzes.id as quiz_id, COUNT(questions.*) AS question_amount
+  FROM attempts
+  LEFT JOIN users ON user_id = users.id
+  JOIN quizzes ON attempts.quiz_id = quizzes.id
+  JOIN questions ON questions.quiz_id = quizzes.id
+  WHERE attempts.id = $1
+  GROUP BY 1, 2, 3, 4, 5, 6;
+  `, [attemptId])
+  .then(res => res.rows);
+} // will return Object of the attempt.  Object Key [attempt_on, id, score, user (undefined if play as guest), quiz_title]
+exports.getAttempt = getAttempt; //checked normal case
+
+const editVisibility =  function(quizId) { //get the attempt result with id
   return pool.query(`
   SELECT attempt_on, attempts.id, attempts.score, users.name AS user, quizzes.title AS quiz_title, quizzes.id as quiz_id, COUNT(questions.*) AS question_amount
   FROM attempts
