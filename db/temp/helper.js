@@ -12,9 +12,9 @@ const getUserWithEmail = function(email) {
   SELECT * FROM users
   WHERE LOWER(email) = LOWER($1);
   `, [`${email}`])
-  .then(res => res.rows);
+  .then(res => res.rows[0] ?  res.rows[0] : null);
 } // will return Object of 1 user with all info, return null if not found. Object Key [id, name, email, password]
-exports.getUserWithEmail = getUserWithEmail; //checked, if not found will return []
+exports.getUserWithEmail = getUserWithEmail; //checked, if not found will
 
 const getUserWithId = function(id) {
   return pool.query(`
@@ -90,66 +90,99 @@ exports.getQuizzesByUserId = getQuizzesByUserId; //checked normal case
 
 const getQuizWithQuizId = function(quizId) { // get a quiz by id
   return pool.query(`
-  SELECT users.name AS creator, quizzes.title, quizzes.description, quizzes.photo_url, quizzes.category, questions.question, questions.id AS questionNumber, answers.value as answers, answers.is_correct
+  WITH ans AS (
+    SELECT
+      question_id,
+      json_agg(
+        json_build_object(
+          'answer_id', id,
+          'answer_value', value,
+          'answer_is_correct', is_correct
+        )
+      ) AS answer
+    FROM answers
+  GROUP BY question_id
+  ), que AS (
+    SELECT
+      quiz_id,
+      json_agg(
+        json_build_object(
+          'question', questions.question,
+          'answers', ans.answer
+        )
+      ) AS question
+    FROM questions
+    JOIN ans ON questions.id = question_id
+    GROUP BY quiz_id
+  )
+  SELECT
+    json_build_object(
+      'quiz', json_agg(
+        json_build_object(
+          'creator', users.name,
+          'quiz_id', quizzes.id,
+          'title', quizzes.title,
+          'description', quizzes.description,
+          'category', quizzes.category,
+          'visibility', quizzes.visibility,
+          'photo_url', quizzes.photo_url,
+          'questions', que.question
+        )
+      )
+    ) quiz
   FROM quizzes
-  JOIN questions ON quiz_id = quizzes.id
-  JOIN answers ON question_id = questions.id
-  JOIN users ON users.id = owner_id
-  WHERE quizzes.id = $1
+  JOIN que ON quizzes.id = quiz_id
+  JOIN users ON owner_id = users.id
+  where quizzes.id = $1
   ;`, [quizId])
   .then(res => res.rows);
 } //return creator, title, des, photo_url, categotu, questions, questionsNumber, answers and is_correct
-exports.getQuizWithQuizId = getQuizWithQuizId; // checked normal case, might wanna try to get itt close to JSON format
+exports.getQuizWithQuizId = getQuizWithQuizId; // checked normal case, might wanna try to get it close to JSON format
 
 const addQuiz = function(quiz) {
   let queryString = `
   WITH quiz AS (
     INSERT INTO quizzes (owner_id, title, description, visibility, photo_url, category)
-    VALUES ($1, '$2', '$3', $4, '$5', '$6')
+    VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING id
     )
     `; // use with to pass quizID for questions insert
   let queryParams = [ quiz.owner_id, quiz.title, quiz.description, quiz.visibility, quiz.photo_url, quiz.category ]
   for (const question in quiz.questions) {
-    queryParams.push(quiz.questions[question].text);
+    queryParams.push(quiz.questions[question].question);
     queryString += `, q${question} AS(
       INSERT INTO questions (quiz_id, question)
-      SELECT quiz.id, '$${queryParams.length}'
+      SELECT quiz.id, $${queryParams.length}
       FROM   quiz
       RETURNING id
       )
       `; // pass questionID for answer insert
     for (const answer in quiz.questions[question].answers) {
       queryParams.push(quiz.questions[question].answers[answer][0]);
-      if (!(quiz.questions[Number(question) + 1]) && !(quiz.questions[question].answers[Number(answer) + 1])) { //if last question and answer, end chain
-        queryString += `
-          INSERT INTO answers (question_id, value, is_correct)
-          SELECT q${question}.id, '$${queryParams.length}', ${queryParams.length + 1}
-          FROM   q${question};
-          `;
-        queryParams.push(quiz.questions[question].answers[answer][1]);
-      }
-      else {
       queryString += `, q${question}a${answer} AS(
         INSERT INTO answers (question_id, value, is_correct)
-        SELECT q${question}.id, '$${queryParams.length}', ${queryParams.length + 1}
+        SELECT q${question}.id, $${queryParams.length}, $${queryParams.length + 1}
         FROM   q${question}
         )
         `;
       queryParams.push(quiz.questions[question].answers[answer][1]);
-      }
     }
   }
+  queryString += `
+  SELECT id
+  FROM quiz
+  ;`
   return pool.query(queryString, queryParams)
-  .then(() => true); //return true, because if .then, there is no error
+  .then(res => getQuizWithQuizId(res.rows[0].id)) //call upon getQuizWIthQuizId to return the whole quiz
+  .catch(e => e);
 }
-exports.addQuiz = addQuiz;
+exports.addQuiz = addQuiz; //checked, working with normal case
 
 const editQuiz =  function(newQuiz) {
   let queryString = ``;
   let queryParams = [];
   for (const question in newQuiz.questions) {
-    queryParams.push(newQuiz.questions[question].text);
+    queryParams.push(newQuiz.questions[question].question);
     queryString += `
     UPDATE questions
     SET question = '$${queryParams.length}'
