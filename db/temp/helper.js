@@ -221,7 +221,7 @@ const editQuiz =  function(newQuiz) {
     UPDATE questions
     SET question = '$${queryParams.length}'
     WHERE id = ${question};
-      `; // pass questionID for answer insert
+      `;
     for (const answer in newQuiz.questions[question].answers) {
       queryParams.push(newQuiz.questions[question].answers[answer][0]);
       queryString += `
@@ -242,7 +242,7 @@ const editQuiz =  function(newQuiz) {
   return pool.query(queryString, queryParams)
   .then(res => getQuizWithQuizId(res.rows[0].id));
 } // will automatically call getQuizWithQuizId, so it should return the updated quiz. NOT TESTED YET
-exports.editQuiz = editQuiz;
+exports.editQuiz = editQuiz; //need to discuss before further coding
 
 const removeQuiz =  function(quizId) { // user id shall be pass
   return pool.query(`
