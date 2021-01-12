@@ -1,3 +1,5 @@
+const { Pool } = require('pg');
+
 const pool = new Pool({
   user: 'labber',
   password: 'labber',
@@ -26,7 +28,7 @@ exports.getUserWithId = getUserWithId;
 const addUser = function(user) {
   return pool.query(`
   INSERT INTO users (name, email, password)
-  VALUES ($1, '$2', '$3')
+  VALUES ($1, $2, $3)
   RETURNING *;
   `, [user.name, user.email, user.password])
   .then(res => res.rows[0]);
