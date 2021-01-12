@@ -20,7 +20,7 @@
     </div>
     <div>
       <h1>Account Management</h1>
-      <form method="POST" action="/users/<%= user.id %>/delete" style="padding: 1em">
+      <form method="GET" action="/users/<%= user.id %>/delete" style="padding: 1em">
         <button type="submit">DELETE</button>
       </form>
       <form method="GET" action="/users/<%= user.id %>/edit" style="padding: 1em">

@@ -101,16 +101,22 @@ module.exports = (db) => {
 
   // users/:user_id DELETE - delete user by removing from users db and redirect to homepage
   router.get("/:user_id/delete", (req, res) => {
-    // if the user is logged in as and is deleting own account
-    if (db.getUserWithID(user_id) === req.session) {
-      db.removeUser(user_id)
-      .then(res => {
-        // clear cookie
+    const user_id = Number(req.params.user_id);
+    // check if logged user is trying to delete owns page
+    if (user_id === req.session.user_id) {
+      // remove user from users db
+      hdb.removeUser(user_id)
+      .then(removedUser => {
+        console.log('this user was removed from db')
+        console.log(removedUser)
+        // resets cookie session
         req.session = null;
-        // redirect to homepage
-        res.redirect('../');
+        // redirect takes to JSON of users with correct update
+        res.redirect('../')
       })
+      .catch(e => {res.send(e)})
     }
+
   })
 
   // users/:user_id/login POST - verify login field with user db, update session cookie if info correct
@@ -146,9 +152,10 @@ module.exports = (db) => {
         // on success, cookie assigned with user_id
         req.session.user_id = user.id;
         console.log(req.session)
-        // post request currently not redirecting
-        res.send({user: {name: user.name, email: user.email, id: user.id}});
+        // redirects to user page
+        res.redirect(`/users/${user.id}`)
       })
+      .catch(e => res.send(e));
 
   })
 
