@@ -1,16 +1,14 @@
 const express = require('express');
 const db = require('../testFiles/database');
 const router = express.Router();
-let request_counter = 0;
 
 module.exports = () => {
-  //returns a json of all the public quizzes
-  router.get("/quizzes", (req, res) => {
-    db.getQuizzes(requestCounter)
+  //returns a json of some public quizzes. Request counter will be used to load more quizzes
+  router.get("/quizzes/:request_counter", (req, res) => {
+    db.getQuizzes(req.params.request_counter)
       .then(results => {
-        requestCounter++;
-        console.log(results);
         res.json(results);
       })
   })
+  return router;
 }
