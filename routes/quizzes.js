@@ -7,13 +7,13 @@
 
 const express = require('express');
 const router = express.Router();
+const db = require('../testFiles/database')
 
-module.exports = (db) => {
+module.exports = () => {
   //displays all the publicly available quizzes
   router.get("/", (req, res) => {
-    //call getQuizzes(range) here
+    //call getAllPublicQuizzes()
     const queryString = `SELECT * FROM quizzes;`;
-    console.log(queryString);
     db.query(queryString)
       .then(data => {
         const quizzes = data.rows;
@@ -25,9 +25,61 @@ module.exports = (db) => {
           .json({ error: err.message });
       });
   });
+  /*
+  this has to be moved to users route
+  /users/:user_id/quizzes/new
+  */
+  router.get("/new", (req, res) => {
+    const userID = req.session.userID;
+    //res.render((userID) ? "../testFiles/new_quiz" : "../testFiles/login")
+    res.render("../testFiles/new_quiz");
+  })
+
+
 
   //inserts a new quiz and redirects to "my quizzes" page
   router.post("/", (req, res) => {
+    const userID = 2; //will be taken from session
+
+    const quizInfo = {
+     owner_id: userID,
+     questions: {}
+    };
+    let questionCounter = 1;
+    let answerCounter = 1;
+    const regex = /q\d/;
+
+    for (key in req.body) {
+      if (regex.test(key)) { //if it passes means it is in the form q1..etc
+        quizInfo.questions[questionCounter] = {
+          text: req.body[key][0],
+          answers: {}
+        };
+        //create and add the answer arrays
+        const lengthOfAnswerArray = req.body[key].length
+        let isCorrect;
+        for (let i = 1; i < lengthOfAnswerArray - 1; i++) {
+          //return true only when the index of the current answer matches the last element of the array
+          isCorrect = (i === Number(req.body[key][lengthOfAnswerArray - 1])) ? true : false;
+          quizInfo.questions[questionCounter].answers[`answer${answerCounter}`] = [req.body[key][i], isCorrect];
+          answerCounter++;
+        }
+        questionCounter++;
+      } else {
+        quizInfo[key] = req.body[key];
+      }
+    };
+
+    db.addQuiz(quizInfo)
+      .then(result => {
+        console.log(result);
+        res.json(quizInfo);
+      })
+      .catch(err => {
+        console.log("query error", err.stack);
+      })
+    //enable after session integration
+    /*
     const userID = req.session.userID;
     if (userID) {
       //all the information will be passed from the html form except the userID and quiz_url
@@ -38,6 +90,8 @@ module.exports = (db) => {
       //redirecting is not necessary since this case won't occur in a browser
       res.status(403).send('Forbidden');
     }
+    */
+
   });
 
   //loads a quiz to be taken by any user/guest
