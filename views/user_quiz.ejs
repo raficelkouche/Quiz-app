@@ -40,12 +40,12 @@
     <% } %>
     <div style="margin: 1em">
       <!-- redirect to edit page -->
-      <form method="GET" action="/users/:user_id/quizzes/:quiz_id/edit">
-        <button type="submit">Edit Quiz</button>
+      <form method="GET" action="/users/<%= user_id %>/quizzes/<%= quiz.quiz_id %>/edit">
+        <button type="submit">Edit</button>
       </form>
       <!-- delete quiz from quizzes db -->
-      <form method="DELETE" action="/users/:user_id/quizzes/:quiz_id/delete">
-        <button type="submit">Delete Quiz</button>
+      <form method="POST" action="/users/<%= user_id %>/quizzes/<%= quiz.quiz_id %>/delete?_method=DELETE">
+        <button type="submit">Delete</button>
       </form>
     </div>
 

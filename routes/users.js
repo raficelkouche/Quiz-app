@@ -226,7 +226,7 @@ module.exports = (db) => {
         // need to get the owner_id not name
 
       // quiz info here to render
-      const templateVars = { quiz: quiz };
+      const templateVars = { quiz: quiz, user_id: req.params.user_id };
       // page rendering for quiz to be viewed by creator
       res.render('user_quiz', templateVars);
 
