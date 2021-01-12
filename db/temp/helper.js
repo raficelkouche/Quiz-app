@@ -54,7 +54,7 @@ const removeUser =  function(id) { // user id shall be pass
 } // will return Object of the removed user with all info
 exports.removeUser = removeUser; //checked normal case, should add security
 
-const getQuizzes = function(count = 0, category) { // count shall be the number of time this been call in the same page, it shall start at 0, default 0
+const getQuizzes = function(limit = 3, count = 0, category) { // count shall be the number of time this been call in the same page, it shall start at 0, default 0
   // category is not implement yet.
   let queryString = `
   SELECT quizzes.*, COUNT(attempts.*) AS total_attempt
@@ -66,22 +66,22 @@ const getQuizzes = function(count = 0, category) { // count shall be the number 
   queryString += `
   GROUP BY quizzes.id
   ORDER BY total_attempt DESC
-  LIMIT 3
-  OFFSET $1;
+  LIMIT $1
+  OFFSET $2;
   `
-  return pool.query(queryString, [count*3])
+  return pool.query(queryString, [limit, count*limit])
   .then(res => res.rows);
 } // will return array of 3 object sort by popularity(attempt), as the count increment, it will the next 3.
 exports.getQuizzes = getQuizzes; //checked normal case
 
 const getQuizzesByUserId = function(userId) { // get all quiz from a certain user
   return pool.query(`
-  SELECT quizzes.id, users.name AS creator, quizzes.title, quizzes.description, quizzes.visibility, quizzes.photo_url, quizzes.category, COUNT(attempts.*) AS total_attempts, ROUND(AVG(attempts.score), 1) AS average_score
+  SELECT quizzes.id, users.name AS creator, users.id AS creator_id, quizzes.title, quizzes.description, quizzes.visibility, quizzes.photo_url, quizzes.category, COUNT(attempts.*) AS total_attempts, ROUND(AVG(attempts.score), 1) AS average_score
   FROM quizzes
   JOIN users ON owner_id = users.id
   LEFT JOIN attempts ON quiz_id = quizzes.id
   WHERE owner_id = $1
-  GROUP BY quizzes.id, users.name
+  GROUP BY quizzes.id, users.name, users.id
   ORDER BY quizzes.id DESC;
   `, [userId]) // this will shown newest first as default
   .then(res => res.rows);
@@ -119,6 +119,7 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
     json_build_object(
       'quiz', json_agg(
         json_build_object(
+          'creator_id', users.id,
           'creator', users.name,
           'quiz_id', quizzes.id,
           'title', quizzes.title,
@@ -275,12 +276,27 @@ exports.addAttempt = addAttempt; //checked no userId and with userId
 
 const getAttempt =  function(attemptId) { //get the attempt result with id
   return pool.query(`
-  SELECT attempt_on, attempts.id, attempts.score, users.name AS user, quizzes.title AS quiz_title, quizzes.id as quiz_id
+  SELECT attempt_on, attempts.id, attempts.score, users.name AS user, quizzes.title AS quiz_title, quizzes.id as quiz_id, COUNT(questions.*) AS question_amount
   FROM attempts
   LEFT JOIN users ON user_id = users.id
-  JOIN quizzes ON quiz_id = quizzes.id
-  WHERE attempts.id = $1;
+  JOIN quizzes ON attempts.quiz_id = quizzes.id
+  JOIN questions ON questions.quiz_id = quizzes.id
+  WHERE attempts.id = $1
+  GROUP BY 1, 2, 3, 4, 5, 6;
   `, [attemptId])
   .then(res => res.rows);
 } // will return Object of the attempt.  Object Key [attempt_on, id, score, user (undefined if play as guest), quiz_title]
 exports.getAttempt = getAttempt; //checked normal case
+
+// helper function to login user with given creds
+const login = function(email, password) {
+  return pool.query(`
+  SELECT * FROM users
+  WHERE email = $1;
+  `, [email])
+  .then (res => {
+    const user = res.rows[0];
+    return user.password === password ? user : null;
+  })
+}
+exports.login = login;
