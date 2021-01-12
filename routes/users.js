@@ -188,7 +188,6 @@ module.exports = (db) => {
     if (user_id === req.session.user_id) {
       hdb.getQuizzesByUserId(user_id)
       .then (quizzes => {
-        console.log(quizzes)
         // quizzes should be all the quiz that belongs to the user_id
         // given back as an array of objects
         const templateVars = {user_id: req.session.user_id, quizzes: quizzes};
@@ -236,11 +235,6 @@ module.exports = (db) => {
       const quiz_id = (req.params.quiz_id);
       hdb.getQuizWithQuizId(quiz_id)
       .then (quiz => {
-        // const quiz = res.quizzes.quiz[0];
-        // check if the cookie user = quiz user id (creator looking at the quiz)
-        // if (quiz.owner_id === req.session.user_id) {
-          // need to get the owner_id not name
-
         // quiz info here to render
         const templateVars = { quiz: quiz };
       // render the page with the fields for edit
@@ -254,6 +248,7 @@ module.exports = (db) => {
 
   // users/:user_id/quizzes/:quiz_id PUT - update quiz info from edit page
   // note: editQuiz function not yet defined
+  // STRETCH
   router.put('/:user_id/quizzes/:quiz_id', (req, res) => {
     // check if the cookie user = quiz user id (creator looking at the quiz)
     const user_id = Number(req.params.user_id);
@@ -261,7 +256,7 @@ module.exports = (db) => {
       const quiz_id = Number(req.params.quiz_id);
       hdb.getQuizWithQuizId(quiz_id)
       .then (quiz => {
-        if (quiz.owner_id === req.session.user_id) {
+        if (quiz.creator_id === req.session.user_id) {
           // store new quiz info
           const newQuizInfo = req.body;
           // updates quiz info in db
@@ -286,9 +281,7 @@ module.exports = (db) => {
       const quiz_id = Number(req.params.quiz_id);
       hdb.getQuizWithQuizId(quiz_id)
       .then (quiz => {
-        console.log(quiz)
-        // if (quiz.owner_id === req.session.user_id) {
-          // remove the quiz from quizzes db
+        // console.log(quiz)
           hdb.removeQuiz(quiz.quiz_id)
           .then ( result => {
             // redirect to user's quizzes page

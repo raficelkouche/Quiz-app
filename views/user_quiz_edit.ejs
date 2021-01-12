@@ -83,7 +83,7 @@
     <div style="margin: 1em">
       <!-- submit edit quiz info to db, need to update helper function to get the creator id number -->
       <!-- replace the quiz.quiz_id with quiz.creator_id -->
-      <form method="POST" action="/users/<%= quiz.quiz_id %>/quizzes/<%= quiz.quiz_id %>/edit">
+      <form method="POST" action="/users/<%= quiz.creator_id %>/quizzes/<%= quiz.quiz_id %>/edit">
         <button type="submit">Edit Quiz</button>
       </form>
     </div>
