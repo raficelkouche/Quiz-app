@@ -12,11 +12,11 @@ const db = require('../helper')
 module.exports = () => {
   //displays all the publicly available quizzes
   router.get("/", (req, res) => {
-    const userID = req.session.userID;
+    const user_id = req.session.user_id;
     db.getQuizzes(10)
       .then(data => {
         const templateVars = {
-          userID,
+          user_id,
           quizzes: data
         }
         res.render("view_quizzes", templateVars)
@@ -30,10 +30,10 @@ module.exports = () => {
 
   //inserts a new quiz and redirects to "my quizzes" page
   router.post("/", (req, res) => {
-    const userID = 2; //will be taken from session cookies
+    const user_id = 2; //will be taken from session cookies
 
     const quizInfo = {
-     owner_id: userID,
+     owner_id: user_id,
      questions: {}
     };
     let questionCounter = 1;
@@ -65,7 +65,7 @@ module.exports = () => {
         console.log(result);
         db.getQuizzes(10)
         .then(quizzes => {
-          res.render("index", { quizzes, userID });
+          res.render("index", { quizzes, user_id });
         })
 
       })
@@ -74,12 +74,12 @@ module.exports = () => {
       })
     //enable after session integration
     /*
-    const userID = req.session.userID;
-    if (userID) {
-      //all the information will be passed from the html form except the userID and quiz_url
-      addQuiz({ userID, title, description, visibility, photo_url, quiz_url, category })
+    const user_id = req.session.user_id;
+    if (user_id) {
+      //all the information will be passed from the html form except the user_id and quiz_url
+      addQuiz({ user_id, title, description, visibility, photo_url, quiz_url, category })
       //redirect to the owner's page showing all the created quizzes
-      res.render("user_quizzes", {userID});
+      res.render("user_quizzes", {user_id});
     } else {
       //redirecting is not necessary since this case won't occur in a browser
       res.status(403).send('Forbidden');
@@ -90,11 +90,11 @@ module.exports = () => {
 
   //loads a quiz to be taken by any user/guest
   router.get("/:quiz_id", (req, res) => {
-    const userID = req.session.userID;
+    const user_id = req.session.user_id;
 
     db.getQuizWithQuizId(req.params.quiz_id)
       .then(result => {
-        res.render("take_quiz", {quizData: result, userID})
+        res.render("take_quiz", {quizData: result, user_id})
       })
       .catch(err => {
         console.log("query failed: ", err.stack);
@@ -106,14 +106,14 @@ module.exports = () => {
   //load all the attempts for a given quiz
   //test again with the new function getAllAttempts(QuizID)
   router.get("/:quiz_id/attempts", (req, res) => {
-    const userID = req.session.quizID;
+    const user_id = req.session.quizID;
 
     db.getAllAttempts(req.params.quiz_id)
       .then(results => {
         console.log(results[0]["json_build_object"].quiz[0]);
         results = results[0]["json_build_object"].quiz[0];
         const templateVars = {
-          userID,
+          user_id,
           results
         }
         res.render("quiz_results", templateVars)
@@ -121,12 +121,12 @@ module.exports = () => {
       .catch(err => {
         console.log("query error", err.stack)
         res.statusCode = "500"
-        res.render("error", {error: "Failed to load results", userID})
+        res.render("error", {error: "Failed to load results", user_id})
       })
   });
 
   router.post("/:quiz_id/attempts", (req, res) => {
-    const userID = req.session.userID;
+    const user_id = req.session.user_id;
 
     db.getCorrectAnswer(req.params.quiz_id)
       .then(results => {
@@ -145,8 +145,8 @@ module.exports = () => {
           score
         };
         console.log(attempt);
-        if (userID) {
-          attempt[userID] = userID;
+        if (user_id) {
+          attempt[user_id] = user_id;
         }
         db.addAttempt(attempt)
           .then(result => {
@@ -163,12 +163,12 @@ module.exports = () => {
   });
   //load the results for a given quiz-attempt
   router.get("/:quiz_id/attempts/:attempt_id", (req, res) => {
-    const userID = req.session.userID;
+    const user_id = req.session.user_id;
     db.getAttempt(req.params.attempt_id)
       .then(results => {
         console.log(results);
         results = results[0];
-        res.render("view_result", {results, userID})
+        res.render("view_result", {results, user_id})
       })
   });
 

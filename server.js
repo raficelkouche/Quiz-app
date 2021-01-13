@@ -49,12 +49,12 @@ app.use("/api", apiRoutes());
 
 // Home page
 app.get("/", (req, res) => {
-  const userID = req.session.userID;
+  const user_id = req.session.user_id;
   const templateVars = {};
   db.getQuizzes()
     .then(results => {
       templateVars.quizzes = results;
-      templateVars.userID = userID;
+      templateVars.user_id = user_id;
       console.log(templateVars);
       res.render("index", templateVars)
     })
