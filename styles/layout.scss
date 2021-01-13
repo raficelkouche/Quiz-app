@@ -101,6 +101,31 @@ body {
 }
 
 // /users/:user_id/quizzes/:quiz_id - VIEW QUIZ PAGE WITH CREATOR ACCESS
+.quiz-details {
+  margin: 2em;
+
+  .quiz-detail-display {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+
+  .quiz-photo-desc {
+    display: flex;
+    align-items: center;
+
+    img {
+      border: 1px solid white;
+    }
+
+    p {
+      margin: .5em;
+      margin-left: 1em;
+    }
+  }
+}
+
 .user-quiz-questions {
 
   border: 3px solid white;
