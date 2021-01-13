@@ -11,15 +11,8 @@ const cookieSession  = require("cookie-session");
 const methodOverride = require("method-override");
 const app            = express();
 const morgan         = require('morgan');
+const db             = require('./testFiles/database')
 
-//Temp files
-// const { getQuizzes } = require('./testFiles/database');
-
-// PG database client/connection setup
-const { Pool } = require('pg');
-const dbParams = require('./lib/db.js');
-const db = new Pool(dbParams);
-db.connect();
 
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
 // 'dev' = Concise output colored by response status for development use.
@@ -47,15 +40,25 @@ app.use(methodOverride('_method'));
 // Separated Routes for each Resource
 const usersRoutes = require("./routes/users");
 const quizzesRoutes = require("./routes/quizzes");
+const apiRoutes = require("./routes/apiRoutes");
 
 // Mount all resource routes
-app.use("/users", usersRoutes(db));
-app.use("/quizzes", quizzesRoutes(db));
+app.use("/users", usersRoutes());
+app.use("/quizzes", quizzesRoutes());
+app.use("/api", apiRoutes());
 
 // Home page
 app.get("/", (req, res) => {
-  const templateVars = { userID: req.session.userID };
-  res.render("index", templateVars);
+  const userID = req.session.userID;
+  const templateVars = {};
+  db.getQuizzes()
+    .then(results => {
+      templateVars.quizzes = results;
+      templateVars.userID = userID;
+      console.log(templateVars);
+      res.render("index", templateVars)
+    })
+
 });
 
 app.listen(PORT, () => {

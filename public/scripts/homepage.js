@@ -1,11 +1,16 @@
 //contains jQuery/JS for the homepage
 $(() => {
-  $.ajax({
-    method: "GET",
-    url: "/quizzes"
-  }).done((quizzes) => {
-    for (quiz of quizzes) {
-      $("<div>").text(user.name).appendTo($("body"));
-    }
-  });;
+  let request_counter = 1;
+  $("#load-more").on("click", function () {
+    $.ajax({
+      method:'GET',
+      url: `/api/quizzes/${request_counter}`
+    })
+      .then(results => {
+        request_counter++;
+        results.forEach(elm => {
+          $("#load-more").before(`<div>${elm.title}</div>`);
+        })
+      })
+  });
 });
