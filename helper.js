@@ -7,6 +7,13 @@ const pool = new Pool({
   database: 'midterm'
 });
 
+const getAllUsers = function() {
+  return pool.query(`
+  SELECT * FROM users;`)
+  .then(res => res);
+}
+exports.getAllUsers = getAllUsers;
+
 const getUserWithEmail = function(email) {
   return pool.query(`
   SELECT * FROM users

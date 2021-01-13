@@ -17,7 +17,7 @@ module.exports = (db) => {
 
   // to see current users database - for dev
   router.get("/", (req, res) => {
-    db.query(`SELECT * FROM users;`)
+    hdb.getAllUsers(`SELECT * FROM users;`)
       .then(data => {
         const users = data.rows;
         res.json({ users });
