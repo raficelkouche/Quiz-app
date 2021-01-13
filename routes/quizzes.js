@@ -110,23 +110,72 @@ module.exports = () => {
   });
 
   //load all the attempts for a given quiz
-  /*router.get("/:quiz_id/attempts", (req, res) => {
-
-  });*/
-
-  //load the results for a given quiz-attempt
-  /*router.get("/:quiz_id/attempts/:attempt_id", (req, res) => {
-    //call getAttempt()
-    const queryString = `
-      SELECT *
-      FROM attempts
-      WHERE attempts.id = ${req.params.attempt_id};
-    `;
-    db.query(queryString)
-      .then(result => {
-
+  //test again with the new function getAllAttempts(QuizID)
+  router.get("/:quiz_id/attempts", (req, res) => {
+    const userID = req.session.quizID;
+    //REPLACE function with db.getAllAttempts(QuizID)
+    db.getAttempt(req.params.quiz_id)
+      .then(results => {
+        console.log(results);
+        const templateVars = {
+          userID,
+          results
+        }
+        res.render("quiz_results", templateVars)
       })
-  });*/
+      .catch(err => {
+        console.log("query error", err.stack)
+        res.statusCode = "500"
+        res.render("error", {error: "Failed to load results", userID})
+      })
+  });
+
+  router.post("/:quiz_id/attempts", (req, res) => {
+    const userID = req.session.userID;
+
+    db.getCorrectAnswer(req.params.quiz_id)
+      .then(results => {
+        console.log(results)
+        let score = 0;
+        const numOfQuestions = results.length;
+
+        for (const question of results) {
+          if (req.body[question.question_id] == question.answer_id) {
+            score++
+          }
+        }
+        //add attempt to the attempts table
+        const attempt = {
+          quizId: req.params.quiz_id,
+          score
+        };
+        console.log(attempt);
+        if (userID) {
+          attempt[userID] = userID;
+        }
+        db.addAttempt(attempt)
+          .then(result => {
+            const attempt = result;
+            res.render("quiz_result", { score, numOfQuestions, attempt });
+          })
+          .catch(err => {
+            console.log("failed to add attempt", err.stack);
+          })
+      })
+      .catch(err => {
+        console.log("query error", err.stack)
+      })
+  });
+  //load the results for a given quiz-attempt
+  router.get("/:quiz_id/attempts/:attempt_id", (req, res) => {
+    const userID = req.session.userID;
+    db.getAttempt(req.params.attempt_id)
+      .then(results => {
+        console.log(results);
+        results = results[0];
+        res.render("view_result", {results, userID})
+      })
+  });
 
   return router;
 };
