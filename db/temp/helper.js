@@ -350,22 +350,22 @@ exports.getAllAttempts = getAllAttempts;
 [{
   "quiz" : [
     {
-    "creator" : "Bora Watson",
-    "quiz_id" : 6,
-    "title" : "Do you feel Lucky?",
-    "category" : "Misc.",
-    "photo_url" : "https://i.imgur.com/dA6qCJO.png",
-    "attempts" : [
-      {
-        "attempt_id" : 37,
-        "attempt_on" : "2021-01-13T15:01:18.687959",
-        "user_id" : 6
-      },
-      {
-        "attempt_id" : 38,
-        "attempt_on" : "2021-01-13T15:01:18.687959",
-        "user_id" : 20
-      }]
+      "creator" : "Iva Harrison",
+      "quiz_id" : 1,
+      "title" : "Basic Math !", "category" : "Education",
+      "photo_url" : "https://i.imgur.com/Ez7g45q.png",
+      "question_amount" : 4,
+      "attempts" : [
+        {
+          "attempt_id" : 1,
+          "attempt_on" : "2021-01-13T15:01:18.687959",
+          "user_id" : 2
+        }, {
+          "attempt_id" : 1,
+          "attempt_on" : "2021-01-13T15:01:18.687959",
+          "user_id" : 2
+        }
+      ]
     }
   ]
 }]
