@@ -103,7 +103,7 @@ module.exports = () => {
 
     db.getQuizWithQuizId(req.params.quiz_id)
       .then(result => {
-        res.render("take_quiz", {quizData: result[0], userID})
+        res.render("take_quiz", {quizData: result, userID})
       })
       .catch(err => {
         console.log("query failed: ", err.stack);
