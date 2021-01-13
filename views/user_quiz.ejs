@@ -14,7 +14,7 @@
     <script type="text/javascript" src="/scripts/homepage.js"></script>
   </head>
 
-  <body>
+  <body class="user-quiz-details-page">
     <%- include('partials/_header') %>
     <h1>Viewing <%= quiz.title%> with creator access</h1>
     <div class="quiz-details">
@@ -46,7 +46,7 @@
         </tbody>
     </table>
     <% } %>
-    <div style="margin: 1em">
+    <div class="user-quiz-buttons">
       <!-- redirect to edit page -->
       <form method="GET" action="/users/<%= user_id %>/quizzes/<%= quiz.quiz_id %>/edit">
         <button type="submit" class="btn btn-outline-info">Edit Quiz</button>
