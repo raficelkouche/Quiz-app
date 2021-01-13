@@ -177,10 +177,10 @@
   VALUES (18, 'Bye Bye Bye', false);
   INSERT INTO answers (
   question_id, value, is_correct)
-  VALUES (18, `It's Gonna Be Me`, false);
+  VALUES (18, 'It''s Gonna Be Me', false);
   INSERT INTO answers (
   question_id, value, is_correct)
-  VALUES (18, `Tearin' Up My Heart`, false);
+  VALUES (18, 'Tearin'' Up My Heart', false);
   INSERT INTO answers (
   question_id, value, is_correct)
   VALUES (18, 'I Want It That Way', true);
