@@ -7,3 +7,36 @@ body {
     color: #244751;
   }
 }
+
+
+.quiz-manage-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100px;
+  width: 150px;
+  justify-content: center;
+  align-items: center;
+}
+
+table, th, td{
+  border: 2px solid black;
+  border-collapse: collapse;
+  margin: 1em;
+}
+
+.quiz-photo {
+  width: 100px;
+  height: 100px;
+}
+
+.edit-quiz {
+  box-sizing: border-box;
+  display: flex;
+
+  .old-quiz {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+}

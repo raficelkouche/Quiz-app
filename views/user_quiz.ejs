@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Quiz Page</title>
+
+    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
+
+    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+    <script type="text/javascript" src="/scripts/homepage.js"></script>
+  </head>
+
+  <body>
+    <h1>Viewing <%= quiz.title%> with creator access</h1>
+    <div>
+      <h2> <%= quiz.title%> </h2>
+      <h3> Created by: <%= quiz.creator %> </h3>
+      <img class="quiz-photo" src=<%= quiz.photo_url %>>
+      <p> <%= quiz.description %> </p>
+      <p> Category: <%= quiz.category%> </p>
+    </div>
+    <% for (let question of quiz.questions) { %>
+    <table>
+        <thead>
+          <tr>
+            <th>Question: <%= question.question %> </th>
+            <th>Correct Answer:</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let answer of question.answers)  { %>
+          <tr>
+              <td> Choice: <%= answer.answer_value%> </td>
+              <td> <%= answer.answer_is_correct%></td>
+          </tr>
+          <% } %>
+        </tbody>
+    </table>
+    <% } %>
+    <div style="margin: 1em">
+      <!-- redirect to edit page -->
+      <form method="GET" action="/users/<%= user_id %>/quizzes/<%= quiz.quiz_id %>/edit">
+        <button type="submit">Edit</button>
+      </form>
+      <!-- delete quiz from quizzes db -->
+      <form method="POST" action="/users/<%= user_id %>/quizzes/<%= quiz.quiz_id %>/delete?_method=DELETE">
+        <button type="submit">Delete</button>
+      </form>
+    </div>
+
+  </body>
+</html>

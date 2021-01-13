@@ -138,7 +138,7 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
   JOIN users ON owner_id = users.id
   where quizzes.id = $1
   ;`, [quizId])
-  .then(res => res.rows);
+  .then(res => res.rows[0].quizzes.quiz[0]);
 } //return JSON
 exports.getQuizWithQuizId = getQuizWithQuizId; // checked normal case
 /*
