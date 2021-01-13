@@ -30,7 +30,7 @@ module.exports = () => {
 
   //inserts a new quiz and redirects to "my quizzes" page
   router.post("/", (req, res) => {
-    const user_id = 2; //will be taken from session cookies
+    const user_id = req.session.user_id; //will be taken from session cookies
 
     const quizInfo = {
      owner_id: user_id,

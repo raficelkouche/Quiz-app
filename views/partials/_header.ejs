@@ -1,0 +1,28 @@
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">TinyApp</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <% if (!user_id) { %>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" href="/users/login">My Quizzes</a>
+          <a class="nav-item nav-link" href="/users/login">Create New Quiz</a>
+        </div>
+      </div>
+      <a class="nav-item nav-link"  href="/users/login">Sign in</a>
+      <a class="nav-item nav-link"  href="/users/new">Register</a>
+    <% } else {%>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" href="/users/<%= user_id %>/quizzes">My Quizzes</a>
+          <a class="nav-item nav-link" href="/users/<%= user_id %>/quizzes/new">Create New Quiz</a>
+        </div>
+      </div>
+      <form method="POST" action="/users/logout" style= "margin-bottom: 0px;">
+        <button type="submit" class="btn btn-outline-primary">Logout</button>
+      </form>
+    <% } %>
+  </nav>
+</header>
