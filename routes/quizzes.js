@@ -7,7 +7,7 @@
 
 const express = require('express');
 const router = express.Router();
-const db = require('../testFiles/database')
+const db = require('../helper')
 
 module.exports = () => {
   //displays all the publicly available quizzes
@@ -33,7 +33,7 @@ module.exports = () => {
   */
   router.get("/new", (req, res) => {
     const userID = req.session.userID;
-    //res.render((userID) ? "../testFiles/new_quiz" : "../testFiles/login")
+    //res.render((userID) ? "new_quiz" : "login")
     res.render("new_quiz");
   })
 

@@ -11,7 +11,7 @@ const cookieSession  = require("cookie-session");
 const methodOverride = require("method-override");
 const app            = express();
 const morgan         = require('morgan');
-const db             = require('./testFiles/database')
+const db             = require('./helper')
 
 
 // Load the logger first so all (static) HTTP requests are logged to STDOUT

@@ -1,5 +1,5 @@
 const express = require('express');
-const db = require('../testFiles/database');
+const db = require('../helper');
 const router = express.Router();
 
 module.exports = () => {
