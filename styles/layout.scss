@@ -26,6 +26,12 @@ body {
   height: 100px;
 }
 
+.already-account {
+  display: flex;
+  flex-direction: column;
+  margin-top: 3em;
+}
+
 // /users/:user_id/quizzes - ALL USERS QUIZZES PAGE
 .all-quizzes {
   margin: 2em;
@@ -93,6 +99,21 @@ body {
     }
   }
 }
+
+// /users/:user_id/quizzes/:quiz_id - VIEW QUIZ PAGE WITH CREATOR ACCESS
+.user-quiz-questions {
+
+  border: 3px solid white;
+  border-radius: 5px;
+  border-collapse: collapse;
+  margin: 1em;
+  max-width: 70em;
+  width:auto;
+
+
+
+}
+
 
 // /users/:user_id/quizzes/:quiz_id/edit - EDIT QUIZ PAGE
 .edit-quiz {
