@@ -151,7 +151,8 @@ module.exports = () => {
         db.addAttempt(attempt)
           .then(result => {
             const attempt = result;
-            res.render("quiz_result", { score, numOfQuestions, attempt });
+            const templateVars = {score: score, quiz_id: attempt.quiz_id, id: attempt.id, numOfQuestions: numOfQuestions, user_id}
+            res.render("view_result", templateVars);
           })
           .catch(err => {
             console.log("failed to add attempt", err.stack);
@@ -168,7 +169,8 @@ module.exports = () => {
       .then(results => {
         console.log(results);
         results = results[0];
-        res.render("view_result", {results, user_id})
+        const templateVars = {score: results.score, quiz_id: results.quiz_id, id: results.id, numOfQuestions: results.question_amount, user_id}
+        res.render("view_result", templateVars)
       })
   });
 

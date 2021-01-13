@@ -13,44 +13,46 @@
     <script type="text/javascript" src="/scripts/homepage.js"></script>
   </head>
 
-  <body class="user-account-page">
+  <body>
     <%- include('partials/_header') %>
     <main>
-    <h1>My Account</h1>
-    <p>Hello <b><%= user.name %></b> from your account page you can view your account information, edit your account details and delete your account.</p>
-    <div class="info-section">
+      <div class="user-account-page">
+        <h1>My Account</h1>
+        <p>Hello <b><%= user.name %></b> from your account page you can view your account information, edit your account details and delete your account.</p>
+        <div class="info-section">
 
-      <div class="user-info">
-        <table>
-          <thead>
-            <th><h3>User Info</h3></th>
-          </thead>
-          <tbody>
-            <tr>
-              <td><b>Name</b></td> <td><%= user.name %></td>
-            </tr>
-            <tr>
-              <td><b>Email</b></td> <td><%= user.email %></td>
-            </tr>
-            <tr>
-              <td><b>Password</b></td> <td><%= user.password %></td>
-            </tr>
-          </tbody>
-        </table>
+          <div class="user-info">
+            <table>
+              <thead>
+                <th><h3>User Info</h3></th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Name</b></td> <td><%= user.name %></td>
+                </tr>
+                <tr>
+                  <td><b>Email</b></td> <td><%= user.email %></td>
+                </tr>
+                <tr>
+                  <td><b>Password</b></td> <td><%= user.password %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="user-info-buttons">
+            <h3>Account Management</h3>
+              <form method="POST" action="/users/<%= user.id %>/delete?_method=DELETE">
+                <button type="submit" class="btn btn-outline-danger">DELETE</button>
+              </form>
+              <form method="GET" action="/users/<%= user.id %>/edit">
+                <button type="submit" class="btn btn-outline-info">EDIT</button>
+              </form>
+              <form method="POST" action="/users/logout">
+                <button type="submit" class="btn btn-outline-dark">LOGOUT</button>
+              </form>
+          </div>
+        </div>
       </div>
-      <div class="user-info-buttons">
-        <h3>Account Management</h3>
-          <form method="POST" action="/users/<%= user.id %>/delete?_method=DELETE">
-            <button type="submit" class="btn btn-outline-danger">DELETE</button>
-          </form>
-          <form method="GET" action="/users/<%= user.id %>/edit">
-            <button type="submit" class="btn btn-outline-info">EDIT</button>
-          </form>
-          <form method="POST" action="/users/logout">
-            <button type="submit" class="btn btn-outline-dark">LOGOUT</button>
-          </form>
-      </div>
-    </div>
     </main>
 
     <!-- Boostrap JS -->
