@@ -1,6 +1,6 @@
 //contains jQuery/JS for the homepage
 $(() => {
-  let request_counter = 0;
+  let request_counter = 1;
   $("#load-more").on("click", function () {
     $.ajax({
       method:'GET',
@@ -9,7 +9,7 @@ $(() => {
       .then(results => {
         request_counter++;
         results.forEach(elm => {
-          $("#load-more").after(`<div>${elm.title}</div>`);
+          $("#load-more").before(`<div>${elm.title}</div>`);
         })
       })
   });
