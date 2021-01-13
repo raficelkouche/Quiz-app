@@ -12,7 +12,6 @@ const db = require('../testFiles/database')
 module.exports = () => {
   //displays all the publicly available quizzes
   router.get("/", (req, res) => {
-    //call getAllPublicQuizzes()
     const userID = req.session.userID;
     db.getQuizzes(10)
       .then(data => {
@@ -38,11 +37,9 @@ module.exports = () => {
     res.render("new_quiz");
   })
 
-
-
   //inserts a new quiz and redirects to "my quizzes" page
   router.post("/", (req, res) => {
-    const userID = 2; //will be taken from session
+    const userID = 2; //will be taken from session cookies
 
     const quizInfo = {
      owner_id: userID,
@@ -76,7 +73,7 @@ module.exports = () => {
     db.addQuiz(quizInfo)
       .then(result => {
         console.log(result);
-        res.json(quizInfo);
+        res.render("index", {userID});
       })
       .catch(err => {
         console.log("query error", err.stack);
@@ -98,19 +95,18 @@ module.exports = () => {
   });
 
   //loads a quiz to be taken by any user/guest
-  router.get("/:quiz_URL", (req, res) => {
-    //quiz can be taken by anyone as long as they have the URL
-    //call getQuizWithURL(quizURL) here, should return quiz details, questions and answers
-    const queryString = `SELECT * FROM quizzes WHERE quiz_url = '${req.params.quiz_URL}';`
-    db.query(queryString)
+  router.get("/:quiz_id", (req, res) => {
+    const userID = req.session.userID;
+
+    db.getQuizWithQuizId(req.params.quiz_id)
       .then(result => {
-        res.render("../testFiles/take_quiz", {quizData: result.rows})
+        res.render("take_quiz", {quizData: result[0], userID})
       })
       .catch(err => {
         console.log("query failed: ", err.stack);
         res.statusCode = 404
         res.render("error", {error: "couldn't retrieve quiz"});
-      })
+      });
   });
 
   //load all the attempts for a given quiz

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, intial-scale=1, shrink-to-fit=no">
+  <title>Take Quiz</title>
+</head>
+<body>
+  <div><%= quizData.title %></div>
+  <div><%= quizData.description %></div>
+  <% for (const question of quizData.questions) { %>
+        <div><%= question.question %></div>
+    <%    for (const answer of question.answers) { %>
+            <div><%= answer.answer_value %></div>
+        <% } %>
+        <br>
+  <% } %>
+</body>
+</html>
