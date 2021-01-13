@@ -98,21 +98,21 @@ module.exports = (db) => {
 
   })
 
-// NOT WORKING !!!!! PLEASE HELP TY
   // users/:user_id/quizzes/new GET - if logged in, take to new quizzes page
-  router.get("/users/:user_id/quizzes/new", (req, res) => {
-    const user_id = Number(req.params.user_id);
-    console.log(user_id)
-    console.log(req.session.user_id)
-    if (!req.session.user_id) {
-      res.redirect('/login')
-    } else if (user_id === req.session.user_id) {
-        res.render("new_quiz")
-    } else {
-      res.render('you do not have access!')
-    }
-  })
+  router.get("/:user_id/quizzes/new", (req, res) => {
+    const user_id = req.session.user_id;
+    const templateVars = {user_id};
 
+    if (req.params.user_id == user_id) { //case where the user_id in the URL belongs to the logged in user
+      res.render("new_quiz", templateVars)
+    }
+    else if (user_id) { //case where the user is logged in but wants to access another user's route
+      res.render("error", {user_id, error: "Access Denied!"})
+    }
+    else { //case where the user is not logged in
+      res.render("user_login")
+    }
+  });
 
   // users/:user_id DELETE - delete user by removing from users db and redirect to homepage
   router.delete("/:user_id/delete", (req, res) => {
