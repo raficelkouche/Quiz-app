@@ -69,11 +69,14 @@ module.exports = () => {
         quizInfo[key] = req.body[key];
       }
     };
-
     db.addQuiz(quizInfo)
       .then(result => {
         console.log(result);
-        res.render("index", {userID});
+        db.getQuizzes(10)
+        .then(quizzes => {
+          res.render("index", { quizzes, userID });
+        })
+
       })
       .catch(err => {
         console.log("query error", err.stack);
