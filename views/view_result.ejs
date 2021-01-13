@@ -15,9 +15,9 @@
 <body>
   <%- include('partials/_header') %>
   <main>
-    <div>Your Score: <%= results.score %>/<%= results.question_amount %>
+    <div>Your Score: <%= score %>/<%= numOfQuestions %>
     </div>
-    <form action="/quizzes/<%=results.quiz_id%>/attempts/<%=results.id%>" method="GET">
+    <form action="/quizzes/<%=quiz_id%>/attempts/<%=id%>" method="GET">
       <button>Share</button>
     </form>
 

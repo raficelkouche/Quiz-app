@@ -14,7 +14,7 @@
   <%- include('partials/_header') %>
   <main>
     <div>Your Score: <%= score %>/<%= numOfQuestions %></div>
-    <form action="/quizzes/<%=attempt.quiz_id%>/attempts/<%=attempt.id%>" method="GET">
+    <form action="/quizzes/<%=quiz_id%>/attempts/<%=id%>" method="GET">
       <button>Share</button>
     </form>
   <!-- Bootstrap JS -->
