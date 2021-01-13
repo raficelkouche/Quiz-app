@@ -306,20 +306,24 @@ const editVisibility =  function(quizId) { //togglt visibility of quiz
 exports.editVisibility = editVisibility;
 
 const getAllAttempts = function(quizId) { //get all attempts given a quizID
+  /*
+  */
   return pool.query(`
   WITH att AS (
     SELECT
-      quiz_id,
+      a.quiz_id,
+      COUNT(DISTINCT que.*) question_amount,
       json_agg(
-        json_build_object(
-          'attempt_id', a.id,
-          'attempt_on', a.attempt_on,
-          'user_id', a.user_id
+      json_build_object(
+        'attempt_id', a.id,
+        'attempt_on', a.attempt_on,
+        'user_id', a.user_id
         )
       ) AS attempt
     FROM attempts a
-    WHERE quiz_id = $1
-    GROUP BY quiz_id
+    JOIN questions que ON a.quiz_id = que.quiz_id
+    WHERE a.quiz_id = $1
+    GROUP BY a.quiz_id
   )
   SELECT
     json_build_object(
@@ -330,6 +334,7 @@ const getAllAttempts = function(quizId) { //get all attempts given a quizID
           'title', q.title,
           'category', q.category,
           'photo_url', q.photo_url,
+          'question_amount', att.question_amount,
           'attempts', att.attempt
         )
       )
@@ -347,21 +352,20 @@ exports.getAllAttempts = getAllAttempts;
     {
     "creator" : "Bora Watson",
     "quiz_id" : 6,
-     "title" : "Do you feel Lucky?",
-      "category" : "Misc.",
-      "photo_url" : "https://i.imgur.com/dA6qCJO.png",
-      "attempts" : [
-        {
-          "attempt_id" : 37,
+    "title" : "Do you feel Lucky?",
+    "category" : "Misc.",
+    "photo_url" : "https://i.imgur.com/dA6qCJO.png",
+    "attempts" : [
+      {
+        "attempt_id" : 37,
         "attempt_on" : "2021-01-13T15:01:18.687959",
         "user_id" : 6
-        },
-        {
-          "attempt_id" : 38,
-          "attempt_on" : "2021-01-13T15:01:18.687959",
-          "user_id" : 20
-        }
-      ]
+      },
+      {
+        "attempt_id" : 38,
+        "attempt_on" : "2021-01-13T15:01:18.687959",
+        "user_id" : 20
+      }]
     }
   ]
 }]
