@@ -9,7 +9,7 @@ const express = require('express');
 const router  = express.Router();
 
 // trying to get access to db helper functions
-const hdb = require('../db/temp/helper')
+const hdb = require('../helper')
 // to call the hlepr functions call dhp - since the methods already call on the db
 
 
