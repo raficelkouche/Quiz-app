@@ -30,32 +30,14 @@
           </div>
       </div>
       <div class="edit-quiz">
-        <div class="old-quiz">
+        <div>
           <% for (let question of quiz.questions) { %>
             <table class="table user-quiz-questions" >
                 <thead>
                   <tr>
                     <th style="word-wrap:break-word; width: 40em">Question <%= quiz.questions.indexOf(question) + 1 %>: <%= question.question %> </th>
-                    <th>Correct Answer:</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% for (let answer of question.answers)  { %>
-                  <tr>
-                      <td style="word-wrap:break-word; width: 40em"> <%= String.fromCharCode(question.answers.indexOf(answer) + 65) %>. <%= answer.answer_value%> </td>
-                      <td> <%= answer.answer_is_correct%></td>
-                  </tr>
-                  <% } %>
-                </tbody>
-            </table>
-          <% } %>
-        </div>
-        <div class="new-quiz">
-          <% for (let question of quiz.questions) { %>
-            <table class="table user-quiz-questions">
-                <thead>
-                  <tr>
-                    <th> Update Question <%= quiz.questions.indexOf(question) + 1 %>: </th>
+                    <th> Correct Answer:</th>
+                    <th> Update Question: </th>
                     <th>
                       <form>
                         <input type="text" name="newQuestion">
@@ -67,6 +49,8 @@
                 <tbody>
                   <% for (let answer of question.answers)  { %>
                   <tr>
+                      <td style="word-wrap:break-word; width: 40em"> <%= String.fromCharCode(question.answers.indexOf(answer) + 65) %>. <%= answer.answer_value%> </td>
+                      <td> <%= answer.answer_is_correct%></td>
                       <td> Update <%= String.fromCharCode(question.answers.indexOf(answer) + 65) %>: </td>
                       <td>
                         <form>
@@ -85,8 +69,24 @@
                   <% } %>
                 </tbody>
             </table>
-            <% } %>
+          <% } %>
         </div>
+        <!-- <div class="new-quiz">
+          <% for (let question of quiz.questions) { %>
+            <table class="table user-quiz-questions">
+                <thead>
+                  <tr>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for (let answer of question.answers)  { %>
+                  <tr>
+                  </tr>
+                  <% } %>
+                </tbody>
+            </table>
+            <% } %>
+        </div> -->
       </div>
 
       <div class="user-quiz-buttons">
