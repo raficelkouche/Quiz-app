@@ -6,29 +6,95 @@ body {
   h1 {
     color: #244751;
   }
+
+  h2 {
+    color: #244751;
+
+  }
+
+  th {
+    color: #244751;
+  }
+
+
 }
 
-
-.quiz-manage-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  height: 100px;
-  width: 150px;
-  justify-content: center;
-  align-items: center;
-}
-
-table, th, td{
-  border: 2px solid black;
-  border-collapse: collapse;
-  margin: 1em;
-}
-
+// affecsts the user_quizzes list and the individual pages
 .quiz-photo {
+  text-align: center;
   width: 100px;
   height: 100px;
 }
 
+// /users/:user_id/quizzes - ALL USERS QUIZZES PAGE
+.all-quizzes {
+  margin: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  width: 80%;
+
+  .quiz-manage-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    height: 100px;
+    width: 200px;
+    justify-content: center;
+    align-items: center;
+
+    form {
+      padding-right: 0.5em;
+      padding-left: 0.5em;
+
+    }
+  }
+
+  .quiz-stats {
+    margin: 1em;
+    min-width: 7.5em;
+  }
+
+  table {
+
+    border: 3px solid white;
+    border-radius: 5px;
+    border-collapse: collapse;
+    margin: 1em;
+    max-width: 70em;
+    width:auto;
+
+    tr {
+
+      border: 3px solid white;
+      border-collapse: collapse;
+      margin: 1em;
+
+      td {
+        flex-basis: auto;
+        justify-self: center;
+      }
+
+      .quiz-row-title {
+        display: flex;
+        flex-direction: column;
+        margin-left: 1em;
+
+        h3 {
+          margin-bottom: 0.25em;
+        }
+
+        .quiz-desc {
+          display: flex;
+          flex-grow: 3;
+          margin-top: 0;
+          height: 2em;
+        }
+      }
+    }
+  }
+}
+
+// /users/:user_id/quizzes/:quiz_id/edit - EDIT QUIZ PAGE
 .edit-quiz {
   box-sizing: border-box;
   display: flex;
@@ -37,6 +103,48 @@ table, th, td{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+  }
+
+}
+
+// /users/:user_id - USER ACCOUNT PAGE
+.user-account-page {
+  margin: 2em;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  p {
+    width: 80%;
+  }
+
+  div {
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    table tr {
+      height: 10px;
+    }
+
+    .user-info-buttons {
+      display:flex;
+      flex-direction: column;
+
+      button {
+        padding: 5px;
+        margin: 2px;
+      }
+    }
+  }
+
+  // when screen gets small, the user info and managment buttons will stack
+  @media screen and (max-width:800px) {
+    div {
+      flex-direction: column;
+    }
   }
 
 }
