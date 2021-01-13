@@ -13,7 +13,9 @@
 
   <body>
     <h1>Hello World!</h1>
+    <% for (const quiz of quizzes) { %>
+      <div><%=quiz.title %></div>
+    <% } %>
     <button id="load-more">Load More</button>
-
   </body>
 </html>
