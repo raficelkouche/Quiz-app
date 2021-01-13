@@ -12,10 +12,16 @@
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
 </head>
 <body>
-  <div><%= results[0].quiz_title %></div>
-  <% results.forEach(result => { %>
-    <div><%= result.user %></div>
-    <div><%= result.score %></div>
+  <div><%= results.title %></div>
+  <% results["attempts"].forEach(result => { %>
+    <% if (result.user_id) { %>
+      <div>User_ID: <%= result.user_id %></div>
+    <% } else { %>
+      <div>User_ID: anonymous</div>
+    <%}%>
+
+    <div>Score: <%= result.score %></div>
+    <br>
   <% }) %>
 </body>
 </html>

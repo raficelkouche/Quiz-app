@@ -324,6 +324,7 @@ const getAllAttempts = function(quizId) { //get all attempts given a quizID
       json_build_object(
         'attempt_id', a.id,
         'attempt_on', a.attempt_on,
+        'score', a.score,
         'user_id', a.user_id
         )
       ) AS attempt

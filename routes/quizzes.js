@@ -116,10 +116,11 @@ module.exports = () => {
   //test again with the new function getAllAttempts(QuizID)
   router.get("/:quiz_id/attempts", (req, res) => {
     const userID = req.session.quizID;
-    //REPLACE function with db.getAllAttempts(QuizID)
-    db.getAttempt(req.params.quiz_id)
+
+    db.getAllAttempts(req.params.quiz_id)
       .then(results => {
-        console.log(results);
+        console.log(results[0]["json_build_object"].quiz[0]);
+        results = results[0]["json_build_object"].quiz[0];
         const templateVars = {
           userID,
           results
