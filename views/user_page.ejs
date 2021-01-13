@@ -39,13 +39,13 @@
       <div class="user-info-buttons">
         <h3>Account Management</h3>
           <form method="POST" action="/users/<%= user.id %>/delete?_method=DELETE">
-            <button type="button" class="btn btn-outline-danger">DELETE</button>
+            <button type="submit" class="btn btn-outline-danger">DELETE</button>
           </form>
           <form method="GET" action="/users/<%= user.id %>/edit">
-            <button type="button" class="btn btn-outline-info">EDIT</button>
+            <button type="submit" class="btn btn-outline-info">EDIT</button>
           </form>
           <form method="POST" action="/users/logout">
-            <button type="button" class="btn btn-outline-dark">LOGOUT</button>
+            <button type="submit" class="btn btn-outline-dark">LOGOUT</button>
           </form>
       </div>
     </div>

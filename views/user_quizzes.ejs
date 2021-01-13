@@ -54,11 +54,11 @@
                   </form>
                   <!-- redirect to edit page -->
                   <form method="GET" action="/users/<%= user_id %>/quizzes/<%= quiz.id %>/edit">
-                    <button type="button" class="btn btn-outline-info" >Edit</button>
+                    <button type="submit" class="btn btn-outline-info" >Edit</button>
                   </form>
                   <!-- delete quiz from quizzes db -->
                   <form method="POST" action="/users/<%= user_id %>/quizzes/<%= quiz.id %>/delete?_method=DELETE">
-                    <button type="button" class="btn btn-outline-danger">Delete</button>
+                    <button type="submit" class="btn btn-outline-danger">Delete</button>
                   </form>
 
                 </div>
