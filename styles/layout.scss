@@ -26,6 +26,12 @@ body {
   height: 100px;
 }
 
+.already-account {
+  display: flex;
+  flex-direction: column;
+  margin-top: 3em;
+}
+
 // /users/:user_id/quizzes - ALL USERS QUIZZES PAGE
 .all-quizzes {
   margin: 2em;
