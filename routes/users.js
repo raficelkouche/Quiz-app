@@ -84,6 +84,7 @@ module.exports = (db) => {
       hdb.getUserWithId(user_id)
       .then(user => {
         const templateVars = {
+          user_id: req.session.user_id,
             // this user object will have all info from users db
           user: user
         }
