@@ -34,11 +34,14 @@ body {
 
 // /users/:user_id/quizzes - ALL USERS QUIZZES PAGE
 .all-quizzes {
-  margin: 2em;
+  // margin: 2em;
   display: flex;
   flex-direction: column;
   justify-self: center;
-  width: 80%;
+
+  h1 {
+    margin: 1em;
+  }
 
   .quiz-manage-buttons {
     display: flex;
@@ -101,18 +104,58 @@ body {
 }
 
 // /users/:user_id/quizzes/:quiz_id - VIEW QUIZ PAGE WITH CREATOR ACCESS
-.user-quiz-questions {
 
-  border: 3px solid white;
-  border-radius: 5px;
-  border-collapse: collapse;
-  margin: 1em;
-  max-width: 70em;
-  width:auto;
+.user-quiz-details-page {
 
+  h1 {
+    margin: 1em;
+  }
+  .quiz-details {
+    margin: 2em;
 
+    .quiz-detail-display {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .quiz-photo-desc {
+      display: flex;
+      align-items: center;
+
+      img {
+        border: 1px solid white;
+      }
+
+      p {
+        margin: .5em;
+        margin-left: 1em;
+      }
+    }
+
+  }
+
+  .user-quiz-questions {
+
+    border: 3px solid white;
+    border-radius: 5px;
+    border-collapse: collapse;
+    margin: 1em;
+    max-width: 70em;
+    width:auto;
+
+  }
+
+  .user-quiz-buttons {
+    margin: 1em;
+    display: flex;
+    justify-content: space-between;
+    max-width: 49em;
+  }
 
 }
+
+
 
 
 // /users/:user_id/quizzes/:quiz_id/edit - EDIT QUIZ PAGE
@@ -120,18 +163,29 @@ body {
   box-sizing: border-box;
   display: flex;
 
-  .old-quiz {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  .user-quiz-questions {
+
+    border: 3px solid white;
+    border-radius: 5px;
+    border-collapse: collapse;
+    margin: 1em;
+    max-width: 70em;
+    width:auto;
+
+    th {
+      min-width: 10em;
+      vertical-align: middle;
+    }
+
   }
+
+
 
 }
 
 // /users/:user_id - USER ACCOUNT PAGE
 .user-account-page {
-  margin: 2em;
-  width: 90%;
+  // width: 90%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -139,6 +193,14 @@ body {
 
   p {
     width: 80%;
+    margin: 2em;
+
+  }
+
+
+  h1 {
+    margin: 1em;
+
   }
 
   div {
@@ -166,6 +228,7 @@ body {
   @media screen and (max-width:800px) {
     div {
       flex-direction: column;
+      margin: 1em;
     }
   }
 

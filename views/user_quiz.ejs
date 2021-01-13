@@ -14,42 +14,46 @@
     <script type="text/javascript" src="/scripts/homepage.js"></script>
   </head>
 
-  <body>
+  <body class="user-quiz-details-page">
     <%- include('partials/_header') %>
     <h1>Viewing <%= quiz.title%> with creator access</h1>
-    <div>
+    <div class="quiz-details">
       <h2> <%= quiz.title%> </h2>
-      <h3> Created by: <%= quiz.creator %> </h3>
-      <img class="quiz-photo" src=<%= quiz.photo_url %>>
-      <p> <%= quiz.description %> </p>
-      <p> Category: <%= quiz.category%> </p>
+      <h4> Created by: <%= quiz.creator %> </h3>
+        <div class="quiz-photo-desc">
+          <img class="quiz-photo" src=<%= quiz.photo_url %>>
+          <div class="quiz-detail-display">
+            <p> <%= quiz.description %> </p>
+            <p> Category: <%= quiz.category%> </p>
+          </div>
+        </div>
     </div>
     <% for (let question of quiz.questions) { %>
     <table class="table user-quiz-questions" >
         <thead>
           <tr>
-            <th style="word-wrap:break-word; width: 40em">Question: <%= question.question %> </th>
+            <th style="word-wrap:break-word; width: 40em">Question <%= quiz.questions.indexOf(question) + 1 %>: <%= question.question %> </th>
             <th>Correct Answer:</th>
           </tr>
         </thead>
         <tbody>
           <% for (let answer of question.answers)  { %>
           <tr>
-              <td style="word-wrap:break-word; width: 40em"> Choice: <%= answer.answer_value%> </td>
+              <td style="word-wrap:break-word; width: 40em"> <%= String.fromCharCode(question.answers.indexOf(answer) + 65) %>. <%= answer.answer_value%> </td>
               <td> <%= answer.answer_is_correct%></td>
           </tr>
           <% } %>
         </tbody>
     </table>
     <% } %>
-    <div style="margin: 1em">
+    <div class="user-quiz-buttons">
       <!-- redirect to edit page -->
       <form method="GET" action="/users/<%= user_id %>/quizzes/<%= quiz.quiz_id %>/edit">
-        <button type="submit">Edit</button>
+        <button type="submit" class="btn btn-outline-info">Edit Quiz</button>
       </form>
       <!-- delete quiz from quizzes db -->
       <form method="POST" action="/users/<%= user_id %>/quizzes/<%= quiz.quiz_id %>/delete?_method=DELETE">
-        <button type="submit">Delete</button>
+        <button type="submit" class="btn btn-outline-danger">Delete Quiz</button>
       </form>
     </div>
 

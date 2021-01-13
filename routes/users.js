@@ -255,7 +255,7 @@ module.exports = (db) => {
       .then (quiz => {
         if (Number(quiz.creator_id) === req.session.user_id) {
           // quiz info here to render
-          const templateVars = { quiz: quiz };
+          const templateVars = { quiz: quiz, user_id: req.session.user_id };
         // render the page with the fields for edit
         res.render('user_quiz_edit', templateVars)
 
