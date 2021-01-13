@@ -31,49 +31,29 @@
   INSERT INTO quizzes (
   owner_id, title, description, visibility, photo_url, category)
   VALUES (
-  15, 'SCIENCE', 'science for kids!', 'TRUE', '', 'Education');
+  8, 'English - Easy', 'Grammar test 1', 'TRUE', 'https://i.imgur.com/9kQsYtq.jpg', 'Education');
 
   INSERT INTO quizzes (
   owner_id, title, description, visibility, photo_url, category)
   VALUES (
-  7, 'SCIENCE', 'science for kids!', 'TRUE', '', 'Education');
+  8, 'English - Easy part 2', 'Thanks for playing my last quiz!', 'TRUE', 'https://i.imgur.com/u8FLGSB.jpeg', 'Education');
 
   INSERT INTO quizzes (
   owner_id, title, description, visibility, photo_url, category)
   VALUES (
-  8, 'SCIENCE', 'science for kids!', 'FALSE', '', 'Education');
+  1, 'Food! Do you know ...?', 'Do you really know about what you are eating everyday?', 'FALSE', 'https://i.imgur.com/A14QwVW.jpg', 'Food');
 
   INSERT INTO quizzes (
   owner_id, title, description, visibility, photo_url, category)
   VALUES (
-  9, 'SCIENCE', 'science for kids!', 'TRUE', '', 'Education');
+  9, 'Minecraft', 'Mineaft Mincraft Minecraft', 'TRUE', 'https://i.imgur.com/IoKZisM.png', 'Gaming');
 
   INSERT INTO quizzes (
   owner_id, title, description, visibility, photo_url, category)
   VALUES (
-  20, 'SCIENCE', 'science for kids!', 'TRUE', '', 'Education');
+  20, 'Super Test!', 'Are you a Mario fan? Try this quiz out!', 'TRUE', 'https://i.imgur.com/4wQXNrx.jpeg', 'Gaming');
 
   INSERT INTO quizzes (
   owner_id, title, description, visibility, photo_url, category)
   VALUES (
-  21, 'SCIENCE', 'science for kids!', 'FALSE', '', 'Education');
-
-  INSERT INTO quizzes (
-  owner_id, title, description, visibility, photo_url, category)
-  VALUES (
-  21, 'SCIENCE', 'science for kids!', 'TRUE', '', 'Education');
-
-  INSERT INTO quizzes (
-  owner_id, title, description, visibility, photo_url, category)
-  VALUES (
-  9, 'SCIENCE', 'science for kids!', 'TRUE', '', 'Education');
-
-  INSERT INTO quizzes (
-  owner_id, title, description, visibility, photo_url, category)
-  VALUES (
-  9, 'SCIENCE', 'science for kids!', 'TRUE', '', 'Education');
-
-  INSERT INTO quizzes (
-  owner_id, title, description, visibility, photo_url, category)
-  VALUES (
-  9, 'SCIENCE', 'science for kids!', 'TRUE', '', 'Education');
+  20, 'Metriod', 'WHERE IS MY PRIME 4 NINTENDO?', 'FALSE', 'https://i.imgur.com/rvxyvDQ.png', 'Gaming');
