@@ -305,6 +305,80 @@ const editVisibility =  function(quizId) { //togglt visibility of quiz
 } // return the new state of the quiz
 exports.editVisibility = editVisibility;
 
+const getAllAttempts = function(quizId) { //get all attempts given a quizID
+  return pool.query(`
+  WITH att AS (
+    SELECT
+      quiz_id,
+      json_agg(
+        json_build_object(
+          'attempt_id', a.id,
+          'attempt_on', a.attempt_on,
+          'user_id', a.user_id
+        )
+      ) AS attempt
+    FROM attempts a
+    WHERE quiz_id = $1
+    GROUP BY quiz_id
+  )
+  SELECT
+    json_build_object(
+      'quiz', json_agg(
+        json_build_object(
+          'creator', u.name,
+          'quiz_id', q.id,
+          'title', q.title,
+          'category', q.category,
+          'photo_url', q.photo_url,
+          'attempts', att.attempt
+        )
+      )
+    )
+  FROM quizzes q
+  JOIN att on q.id = quiz_id
+  JOIN users u ON owner_id = u.id;
+  `, [quizId])
+  .then(res => res.rows);
+}
+exports.getAllAttempts = getAllAttempts;
+/* example output
+[{
+  "quiz" : [
+    {
+    "creator" : "Bora Watson",
+    "quiz_id" : 6,
+     "title" : "Do you feel Lucky?",
+      "category" : "Misc.",
+      "photo_url" : "https://i.imgur.com/dA6qCJO.png",
+      "attempts" : [
+        {
+          "attempt_id" : 37,
+        "attempt_on" : "2021-01-13T15:01:18.687959",
+        "user_id" : 6
+        },
+        {
+          "attempt_id" : 38,
+          "attempt_on" : "2021-01-13T15:01:18.687959",
+          "user_id" : 20
+        }
+      ]
+    }
+  ]
+}]
+*/
+
+const getCorrectAnswer = function(quizId) {
+  return pool.query(`
+  SELECT a.id answer_id, a.value correct_answer, que.id question_id
+  FROM quizzes q
+  JOIN questions que ON que.quiz_id = q.id
+  JOIN answers a ON a.question_id = que.id
+  WHERE q.id = $1 AND a.is_correct = TRUE;
+  `, [quizId])
+  .then(res => res.rows);
+}
+exports.getCorrectAnswer = getCorrectAnswer;
+
 // helper function to login user with given creds
 const login = function(email, password) {
   return pool.query(`
