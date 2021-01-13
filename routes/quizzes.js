@@ -27,15 +27,6 @@ module.exports = () => {
           .json({ error: err.message });
       });
   });
-  /*
-  this has to be moved to users route
-  /users/:user_id/quizzes/new
-  */
-  router.get("/new", (req, res) => {
-    const userID = req.session.userID;
-    //res.render((userID) ? "new_quiz" : "login")
-    res.render("new_quiz");
-  })
 
   //inserts a new quiz and redirects to "my quizzes" page
   router.post("/", (req, res) => {

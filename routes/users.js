@@ -98,6 +98,22 @@ module.exports = (db) => {
 
   })
 
+// NOT WORKING !!!!! PLEASE HELP TY
+  // users/:user_id/quizzes/new GET - if logged in, take to new quizzes page
+  router.get("/users/:user_id/quizzes/new", (req, res) => {
+    const user_id = Number(req.params.user_id);
+    console.log(user_id)
+    console.log(req.session.user_id)
+    if (!req.session.user_id) {
+      res.redirect('/login')
+    } else if (user_id === req.session.user_id) {
+        res.render("new_quiz")
+    } else {
+      res.render('you do not have access!')
+    }
+  })
+
+
   // users/:user_id DELETE - delete user by removing from users db and redirect to homepage
   router.delete("/:user_id/delete", (req, res) => {
     const user_id = Number(req.params.user_id);
@@ -210,21 +226,22 @@ module.exports = (db) => {
       .then (quiz => {
         // const quiz = res.quizzes.quiz[0];
         // check if the cookie user = quiz user id (creator looking at the quiz)
-        // if (quiz.owner_id === req.session.user_id) {
-          // need to get the owner_id not name
+        if (Number(quiz.creator_id) === req.session.user_id) {
+          // quiz info here to render
+          const templateVars = { quiz: quiz, user_id: req.params.user_id };
+          // page rendering for quiz to be viewed by creator
+          res.render('user_quiz', templateVars);
 
-        // quiz info here to render
-        const templateVars = { quiz: quiz, user_id: req.params.user_id };
-        // page rendering for quiz to be viewed by creator
-        res.render('user_quiz', templateVars);
+        } else {
+            // need to get the owner_id not name
+          res.send('you dont have access!')
+        }
 
-        })
-        .catch(e => res.send(e));
-      } else {
-        res.send('you dont have access!')
-      }
+      })
+      .catch(e => res.send(e));
+
     }
-  )
+  })
 
   // ROUTES TO BE ADDED - JAN 11
 
@@ -235,15 +252,18 @@ module.exports = (db) => {
       const quiz_id = (req.params.quiz_id);
       hdb.getQuizWithQuizId(quiz_id)
       .then (quiz => {
-        // quiz info here to render
-        const templateVars = { quiz: quiz };
-      // render the page with the fields for edit
-      res.render('user_quiz_edit', templateVars)
-      })
+        if (Number(quiz.creator_id) === req.session.user_id) {
+          // quiz info here to render
+          const templateVars = { quiz: quiz };
+        // render the page with the fields for edit
+        res.render('user_quiz_edit', templateVars)
+
+      } else {
+        res.send('you dont have access!')
+      }
+    })
       .catch(e => res.send(e));
-    } else {
-      res.send('you dont have access!')
-    }
+   }
   })
 
   // users/:user_id/quizzes/:quiz_id PUT - update quiz info from edit page
