@@ -38,13 +38,14 @@ body {
     display: flex;
     flex-wrap: wrap;
     height: 100px;
-    width: 150px;
+    width: 200px;
     justify-content: center;
     align-items: center;
 
     form {
       padding-right: 0.5em;
       padding-left: 0.5em;
+
     }
   }
 
@@ -89,13 +90,8 @@ body {
           height: 2em;
         }
       }
-
     }
-
-
   }
-
-
 }
 
 // /users/:user_id/quizzes/:quiz_id/edit - EDIT QUIZ PAGE

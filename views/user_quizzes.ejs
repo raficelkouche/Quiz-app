@@ -3,6 +3,9 @@
   <head>
     <title>My Quizzes</title>
 
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
     <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
     <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
@@ -14,12 +17,11 @@
   <body class="all-quizzes">
     <% if (quizzes.length > 0) { %>
     <h1>My Quizzes</h1>
-      <table>
-        <thead>
+      <table class="table table-hover">
+        <thead class="thead-dark">
           <tr>
             <th scope="col" width="15%"></th>
             <th scope="col" width="55%">Quiz</th>
-            <!-- <th scope="col">Description</th> -->
             <th scope="col" width="15%">Stats</th>
             <th scope="col" width="15%">Manage Quiz</th>
           </tr>
@@ -33,7 +35,6 @@
                   <h3><%= quiz.title %> </h3> <p class="quiz-desc"><%= quiz.description %></p>
                 </div>
               </td>
-              <!-- <td><%= quiz.description %></td> -->
               <td width="15%">
                 <div class="quiz-stats">Quiz Count: <%= quiz.total_attempts %></div>
                 <div class="quiz-stats">AVG Score: <%= quiz.average_score %></div>
@@ -44,20 +45,20 @@
                   <!-- Manage Quiz butttons (visibility, edit, delete, share) -->
                   <!-- Visibility function and route to be implemented a-->
                   <form method="GET" action="/users/<%= user_id %>/quizzes/<%= quiz.id %>">
-                    <button type="submit">View</button>
+                    <button type="submit" class="btn btn-outline-primary">View</button>
                   </form>
                   <!-- for now the share button will redirect to the ind quiz page -->
                   <!-- should get a copy of the quiz url -->
                   <form method="GET" action="../quizzes/<%= quiz.id %>">
-                    <button type="submit">Share</button>
+                    <button type="submit" class="btn btn-outline-success">Share</button>
                   </form>
                   <!-- redirect to edit page -->
                   <form method="GET" action="/users/<%= user_id %>/quizzes/<%= quiz.id %>/edit">
-                    <button type="submit">Edit</button>
+                    <button type="button" class="btn btn-outline-info" >Edit</button>
                   </form>
                   <!-- delete quiz from quizzes db -->
                   <form method="POST" action="/users/<%= user_id %>/quizzes/<%= quiz.id %>/delete?_method=DELETE">
-                    <button type="submit">Delete</button>
+                    <button type="button" class="btn btn-outline-danger">Delete</button>
                   </form>
 
                 </div>
@@ -67,12 +68,17 @@
           </tbody>
         </table>
     <% }  else { %>
-      <h1>Hello to your quizzes page!</h1>
+      <h1>My Quizzes</h1>
       <p>You dont have any quizzes!</p>
       <form method="GET" action="/">
         <button type="submit">Go to Homepage</button>
       </form>
     <% } %>
+
+      <!-- Bootstrap JS -->
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     </body>
     </html>
