@@ -13,11 +13,14 @@ module.exports = () => {
   //displays all the publicly available quizzes
   router.get("/", (req, res) => {
     //call getAllPublicQuizzes()
-    const queryString = `SELECT * FROM quizzes;`;
-    db.query(queryString)
+    const userID = req.session.userID;
+    db.getQuizzes(10)
       .then(data => {
-        const quizzes = data.rows;
-        res.json({ quizzes });
+        const templateVars = {
+          userID,
+          quizzes: data
+        }
+        res.render("view_quizzes", templateVars)
       })
       .catch(err => {
         res
