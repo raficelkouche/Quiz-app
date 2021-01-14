@@ -14,6 +14,29 @@
     <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
     <script type="text/javascript" src="/scripts/homepage.js"></script>
 
+    <!-- function to copy url -->
+    <script type="text/javascript">
+      function copyUrl(quiz_id) {
+        const dummy = document.createElement('p');
+        const url = "http://localhost:8080/quizzes/" + quiz_id;
+        dummy.textContent = url;
+        document.body.appendChild(dummy);
+
+        const range = document.createRange();
+        range.setStartBefore(dummy);
+        range.setEndAfter(dummy);
+
+        const selection = window.getSelection();
+        // First clear, in case the user already selected some other text
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        document.execCommand('copy');
+        document.body.removeChild(dummy);
+        alert("The quiz url has been copied!");
+      }
+    </script>
+
   </head>
 
   <body class="all-quizzes">
@@ -53,8 +76,8 @@
                   </form>
                   <!-- for now the share button will redirect to the ind quiz page -->
                   <!-- should get a copy of the quiz url -->
-                  <form method="GET" action="/quizzes/<%= quiz.id %>">
-                    <button type="submit" class="btn btn-outline-success">Share</button>
+                  <form method="GET" action="/quizzes/<%= quiz.id %>" >
+                    <button id="<%= quiz.id %>" type="submit" class="btn btn-outline-success" onclick="copyUrl(this.id)">Share</button>
                   </form>
                   <!-- redirect to edit page -->
                   <form method="GET" action="/users/<%= user_id %>/quizzes/<%= quiz.id %>/edit">
