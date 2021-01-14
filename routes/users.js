@@ -289,6 +289,8 @@ module.exports = (db) => {
   // STRETCH
   router.put('/:user_id/quizzes/:quiz_id', (req, res) => {
     // check if the cookie user = quiz user id (creator looking at the quiz)
+    console.log('hello what sthe field ?')
+    console.log(req.body)
     const user_id = Number(req.params.user_id);
     if (user_id === req.session.user_id) {
       const quiz_id = Number(req.params.quiz_id);
