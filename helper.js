@@ -187,6 +187,8 @@ Here is a reference for output
 */
 
 const addQuiz = function(quiz) {
+  console.log(typeof quiz.visibility)
+  if(!quiz.visibility) quiz.visibility = "true";
   let queryString = `
   WITH quiz AS (
     INSERT INTO quizzes (owner_id, title, description, visibility, photo_url, category)

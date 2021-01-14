@@ -13,51 +13,61 @@
 </head>
 <body>
   <%- include('partials/_header') %>
-  <main>
+  <main class="new_quiz">
     <form action="/quizzes/" method="POST">
-      <label for="">title</label>
+      <label for="">Title :</label>
         <input type="text" name="title"><br>
-      <label for="">description</label>
+      <label for="">Description :</label>
         <input type="text" name="description"><br>
-      <label for="">visibility</label>
-        <input type="checkbox" name="visibility" value="true">
-        <label for="">public</label>
-        <input type="checkbox" name="visibility" value="false">
-        <label for="">private</label><br>
+      <label for="">Hide Quiz from Public:</label>
+        <input type="checkbox" name="visibility" value="false"><br>
       <label for="">Photo URL</label>
         <input type="text" name="photo_url"><br>
       <label for="">Category</label>
         <input type="text" name="category"><br>
-      <label for="">question 1</label>
-        <input type="text" name="q1"><br>
-        <label for="">Answers</label>
-          <input type="text" name="q1">
-          <input type="text" name="q1">
-          <input type="text" name="q1">
-          <br>
-        <label for="">Correct</label>
-          <input type="radio" name="q1" value=1>
-            <label for="">1</label>
-          <input type="radio" name="q1" value=2>
-            <label for="">2</label>
-          <input type="radio" name="q1" value=3>
-            <label for="">3</label>
-      <br>
-      <label for="">question 2</label>
-        <input type="text" name="q2"><br>
-        <label for="">Answers</label>
-          <input type="text" name="q2">
-          <input type="text" name="q2">
-          <input type="text" name="q2">
-          <br>
-        <label for="">Correct</label>
-          <input type="radio" name="q2" value=1>
-            <label for="">1</label>
-          <input type="radio" name="q2" value=2>
-            <label for="">2</label>
-          <input type="radio" name="q2" value=3>
-            <label for="">3</label>
-      <br>
+<!-- import from other pages-->
+      <table class="table user-quiz-questions" >
+        <thead>
+          <tr>
+            <th style="word-wrap:break-word; width: 70%">Question : </th>
+            <th style="width: 30%; ">Answer:</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td style="word-wrap:break-word; width: 70%">
+                <input type="text" name="q1"><br>
+              </td>
+              <td style="width: 30%; white-space:nowrap;">
+                <input type="text" name="q1">
+                <input type="radio" name="q1" value=1>
+                  <label for="">1</label><br>
+                <input type="text" name="q1">
+                <input type="radio" name="q1" value=2>
+                  <label for="">2</label><br>
+                <input type="text" name="q1">
+                <input type="radio" name="q1" value=3>
+                  <label for="">3</label><br>
+              </td>
+            </tr>
+            <tr>
+              <td style="word-wrap:break-word; width: 70%">
+                <input type="text" name="q2"><br>
+              </td>
+              <td style="width: 30%; white-space:nowrap;">
+                <input type="text" name="q2">
+                <input type="radio" name="q2" value=1>
+                  <label for="">1</label><br>
+                <input type="text" name="q2">
+                <input type="radio" name="q2" value=2>
+                  <label for="">2</label><br>
+                <input type="text" name="q2">
+                <input type="radio" name="q2" value=3>
+                  <label for="">3</label><br>
+              </td>
+            </tr>
+        </tbody>
+      </table>
       <button>submit</button>
     </form>
 
