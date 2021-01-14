@@ -144,15 +144,14 @@ module.exports = () => {
           quizId: req.params.quiz_id,
           score
         };
-        console.log(attempt);
         if (user_id) {
-          attempt[user_id] = user_id;
+          attempt.user_id = user_id;
         }
+        console.log(attempt.user_id);
         db.addAttempt(attempt)
           .then(result => {
-            const attempt = result;
-            const templateVars = {score: score, quiz_id: attempt.quiz_id, id: attempt.id, numOfQuestions: numOfQuestions, user_id}
-            res.render("view_result", templateVars);
+            const url = '/quizzes/' + result.quiz_id + '/attempts/' + result.id;
+            res.redirect(url);
           })
           .catch(err => {
             console.log("failed to add attempt", err.stack);
@@ -167,9 +166,8 @@ module.exports = () => {
     const user_id = req.session.user_id;
     db.getAttempt(req.params.attempt_id)
       .then(results => {
-        console.log(results);
-        results = results[0];
-        const templateVars = {score: results.score, quiz_id: results.quiz_id, id: results.id, numOfQuestions: results.question_amount, user_id}
+        let percentage = results.score/results.question_amount;
+        const templateVars = {percentage: percentage, score: results.score, quiz_id: results.quiz_id, id: results.id, numOfQuestions: results.question_amount, name: results.user, user_id, title: results.quiz_title, Attempter: user_id === results.attempter_id}
         res.render("view_result", templateVars)
       })
   });
