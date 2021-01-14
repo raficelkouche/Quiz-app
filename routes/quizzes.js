@@ -166,13 +166,23 @@ module.exports = () => {
     const user_id = req.session.user_id;
     db.getAttempt(req.params.attempt_id)
       .then(results => {
-        if (req.params.quiz_id === results.quiz_id) {
+        if (req.params.quiz_id == results.quiz_id) {
           let percentage = results.score/results.question_amount;
-          const templateVars = {percentage: percentage, score: results.score, quiz_id: results.quiz_id, id: results.id, numOfQuestions: results.question_amount, name: results.user, user_id, title: results.quiz_title, Attempter: user_id === results.attempter_id}
+          const templateVars = {percentage: percentage, score: results.score, quiz_id: results.quiz_id, id: results.id, numOfQuestions: results.question_amount, name: results.user, user_id, title: results.quiz_title, Attempter: user_id === results.attempter_id, matchingQuiz: true}
           console.log(templateVars)
           res.render("view_result", templateVars)
         } else {
-          res.render("error");
+          db.getQuizInfoWithId(req.params.quiz_id)
+            .then(resu => {
+              let result = resu[0] || {title: undefined};
+              if(result.title && result.visibility) {
+                const templateVars = {matchingQuiz: false, user_id, quiz_id: req.params.quiz_id, title: result.title}
+                res.render("view_result", templateVars);
+              } else {
+                const templateVars = {matchingQuiz: false, user_id, quiz_id: req.params.quiz_id, title: null}
+                res.render("view_result", templateVars);
+              }
+            });
         }
       })
   });

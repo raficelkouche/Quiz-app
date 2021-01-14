@@ -403,3 +403,12 @@ const login = function(email, password) {
   })
 }
 exports.login = login;
+
+const getQuizInfoWithId = function(id) {
+  return pool.query(`
+  SELECT title, visibility FROM quizzes
+  WHERE id = $1;
+  `, [id])
+  .then (res => res.rows)
+}
+exports.getQuizInfoWithId = getQuizInfoWithId;

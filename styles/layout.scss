@@ -303,8 +303,14 @@ div.score {
 
     h2 {
       align-self: center;
+      text-align: center;
       font-weight: 800;
       color: #244751;
+      overflow: auto;
+    }
+
+    h2.wrongLink {
+      line-height: 2;
     }
 
     p {

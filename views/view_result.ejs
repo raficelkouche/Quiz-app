@@ -38,7 +38,25 @@ function copyUrl() {
   <main>
     <div class="score">
       <div class="resultArea">
-      <% if (name && Attempter) { %>
+      <% if (!title) { %>
+        <h2 class="wrongLink">The result of quiz you are looking for<br>
+          Is not open for public, or<br>
+          Does not exist!</h2>
+          <div class="react">
+            <form method="GET" action="/">
+              <button class="btn btn-outline-primary" type="submit">Back to Homepage</button>
+            </form>
+          </div>
+      <% } else if (!matchingQuiz) { %>
+        <h2 class="wrongLink">The result you are trying to get for<br>
+          The quiz: <%= title %><br>
+          Does not exist!</h2>
+          <div class="react">
+            <form method="GET" action="/quizzes/<%= quiz_id %>">
+              <button class="btn btn-outline-primary" type="submit">Attempt the quiz yourself?</button>
+            </form>
+          </div>
+      <% } else if (name && Attempter) { %>
         <% if (percentage === 1) { %>
           <h2>Congratulation, <%= name %>!</h3>
           <p class="smaller">You have scored</p>
