@@ -1,5 +1,6 @@
 $(() => {
   let request_counter = 1;
+
   $("#load-more-quizzes").on("click", function () {
     $.ajax({
       method: "GET",
@@ -12,10 +13,6 @@ $(() => {
         $("#load-more-quizzes").before(`<div>${elm.title}</div>`);
       })
     })
-});
-
-
-
-
+  });
 
 });
