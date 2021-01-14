@@ -14,8 +14,8 @@
 
 <script>
   function addAnswer(x) {
-    let questionAmount = document.getElementById("question_counter").innerHTML;
-    console.log(questionAmount)
+    let queNum = x.previousElementSibling.previousElementSibling.name;
+    console.log(queNum)
     let lastAns = x.parentNode.childElementCount;
     if (lastAns == 14) {
       alert('Max choice (6) for a question reached')
@@ -23,7 +23,7 @@
       //add new field to answer
       let answerField = document.createElement("input");
       answerField.setAttribute("type", "text");
-      answerField.setAttribute("name", "q" + questionAmount);
+      answerField.setAttribute("name", queNum);
       answerField.required = true;
       let spacer = document.createElement("br");
       x.parentNode.insertBefore(answerField, x.parentNode.lastElementChild.previousElementSibling)
@@ -31,7 +31,7 @@
       //add new selector beside answer
       let answerisTrue = document.createElement("input");
       answerisTrue.setAttribute("type", "radio");
-      answerisTrue.setAttribute("name", "q" + questionAmount);
+      answerisTrue.setAttribute("name", queNum);
       answerisTrue.setAttribute("value", (((Number(lastAns) - 2) / 2) + 1));
       let answerLabel = document.createElement("label");
       answerLabel.setAttribute('for', "");
@@ -63,6 +63,7 @@
 
   function addQuestion(x) {
     let questionAmount = document.getElementById("question_counter").innerHTML;
+
     if(questionAmount == 10) {
       alert('The max amount of question allow is 10')
     } else {
@@ -119,6 +120,7 @@
       selIn.setAttribute("type", "radio");
       selIn.setAttribute("name", "q" + questionAmount);
       selIn.setAttribute("value", '1');
+      selIn.setAttribute('checked',"checked");
       let selLa = document.createElement("label");
       selLa.setAttribute('for', "");
       selLa.setAttribute('style', "padding-left: 5px;");
@@ -154,12 +156,16 @@
     }
   }
 
-  function rmQuestion(this) {
+  function rmQuestion(x) {
     let questionAmount = document.getElementById("question_counter").innerHTML;
     if (questionAmount == 1) {
-      alert('The max amount of question allow is 10')
+      alert('The min amount of question allow is 1')
+    } else {
+      let lasQue = x.previousElementSibling.previousElementSibling.previousElementSibling.lastElementChild.lastElementChild;
+      questionAmount--;
+      x.previousElementSibling.previousElementSibling.previousElementSibling.lastElementChild.removeChild(lasQue);
+      document.getElementById("question_counter").innerHTML = questionAmount;
     }
-
   }
 </script>
 <body>
