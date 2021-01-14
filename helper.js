@@ -112,7 +112,9 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
   GROUP BY question_id
   ), que AS (
     SELECT
-      quiz_id,
+      questions.quiz_id,
+      COUNT(attempts.*) total_attempts,
+      ROUND(AVG(attempts.score), 2) average_score,
       json_agg(
         json_build_object(
           'question_id', questions.id,
@@ -122,7 +124,8 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
       ) AS question
     FROM questions
     JOIN ans ON questions.id = question_id
-    GROUP BY quiz_id
+    JOIN attempts ON questions.quiz_id = attempts.quiz_id
+    GROUP BY questions.quiz_id
   )
   SELECT
     json_build_object(
@@ -136,6 +139,8 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
           'category', quizzes.category,
           'visibility', quizzes.visibility,
           'photo_url', quizzes.photo_url,
+          'total_attempts', que.total_attempts,
+          'average_score', que.average_score,
           'questions', que.question
         )
       )
