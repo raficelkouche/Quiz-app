@@ -142,6 +142,7 @@ body {
       display: flex;
       flex-direction: column;
       justify-content: center;
+      margin-right: 1em;
     }
 
     .quiz-photo-desc {
@@ -168,6 +169,14 @@ body {
     margin: 1em;
     max-width: 70em;
     width:auto;
+
+    table:hover {
+      box-shadow: 2px 2px black;
+    }
+
+    th {
+      vertical-align: middle;
+    }
 
   }
 
