@@ -269,6 +269,20 @@ module.exports = (db) => {
 
   // added visibility change to update quiz page
   // users/:user_id/quizzes/:quiz_id/edit PUT - change visibility
+  router.put('/:user_id/quizzes/:quiz_id/edit', (req, res) => {
+    const quiz_id = req.params.quiz_id;
+    hdb.editVisibility(quiz_id)
+    .then(result => {
+      console.log(result)
+
+      res.redirect(`back`)
+    })
+    .catch (e => {
+      console.error(e)
+      res.status(500).send(e);
+    })
+
+  })
 
   // users/:user_id/quizzes/:quiz_id PUT - update quiz info from edit page
   // note: editQuiz function not yet defined

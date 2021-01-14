@@ -30,11 +30,11 @@
 
               <div>
                 <p> Category: <%= quiz.category%> </p>
-                <p> Public Visibility: <%= quiz.visibility %></p>
+                <p> Public Visibility: <b><%= quiz.visibility %></b> </p>
               </div>
             </div>
             <div>
-              <form method="POST" action="/users/<%= quiz.creator_id %>/quizzes/<%= quiz.quiz_id %>/visibility">
+              <form method="POST" action="/users/<%= quiz.creator_id %>/quizzes/<%= quiz.quiz_id %>/edit?_method=PUT">
                 <button type="submit" class="btn btn-outline-info">Change Visibility</button>
               </form>
             </div>
