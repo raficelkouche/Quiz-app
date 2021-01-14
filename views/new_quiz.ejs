@@ -11,6 +11,30 @@
     integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
 </head>
+
+<script>
+  function addAnswer() {
+    let node = document.createElement("input");
+    document.getElementById("moreAnswer").appendChild(node);
+  }
+</script>
+<script>
+  function addQuestion() {
+    let questionAmount = document.getElementById("question_counter").innerHTML;
+    console.log(questionAmount)
+    if(questionAmount == 4) {
+      alert('The max amount of question allow is 10')
+    } else {
+//      let node = document.createElement("input");
+//      document.getElementById("moreQuestion").appendChild(node);
+      questionAmount++;
+      document.getElementById("question_counter").innerHTML = questionAmount;
+    }
+  }
+</script>
+<script>
+</script>
+
 <body>
   <%- include('partials/_header') %>
   <main class="new_quiz">
@@ -30,7 +54,7 @@
         <thead>
           <tr>
             <th style="word-wrap:break-word; width: 70%">Question : </th>
-            <th style="width: 30%; ">Answer:</th>
+            <th style="width: 30%; ">Answer(correct) : </th>
           </tr>
         </thead>
         <tbody>
@@ -40,7 +64,7 @@
               </td>
               <td style="width: 30%; white-space:nowrap;">
                 <input type="text" name="q1">
-                <input type="radio" name="q1" value=1>
+                <input type="radio" name="q1" value=1 checked="checked">
                   <label for="">1</label><br>
                 <input type="text" name="q1">
                 <input type="radio" name="q1" value=2>
@@ -48,6 +72,7 @@
                 <input type="text" name="q1">
                 <input type="radio" name="q1" value=3>
                   <label for="">3</label><br>
+                  <!-- <button type="button" onclick="addAnswer()">add more answer</button> -->
               </td>
             </tr>
             <tr>
@@ -56,7 +81,7 @@
               </td>
               <td style="width: 30%; white-space:nowrap;">
                 <input type="text" name="q2">
-                <input type="radio" name="q2" value=1>
+                <input type="radio" name="q2" value=1 checked="checked">
                   <label for="">1</label><br>
                 <input type="text" name="q2">
                 <input type="radio" name="q2" value=2>
@@ -66,10 +91,28 @@
                   <label for="">3</label><br>
               </td>
             </tr>
+            <tr>
+              <td style="word-wrap:break-word; width: 70%">
+                <input type="text" name="q3"><br>
+              </td>
+              <td style="width: 30%; white-space:nowrap;">
+                <input type="text" name="q3">
+                <input type="radio" name="q3" value=1 checked="checked">
+                  <label for="">1</label><br>
+                <input type="text" name="q3">
+                <input type="radio" name="q3" value=2>
+                  <label for="">2</label><br>
+                <input type="text" name="q3">
+                <input type="radio" name="q3" value=3>
+                  <label for="">3</label><br>
+              </td>
+            </tr>
+            <button type="button" onclick="addQuestion()">add more question</button>
         </tbody>
       </table>
-      <button>submit</button>
+      <button type="submit">submit</button>
     </form>
+    <p id="question_counter" style="visibility: hidden;"> 3 </p>
 
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
