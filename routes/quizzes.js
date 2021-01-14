@@ -166,9 +166,14 @@ module.exports = () => {
     const user_id = req.session.user_id;
     db.getAttempt(req.params.attempt_id)
       .then(results => {
-        let percentage = results.score/results.question_amount;
-        const templateVars = {percentage: percentage, score: results.score, quiz_id: results.quiz_id, id: results.id, numOfQuestions: results.question_amount, name: results.user, user_id, title: results.quiz_title, Attempter: user_id === results.attempter_id}
-        res.render("view_result", templateVars)
+        if (req.params.quiz_id === results.quiz_id) {
+          let percentage = results.score/results.question_amount;
+          const templateVars = {percentage: percentage, score: results.score, quiz_id: results.quiz_id, id: results.id, numOfQuestions: results.question_amount, name: results.user, user_id, title: results.quiz_title, Attempter: user_id === results.attempter_id}
+          console.log(templateVars)
+          res.render("view_result", templateVars)
+        } else {
+          res.render("error");
+        }
       })
   });
 

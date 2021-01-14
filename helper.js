@@ -271,13 +271,13 @@ exports.removeQuiz = removeQuiz; // checked normal case
 const addAttempt = function(attempt) {
   let queryString = `INSERT INTO attempts (quiz_id, `;
   let queryParams = [attempt.quizId];
-  if (attempt.userId) { // check if there is a userId
+  if (attempt.user_id) { // check if there is a userId
     queryString += `user_id, `;
-    queryParams.push(attempt.userId); //yes then add
+    queryParams.push(attempt.user_id); //yes then add
   }
   queryString += `score)
   VALUES ($1, $2`
-  if (attempt.userId) { queryString += `, $3`;
+  if (attempt.user_id) { queryString += `, $3`;
   }
   queryString +=`)
   RETURNING *;`;
@@ -289,15 +289,15 @@ exports.addAttempt = addAttempt; //checked no userId and with userId
 
 const getAttempt =  function(attemptId) { //get the attempt result with id
   return pool.query(`
-  SELECT attempt_on, attempts.id, attempts.score, users.name AS user, quizzes.title AS quiz_title, quizzes.id as quiz_id, COUNT(questions.*) AS question_amount
+  SELECT attempt_on, attempts.id, attempts.score, users.name AS user, users.id AS attempter_id, quizzes.title AS quiz_title, quizzes.id as quiz_id, COUNT(questions.*) AS question_amount
   FROM attempts
   LEFT JOIN users ON user_id = users.id
   JOIN quizzes ON attempts.quiz_id = quizzes.id
   JOIN questions ON questions.quiz_id = quizzes.id
   WHERE attempts.id = $1
-  GROUP BY 1, 2, 3, 4, 5, 6;
+  GROUP BY 1, 2, 3, 4, 5, 6, 7;
   `, [attemptId])
-  .then(res => res.rows);
+  .then(res => res.rows[0]);
 } // will return Object of the attempt.  Object Key [attempt_on, id, score, user (undefined if play as guest), quiz_title]
 exports.getAttempt = getAttempt; //checked normal case
 
