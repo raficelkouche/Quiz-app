@@ -12,14 +12,95 @@
   <title>Document</title>
 </head>
 
+<script type="text/javascript">
+function copyUrl() {
+  const dummy = document.createElement('p');
+  dummy.textContent = window.location.href;
+  document.body.appendChild(dummy);
+
+  const range = document.createRange();
+  range.setStartBefore(dummy);
+  range.setEndAfter(dummy);
+
+  const selection = window.getSelection();
+  // First clear, in case the user already selected some other text
+  selection.removeAllRanges();
+  selection.addRange(range);
+
+  document.execCommand('copy');
+  document.body.removeChild(dummy);
+  alert("This url have been copied to your clipboard");
+}
+</script>
+
 <body>
   <%- include('partials/_header') %>
   <main>
-    <div>Your Score: <%= score %>/<%= numOfQuestions %>
+    <div class="score">
+      <div class="resultArea">
+      <% if (name && Attempter) { %>
+        <% if (percentage === 1) { %>
+          <h2>Congratulation, <%= name %>!</h3>
+          <p class="smaller">You have scored</p>
+          <p class="perfect"><%= score %>/<%= numOfQuestions %></p>
+          <p class="smaller">on the quiz</p>
+          <h3><%= title %></h3>
+          <p>You have achieved perfection!</p>
+        <% } else if (percentage >= 0.75) { %>
+          <h2>Congratulation, <%= name %>!</h3>
+          <p class="smaller">You have scored</p>
+          <p class="ace"><%= score %>/<%= numOfQuestions %></p>
+          <p class="smaller">on the quiz</p>
+          <h3><%= title %></h3>
+          <p>Almost perfect! One more time?</p>
+        <% } else if (percentage >= 0.5) { %>
+          <h2>Good job, <%= name %>!</h3>
+          <p class="smaller">You have scored</p>
+          <p class="pass"><%= score %>/<%= numOfQuestions %></p>
+          <p class="smaller">on the quiz</p>
+          <h3><%= title %></h3>
+          <p>Keep on going!</p>
+        <% } else { %>
+          <h2>Uhhh, <%= name %>!</h3>
+          <p class="smaller">You have scored</p>
+          <p class="fail"><%= score %>/<%= numOfQuestions %></p>
+          <p class="smaller">on the quiz</p>
+          <h3><%= title %></h3>
+          <p>You can do better! Try again!</p>
+        <% } %>
+        </div>
+        <div class="react">
+          <button class="btn btn-outline-success" onclick="copyUrl();">Share result?</button>
+          <form method="GET" action="/quizzes/<%= quiz_id %>">
+            <button class="btn btn-outline-primary" type="submit">Try again?</button>
+          </form>
+        </div>
+      <% } else { %>
+          <% if (name) { %>
+            <h2><%= name %></h3>
+          <% } else { %>
+            <h2>Guest</h3>
+          <% } %>
+          <p class="smaller">have scored</p>
+          <% if (percentage > 0.75) { %>
+            <p class="ace">
+          <% } else if (percentage > 0.5) { %>
+            <p class="pass">
+          <% } else { %>
+            <p class="fail">
+          <% } %>
+            <%= score %>/<%= numOfQuestions %></p>
+          <p class="smaller">on the quiz</p>
+          <h3><%= title %></h3>
+        </div>
+        <div class="react">
+          <button class="btn btn-outline-success" onclick="copyUrl();">Share result?</button>
+          <form method="GET" action="/quizzes/<%= quiz_id %>">
+            <button class="btn btn-outline-primary" type="submit">Try this quiz?</button>
+          </form>
+        </div>
+      <% } %>
     </div>
-    <form action="/quizzes/<%=quiz_id%>/attempts/<%=id%>" method="GET">
-      <button>Share</button>
-    </form>
 
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
