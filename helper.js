@@ -97,6 +97,7 @@ const getQuizzesByUserId = function(userId) { // get all quiz from a certain use
 exports.getQuizzesByUserId = getQuizzesByUserId; //checked normal case
 
 const getQuizWithQuizId = function(quizId) { // get a quiz by id
+  console.log('called')
   return pool.query(`
   WITH ans AS (
     SELECT
@@ -109,12 +110,11 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
         )
       ) AS answer
     FROM answers
+  where quizzes.id = $1
   GROUP BY question_id
   ), que AS (
     SELECT
       questions.quiz_id,
-      COUNT(attempts.*) total_attempts,
-      ROUND(AVG(attempts.score), 2) average_score,
       json_agg(
         json_build_object(
           'question_id', questions.id,
@@ -124,8 +124,8 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
       ) AS question
     FROM questions
     JOIN ans ON questions.id = question_id
-    JOIN attempts ON questions.quiz_id = attempts.quiz_id
-    GROUP BY questions.quiz_id
+    JOIN attempts ON attempts.quiz_id = questions.quiz_id
+    GROUP BY quiz_id
   )
   SELECT
     json_build_object(
@@ -139,8 +139,6 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
           'category', quizzes.category,
           'visibility', quizzes.visibility,
           'photo_url', quizzes.photo_url,
-          'total_attempts', que.total_attempts,
-          'average_score', que.average_score,
           'questions', que.question
         )
       )
@@ -148,9 +146,8 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
   FROM quizzes
   JOIN que ON quizzes.id = quiz_id
   JOIN users ON owner_id = users.id
-  where quizzes.id = $1
   ;`, [quizId])
-  .then(res => res.rows[0].quizzes.quiz[0]);
+  .then(res => console.log(res.rows[0].quizzes.quiz[0]));
 } //return JSON
 exports.getQuizWithQuizId = getQuizWithQuizId; // checked normal case
 /*
@@ -276,14 +273,13 @@ exports.removeQuiz = removeQuiz; // checked normal case
 const addAttempt = function(attempt) {
   let queryString = `INSERT INTO attempts (quiz_id, `;
   let queryParams = [attempt.quizId];
-  console.log(attempt)
-  if (attempt.user_id) { // check if there is a userId
+  if (attempt.userId) { // check if there is a userId
     queryString += `user_id, `;
-    queryParams.push(attempt.user_id); //yes then add
+    queryParams.push(attempt.userId); //yes then add
   }
   queryString += `score)
   VALUES ($1, $2`
-  if (attempt.user_id) { queryString += `, $3`;
+  if (attempt.userId) { queryString += `, $3`;
   }
   queryString +=`)
   RETURNING *;`;
@@ -295,15 +291,15 @@ exports.addAttempt = addAttempt; //checked no userId and with userId
 
 const getAttempt =  function(attemptId) { //get the attempt result with id
   return pool.query(`
-  SELECT attempt_on, attempts.id, attempts.score, users.name AS user, users.id AS attempter_id, quizzes.title AS quiz_title, quizzes.id as quiz_id, COUNT(questions.*) AS question_amount
+  SELECT attempt_on, attempts.id, attempts.score, users.name AS user, quizzes.title AS quiz_title, quizzes.id as quiz_id, COUNT(questions.*) AS question_amount
   FROM attempts
   LEFT JOIN users ON user_id = users.id
   JOIN quizzes ON attempts.quiz_id = quizzes.id
   JOIN questions ON questions.quiz_id = quizzes.id
   WHERE attempts.id = $1
-  GROUP BY 1, 2, 3, 4, 5, 6, 7;
+  GROUP BY 1, 2, 3, 4, 5, 6;
   `, [attemptId])
-  .then(res => res.rows[0]);
+  .then(res => res.rows);
 } // will return Object of the attempt.  Object Key [attempt_on, id, score, user (undefined if play as guest), quiz_title]
 exports.getAttempt = getAttempt; //checked normal case
 
