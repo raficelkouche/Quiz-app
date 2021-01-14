@@ -112,9 +112,7 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
   GROUP BY question_id
   ), que AS (
     SELECT
-      questions.quiz_id,
-      COUNT(DISTINCT attempts.*) total_attempts,
-      AVG(attempts.score) average_score,
+      quiz_id,
       json_agg(
         json_build_object(
           'question_id', questions.id,
