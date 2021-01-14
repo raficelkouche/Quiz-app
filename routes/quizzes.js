@@ -167,7 +167,6 @@ module.exports = () => {
     db.getAttempt(req.params.attempt_id)
       .then(results => {
         let percentage = results.score/results.question_amount;
-        console.log(percentage)
         const templateVars = {percentage: percentage, score: results.score, quiz_id: results.quiz_id, id: results.id, numOfQuestions: results.question_amount, name: results.user, user_id, title: results.quiz_title, Attempter: user_id === results.attempter_id}
         res.render("view_result", templateVars)
       })
