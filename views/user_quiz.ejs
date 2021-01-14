@@ -28,8 +28,8 @@
             <p> Category: <%= quiz.category%> </p>
           </div>
           <div class="quiz-detail-display border-left border-info">
-            <p> Quiz taken: </p>
-            <p> AVG Score:</p>
+            <p> Quiz taken: <%= quiz.total_attempts %></p>
+            <p> AVG Score: <%= quiz.average_score %></p>
           </div>
         </div>
     </div>
