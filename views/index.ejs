@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
     <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
     <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Goldman&family=Raleway:wght@400;500&display=swap" rel="stylesheet">
 
     <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
     <script type="text/javascript" src="/scripts/homepage.js"></script>
@@ -16,12 +18,40 @@
 
   <body>
     <%- include('partials/_header') %>
-    <main>
-      <h1>Hello World!</h1>
-      <% for (const quiz of quizzes) { %>
-        <div><%=quiz.title %></div>
-      <% } %>
-      <button id="load-more">Load More</button>
+    <main class="container-fluid homepage-quizzes">
+      <h2>Most Popular</h2>
+      <div class="row justify-content-center">
+        <div class="col-12 col-sm-3">
+          <div class="card text-center">
+            <img src="https://i.imgur.com/D0Iz7.jpeg" class="card-img-top" alt="">
+            <div class="card-body">
+              <h5 class="card-title">Basic Maths</h5>
+              <p class="card-text">Test your math skills</p>
+              <a href="#" class="btn btn-primary">Take Quiz</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-3">
+          <div class="card text-center">
+            <img src="https://i.imgur.com/D0Iz7.jpeg" class="card-img-top" alt="">
+            <div class="card-body">
+              <h5 class="card-title">Basic Maths</h5>
+              <p class="card-text">Test your math skills</p>
+              <a href="#" class="btn btn-primary">Take Quiz</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-3">
+          <div class="card text-center">
+            <img src="https://i.imgur.com/D0Iz7.jpeg" class="card-img-top" alt="">
+            <div class="card-body">
+              <h5 class="card-title">Basic Maths</h5>
+              <p class="card-text">Test your math skills</p>
+              <a href="#" class="btn btn-primary">Take Quiz</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
 
     <!-- Bootstrap JS -->

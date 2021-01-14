@@ -1,5 +1,9 @@
 // See: https://sass-lang.com/
 
+$font-titles: 'Goldman', 'cursive';
+$font-others: 'Raleway', 'sans-serif';
+
+
 body {
   background-color: #EEE;
 
@@ -232,4 +236,29 @@ body {
     }
   }
 
+}
+
+
+// --- HOMEPAGE CSS ---
+.homepage-quizzes {
+  margin-top: 2%;
+  background-color:white;
+
+  h2 {
+    font-size: 2.5em;
+    color: black;
+    border-bottom: 4px solid #adb3b2;
+    text-transform: capitalize;
+    font-family: $font-titles
+  }
+
+  .card {
+    border: 2px groove black;
+    height: 100%;
+    font-family: $font-others;
+
+    h5 {
+      font-size: 1.5em;
+    }
+  }
 }
