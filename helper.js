@@ -97,7 +97,6 @@ const getQuizzesByUserId = function(userId) { // get all quiz from a certain use
 exports.getQuizzesByUserId = getQuizzesByUserId; //checked normal case
 
 const getQuizWithQuizId = function(quizId) { // get a quiz by id
-  console.log('called')
   return pool.query(`
   WITH ans AS (
     SELECT
@@ -110,7 +109,6 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
         )
       ) AS answer
     FROM answers
-  where quizzes.id = $1
   GROUP BY question_id
   ), que AS (
     SELECT
@@ -126,7 +124,6 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
       ) AS question
     FROM questions
     JOIN ans ON questions.id = question_id
-    JOIN attempts ON attempts.quiz_id = questions.quiz_id
     GROUP BY quiz_id
   )
   SELECT
@@ -148,8 +145,9 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
   FROM quizzes
   JOIN que ON quizzes.id = quiz_id
   JOIN users ON owner_id = users.id
+  where quizzes.id = $1
   ;`, [quizId])
-  .then(res => console.log(res.rows[0].quizzes.quiz[0]));
+  .then(res => res.rows[0].quizzes.quiz[0]);
 } //return JSON
 exports.getQuizWithQuizId = getQuizWithQuizId; // checked normal case
 /*
