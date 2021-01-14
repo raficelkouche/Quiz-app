@@ -31,7 +31,6 @@ module.exports = () => {
   //inserts a new quiz and redirects to "my quizzes" page
   router.post("/", (req, res) => {
     const user_id = req.session.user_id; //will be taken from session cookies
-
     const quizInfo = {
      owner_id: user_id,
      questions: {}
@@ -39,9 +38,6 @@ module.exports = () => {
     let questionCounter = 1;
     let answerCounter = 1;
     const regex = /q\d/;
-
-    console.log(req.body)
-
     for (key in req.body) {
       if (regex.test(key)) { //if it passes means it is in the form q1..etc
         quizInfo.questions[questionCounter] = {
@@ -62,11 +58,9 @@ module.exports = () => {
         quizInfo[key] = req.body[key];
       }
     };
-    console.log(quizInfo)
     db.addQuiz(quizInfo)
       .then(result => {
-        console.log(result);
-        db.getQuizzes(10)
+        db.getQuizzes(result.quiz_id)
         .then(quizzes => {
           res.render("index", { quizzes, user_id });
         })
