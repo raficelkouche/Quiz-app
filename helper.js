@@ -100,16 +100,19 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
   return pool.query(`
   WITH ans AS (
     SELECT
-      question_id,
+    answers.question_id,
       json_agg(
         json_build_object(
-          'answer_id', id,
-          'answer_value', value,
-          'answer_is_correct', is_correct
+          'answer_id', answers.id,
+          'answer_value', answers.value,
+          'answer_is_correct', answers.is_correct
         )
       ) AS answer
     FROM answers
-  GROUP BY question_id
+    JOIN questions ON answers.question_id = questions.id
+    JOIN quizzes ON questions.quiz_id = quizzes.id
+    where quizzes.id = $1
+  GROUP BY answers.question_id
   ), que AS (
     SELECT
       quiz_id,
@@ -142,8 +145,7 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
     ) quizzes
   FROM quizzes
   JOIN que ON quizzes.id = quiz_id
-  JOIN users ON owner_id = users.id
-  where quizzes.id = $1
+  JOIN users ON owner_id = users.id;
   ;`, [quizId])
   .then(res => res.rows[0].quizzes.quiz[0]);
 } //return JSON

@@ -25,8 +25,19 @@
           <div class="quiz-photo-desc">
             <img class="quiz-photo" src=<%= quiz.photo_url %>>
             <div class="quiz-detail-display">
-              <p> <%= quiz.description %> </p>
-              <p> Category: <%= quiz.category%> </p>
+
+              <p class="desc"> <%= quiz.description %> </p>
+
+              <div>
+                <p> Category: <%= quiz.category%> </p>
+                <p> Public Visibility: <%= quiz.visibility %></p>
+              </div>
+            </div>
+            <div>
+              <form method="POST" action="/users/<%= quiz.creator_id %>/quizzes/<%= quiz.quiz_id %>/visibility">
+                <button type="submit" class="btn btn-outline-info">Change Visibility</button>
+              </form>
+            </div>
             </div>
           </div>
       </div>

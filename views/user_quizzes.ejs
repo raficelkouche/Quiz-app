@@ -71,11 +71,13 @@
           </tbody>
         </table>
     <% }  else { %>
-      <h1>My Quizzes</h1>
-      <p>You dont have any quizzes!</p>
-      <form method="GET" action="/">
-        <button type="submit">Go to Homepage</button>
-      </form>
+      <div class="all-quizzes-empty">
+        <h1>My Quizzes</h1>
+        <p>You do not have any quizzes! You can create a new quiz or go to homepage.</p>
+        <form method="GET" action="/">
+          <button type="submit" class="btn btn-primary">Go to Homepage</button>
+        </form>
+      </div>
     <% } %>
 
       <!-- Bootstrap JS -->

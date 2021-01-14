@@ -267,6 +267,9 @@ module.exports = (db) => {
    }
   })
 
+  // added visibility change to update quiz page
+  // users/:user_id/quizzes/:quiz_id/edit PUT - change visibility
+
   // users/:user_id/quizzes/:quiz_id PUT - update quiz info from edit page
   // note: editQuiz function not yet defined
   // STRETCH

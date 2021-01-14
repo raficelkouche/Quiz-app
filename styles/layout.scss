@@ -129,9 +129,22 @@ body {
 
       }
     }
+  }
 
+  // at bottom of all quizzes page if user does not have any quizzes made
+
+  .all-quizzes-empty {
+
+    p {
+      margin: 1em;
+    }
+
+    button {
+      margin: 1em;
+    }
 
   }
+
 
 }
 
@@ -142,14 +155,33 @@ body {
   h1 {
     margin: 1em;
   }
+
+
   .quiz-details {
     margin: 2em;
+
+    h5 {
+      color: rgba(37, 37, 37, 0.685);
+    }
 
     .quiz-detail-display {
       display: flex;
       flex-direction: column;
       justify-content: center;
       margin-right: 1em;
+
+      .desc {
+        padding-top: 1 em;
+        font-size: 110%;
+      }
+
+      div p {
+        margin: 0;
+        margin-left: 1em;
+        color: rgba(37, 37, 37, 0.685);
+
+      }
+
     }
 
     .quiz-photo-desc {
