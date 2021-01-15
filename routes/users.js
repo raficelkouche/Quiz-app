@@ -353,6 +353,16 @@ module.exports = (db) => {
           // store new quiz info
           console.log('creator_id checked with session and newQuiz to be passed into helper')
           const newQuizInfo = newQuiz
+          // take quiz info and add the questions id and answers id to new Quiz
+          console.log(quiz.questions)
+          console.log(newQuiz.questions)
+
+          for (let i = 0; i < quiz.questions.length; i++) {
+            newQuiz.questions[i].question_id = quiz.questions[i].question_id;
+          }
+
+          console.log(newQuiz.questions)
+
           // updates quiz info in db
           hdb.editQuiz(newQuizInfo)
           .then( quiz => {
