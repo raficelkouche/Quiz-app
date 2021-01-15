@@ -195,15 +195,17 @@
     <form action="/quizzes/" method="POST" >
     <div class="new-quiz-details">
         <label for="">Title :</label>
-          <input type="text" name="title" maxlength="30" required><br>
+          <input type="text" name="title" maxlength="30" required>
         <label for="">Description :</label>
-          <input type="text" name="description" maxlength="140" required><br>
+          <input type="text" name="description" maxlength="140" required>
         <label for="">Photo URL:</label>
-          <input type="text" name="photo_url" maxlength="200" required><br>
+          <input type="text" name="photo_url" maxlength="200" required>
         <label for="">Category:</label>
-          <input type="text" name="category" maxlength="20" required><br>
-        <label style="width: 11em;" for="">Hide Quiz from Public:</label>
-          <input type="checkbox" name="visibility" value="false"><br>
+          <input type="text" name="category" maxlength="20" required>
+        <div>
+          <label for="">Hide Quiz from Public:</label>
+          <input style="margin-left: 1em" type="checkbox" name="visibility" value="false"><br>
+        </div>
     </div>
       <table class="table table-striped user-quiz-questions" >
         <thead class="thead-dark">

@@ -278,9 +278,8 @@ body {
 
   }
 
-
-
 }
+
 
 // /users/:user_id - USER ACCOUNT PAGE
 .user-account-page {
@@ -647,8 +646,9 @@ div.score {
     100% {opacity: 1;}
   }
 }
-// create new quiz page
 
+
+// create new quiz page
 
 .new-quiz-page {
 
@@ -683,22 +683,21 @@ div.score {
 
   h2 {
     padding: 0.5em;
+    padding-bottom: 0;
   }
 
   .new-quiz-details {
 
     margin:1em;
+    margin-top:0;
     font-size: 110%;
     font-weight: bold;
     display:flex;
-    justify-content: space-between;
+    flex-direction: column;
+    width: 50%;
 
     label {
-      width: 7em;
-
-      .visibility-checkbox {
-        width: 10em;
-      }
+      margin-top: 0.5em;
     }
 
   }
