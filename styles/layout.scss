@@ -439,11 +439,16 @@ div.score {
 
     margin:1em;
     font-size: 110%;
+    font-weight: bold;
     display:flex;
     justify-content: space-between;
 
     label {
       width: 7em;
+
+      .visibility-checkbox {
+        width: 10em;
+      }
     }
 
   }
