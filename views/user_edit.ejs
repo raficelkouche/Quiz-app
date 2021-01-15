@@ -21,7 +21,7 @@
     <main style="margin: 1em;">
       <h3>Update Account</h3>
       <p>Please complete the fields below to update your account information.</p>
-      <form action="/users" method="POST" style="width: 400px">
+      <form action="/users/<%= user_id %>?_method=PUT" method="POST" style="width: 400px">
         <div class="form-group">
           <label>Name</label>
           <input type="name" name="name" placeholder="Enter name" class="form-control">

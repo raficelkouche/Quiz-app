@@ -169,7 +169,8 @@ module.exports = (db) => {
     // check if the user has access to this page
     if (user_id === req.session.user_id) {
       // render the page with the fields for edit
-      res.render('user_edit')
+      const templateVars = { user_id: req.session.user_id }
+      res.render('user_edit', templateVars)
     } else {
       res.send('you dont have access!')
     }
@@ -181,9 +182,12 @@ module.exports = (db) => {
     const user_id = Number(req.params.user_id);
     // check if logged user is trying to edit owns page
     if (user_id === req.session.user_id) {
-      // need to save the form data as new info (will need to review
-      // the req.body data structure)
-      const new_info = req.body
+      const new_info = {
+        id: user_id,
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password
+      }
       // editUser helper should take two parameters, user_id and new info
       // it then updates the db
       hdb.editUser(new_info)
@@ -191,7 +195,7 @@ module.exports = (db) => {
         // with the new user info returned, cookie does not need to be updated
         // since user_id should remain the same
         // re-render the user_id page with new info
-        res.redirect(`/${req.params.user_id}`)
+        res.redirect(`../`)
       })
     }
   })
