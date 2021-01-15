@@ -351,9 +351,9 @@ module.exports = (db) => {
           })
           .catch(e => res.send(e));
         // }
-      })
+      });
     } else {
-      res.send('you dont have access!')
+      res.send('you dont have access!');
     }
   });
 
