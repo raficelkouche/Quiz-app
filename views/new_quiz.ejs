@@ -17,7 +17,7 @@
     let queNum = x.previousElementSibling.previousElementSibling.name;
     console.log(queNum)
     let lastAns = x.parentNode.childElementCount;
-    if (lastAns == 14) {
+    if (lastAns == 20) {
       alert('Max choice (6) for a question reached')
     } else {
       //add new field to answer
@@ -26,33 +26,37 @@
       answerField.setAttribute("name", queNum);
       answerField.required = true;
       let spacer = document.createElement("br");
+      let p = document.createElement("p");
       x.parentNode.insertBefore(answerField, x.parentNode.lastElementChild.previousElementSibling)
       x.parentNode.insertBefore(spacer, x.parentNode.lastElementChild.previousElementSibling)
+      x.parentNode.insertBefore(p, x.parentNode.lastElementChild.previousElementSibling)
       //add new selector beside answer
       let answerisTrue = document.createElement("input");
       answerisTrue.setAttribute("type", "radio");
       answerisTrue.setAttribute("name", queNum);
-      answerisTrue.setAttribute("value", (((Number(lastAns) - 2) / 2) + 1));
+      answerisTrue.setAttribute("value", (((Number(lastAns) - 2) / 3) + 1));
       let answerLabel = document.createElement("label");
       answerLabel.setAttribute('for', "");
-      answerLabel.setAttribute('style', "padding-left: 5px;");
-      answerLabel.innerHTML = " " + (((Number(lastAns) - 2) / 2) + 1);
+      answerLabel.setAttribute('style', "padding-left: 5px; margin-bottom: 6px");
+      answerLabel.innerHTML = " " + (((Number(lastAns) - 2) / 3) + 1);
       let spacer2 = document.createElement("br");
+      let p2 = document.createElement("p");
       x.parentNode.nextElementSibling.appendChild(answerisTrue);
       x.parentNode.nextElementSibling.appendChild(answerLabel);
       x.parentNode.nextElementSibling.appendChild(spacer2);
+      x.parentNode.nextElementSibling.appendChild(p2);
     }
   }
 
   function removeAns(x) {
     let lastAns = x.parentNode.childElementCount;
-    if (((Number(lastAns) - 2) / 2) == 2) {
+    if (((Number(lastAns) - 2) / 3) == 2) {
       alert('Min choice (2) for a question reached')
     } else {
       let ansField;
       let ansSelect = x.parentNode.nextElementSibling.lastElementChild;
       x.parentNode.nextElementSibling.removeChild(ansSelect);
-      for(let i = 0; i < 2; i++) {
+      for(let i = 0; i < 3; i++) {
         ansField = x.parentNode.lastElementChild.previousElementSibling.previousElementSibling;
         ansSelect = x.parentNode.nextElementSibling.lastElementChild;
         x.parentNode.nextElementSibling.removeChild(ansSelect);
@@ -72,11 +76,19 @@
       let queTd = document.createElement("td");
       queTd.setAttribute("style", "word-wrap:break-word; width: 60%")
       //question input
-      let queIn = document.createElement("input");
+      let queNum = document.createElement("label");
+      queNum.setAttribute("for", "");
+      queNum.innerHTML = "Q" + questionAmount;
+      let spa = document.createElement("br");
+      let queIn = document.createElement("textarea");
       queIn.setAttribute("type", "text");
       queIn.setAttribute("name", "q" + questionAmount); // rememeber to put this after qa++
+      queIn.setAttribute("maxlength", "85");
+      queIn.setAttribute("style", "width: 100%; resize: none;");
       queIn.required = true;
       //combine
+      queTd.appendChild(queNum);
+      queTd.appendChild(spa);
       queTd.appendChild(queIn); //queTd completed
 
       //Answer section
@@ -88,11 +100,13 @@
       ansIn.setAttribute("name", "q" + questionAmount); // as mention before, after qa++
       ansIn.required = true;
       let spacer = document.createElement("br");
+      let p1 = document.createElement("p");
       let ansIn2 = document.createElement("input");
       ansIn2.setAttribute("type", "text");
       ansIn2.setAttribute("name", "q" + questionAmount); // as mention before, after qa++
       ansIn2.required = true;
       let spacer2 = document.createElement("br");
+      let p2 = document.createElement("p");
       //Construct button
       let addbtn = document.createElement("button");
       addbtn.setAttribute('class', 'btn btn-outline-success');
@@ -107,8 +121,10 @@
       //construct td of answer
       ansTd.appendChild(ansIn)
       ansTd.appendChild(spacer)
+      ansTd.appendChild(p1)
       ansTd.appendChild(ansIn2)
       ansTd.appendChild(spacer2)
+      ansTd.appendChild(p2)
       ansTd.appendChild(addbtn)
       ansTd.appendChild(rmbtn) // compelet ansTd
 
@@ -126,6 +142,7 @@
       selLa.setAttribute('style', "padding-left: 5px;");
       selLa.innerHTML = " " + 1;
       let spacer3 = document.createElement("br");
+      let p3 = document.createElement("p");
       let selIn2 = document.createElement("input");
       selIn2.setAttribute("type", "radio");
       selIn2.setAttribute("name", "q" + questionAmount);
@@ -135,13 +152,16 @@
       selLa2.setAttribute('style', "padding-left: 5px;");
       selLa2.innerHTML = " " + 2;
       let spacer4 = document.createElement("br");
+      let p4 = document.createElement("p");
       //start construct of selTd
       selTd.appendChild(selIn)
       selTd.appendChild(selLa)
       selTd.appendChild(spacer3)
+      selTd.appendChild(p3)
       selTd.appendChild(selIn2)
       selTd.appendChild(selLa2)
-      selTd.appendChild(spacer4) //complete construct of selTd
+      selTd.appendChild(spacer4)
+      selTd.appendChild(p4) //complete construct of selTd
 
       //Oh yeah, it's all coming together 😏
       let tr = document.createElement("tr");
@@ -173,39 +193,45 @@
   <main class="new_quiz">
     <form action="/quizzes/" method="POST">
       <label for="">Title :</label>
-        <input type="text" name="title" required><br>
+        <input type="text" name="title" maxlength="30" required><br>
       <label for="">Description :</label>
-        <input type="text" name="description" required><br>
+        <input type="text" name="description" maxlength="140" required><br>
       <label for="">Hide Quiz from Public:</label>
         <input type="checkbox" name="visibility" value="false"><br>
       <label for="">Photo URL</label>
-        <input type="text" name="photo_url" required><br>
+        <input type="text" name="photo_url" maxlength="200" required><br>
       <label for="">Category</label>
-        <input type="text" name="category" required><br>
+        <input type="text" name="category" maxlength="20" required><br>
       <table class="table user-quiz-questions" >
         <thead>
-          <tr>
-            <th style="width: 60%;">Question : </th>
+          <tr class="columnOfNewQues">
+            <th class="Question" >Question : </th>
             <th style="width: 30%; ">Answer : </th>
             <th style="width: 15%; ">Select Answer : </th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td style="word-wrap:break-word; width: 60%"> <!--question field of q1 -->
-              <input type="text" name="q1" required><br>
+            <td style="width: 60%"> <!--question field of q1 -->
+              <label for="">Q1: </label>
+              <br>
+              <textarea type="text" name="q1" maxlength="80" style="width: 100%; resize: none;" required></textarea><br>
             </td>
             <td style="width: 30%; white-space:nowrap;">
               <input type="text" name="q1" required> <br><!--answer field of q1 -->
-              <input type="text" name="q1" required><br>
+              <p></p>
+              <input type="text" name="q1"  required><br>
+              <p></p>
               <button class="btn btn-outline-success" type="button" onclick="addAnswer(this)">add more answer</button>
               <button class="btn btn-outline-danger" type="button" onclick="removeAns(this)">remove answer</button>
             </td>
             <td style="width: 10%;">
               <input type="radio" name="q1" value='1' checked="checked" required>
-              <label for="">1</label><br>
+              <label style="margin-bottom: 6px" for="">1</label><br>
+              <p></p>
               <input type="radio" name="q1" value='2'>
-              <label for="">2</label><br>
+              <label style="margin-bottom: 6px" for="">2</label><br>
+              <p></p>
             </td>
           </tr>
         </tbody>
