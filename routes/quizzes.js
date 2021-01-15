@@ -31,7 +31,6 @@ module.exports = () => {
   //inserts a new quiz and redirects to "my quizzes" page
   router.post("/", (req, res) => {
     const user_id = req.session.user_id; //will be taken from session cookies
-
     const quizInfo = {
      owner_id: user_id,
      questions: {}
@@ -39,7 +38,6 @@ module.exports = () => {
     let questionCounter = 1;
     let answerCounter = 1;
     const regex = /q\d/;
-
     for (key in req.body) {
       if (regex.test(key)) { //if it passes means it is in the form q1..etc
         quizInfo.questions[questionCounter] = {
@@ -52,18 +50,18 @@ module.exports = () => {
         for (let i = 1; i < lengthOfAnswerArray - 1; i++) {
           //return true only when the index of the current answer matches the last element of the array
           isCorrect = (i === Number(req.body[key][lengthOfAnswerArray - 1])) ? true : false;
-          quizInfo.questions[questionCounter].answers[`answer${answerCounter}`] = [req.body[key][i], isCorrect];
+          quizInfo.questions[questionCounter].answers[`${answerCounter}`] = [req.body[key][i], isCorrect];
           answerCounter++;
         }
         questionCounter++;
+        answerCounter = 1;
       } else {
         quizInfo[key] = req.body[key];
       }
     };
     db.addQuiz(quizInfo)
       .then(result => {
-        console.log(result);
-        db.getQuizzes(10)
+        db.getQuizzes(result.quiz_id)
         .then(quizzes => {
           res.render("index", { quizzes, user_id });
         })
@@ -166,9 +164,26 @@ module.exports = () => {
     const user_id = req.session.user_id;
     db.getAttempt(req.params.attempt_id)
       .then(results => {
-        let percentage = results.score/results.question_amount;
-        const templateVars = {percentage: percentage, score: results.score, quiz_id: results.quiz_id, id: results.id, numOfQuestions: results.question_amount, name: results.user, user_id, title: results.quiz_title, Attempter: user_id === results.attempter_id}
-        res.render("view_result", templateVars)
+        if (results && req.params.quiz_id == results.quiz_id && req.params.attempt_id == results.id) {
+          let percentage = results.score/results.question_amount;
+          const templateVars = {percentage: percentage, score: results.score, quiz_id: results.quiz_id, id: results.id, numOfQuestions: results.question_amount, name: results.user, user_id, title: results.quiz_title, Attempter: user_id === results.attempter_id, matchingQuiz: true}
+          console.log(templateVars)
+          res.render("view_result", templateVars)
+        } else {
+          db.getQuizInfoWithId(req.params.quiz_id)
+            .then(resu => {
+              let result = resu[0] || {title: undefined};
+              console.log('why')
+              console.log(!results)
+              if (!results || (result.title && result.visibility)) {
+                const templateVars = {matchingQuiz: false, user_id, quiz_id: req.params.quiz_id, title: result.title}
+                res.render("view_result", templateVars);
+              } else {
+                const templateVars = {matchingQuiz: false, user_id, quiz_id: req.params.quiz_id, title: null}
+                res.render("view_result", templateVars);
+              }
+            });
+        }
       })
   });
 

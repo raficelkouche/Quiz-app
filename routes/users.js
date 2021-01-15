@@ -103,7 +103,6 @@ module.exports = (db) => {
   router.get("/:user_id/quizzes/new", (req, res) => {
     const user_id = req.session.user_id;
     const templateVars = {user_id};
-
     if (req.params.user_id == user_id) { //case where the user_id in the URL belongs to the logged in user
       res.render("new_quiz", templateVars)
     }
@@ -111,7 +110,7 @@ module.exports = (db) => {
       res.render("error", {user_id, error: "Access Denied!"})
     }
     else { //case where the user is not logged in
-      res.render("user_login")
+      res.render("user_login", templateVars)
     }
   });
 
@@ -170,7 +169,8 @@ module.exports = (db) => {
     // check if the user has access to this page
     if (user_id === req.session.user_id) {
       // render the page with the fields for edit
-      res.render('user_edit')
+      const templateVars = { user_id: req.session.user_id }
+      res.render('user_edit', templateVars)
     } else {
       res.send('you dont have access!')
     }
@@ -182,9 +182,12 @@ module.exports = (db) => {
     const user_id = Number(req.params.user_id);
     // check if logged user is trying to edit owns page
     if (user_id === req.session.user_id) {
-      // need to save the form data as new info (will need to review
-      // the req.body data structure)
-      const new_info = req.body
+      const new_info = {
+        id: user_id,
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password
+      }
       // editUser helper should take two parameters, user_id and new info
       // it then updates the db
       hdb.editUser(new_info)
@@ -192,7 +195,7 @@ module.exports = (db) => {
         // with the new user info returned, cookie does not need to be updated
         // since user_id should remain the same
         // re-render the user_id page with new info
-        res.redirect(`/${req.params.user_id}`)
+        res.redirect(`../`)
       })
     }
   })
@@ -253,6 +256,8 @@ module.exports = (db) => {
       const quiz_id = (req.params.quiz_id);
       hdb.getQuizWithQuizId(quiz_id)
       .then (quiz => {
+        console.log(quiz.questions[0].question_id)
+        console.log(quiz.questions[0].answers[0].answer_id)
         if (Number(quiz.creator_id) === req.session.user_id) {
           // quiz info here to render
           const templateVars = { quiz: quiz, user_id: req.session.user_id };
@@ -267,19 +272,117 @@ module.exports = (db) => {
    }
   })
 
+  // added visibility change to update quiz page
+  // users/:user_id/quizzes/:quiz_id/edit PUT - change visibility
+  router.put('/:user_id/quizzes/:quiz_id/edit', (req, res) => {
+    const quiz_id = req.params.quiz_id;
+    hdb.editVisibility(quiz_id)
+    .then(result => {
+
+      res.redirect(`back`)
+    })
+    .catch (e => {
+      console.error(e)
+      res.status(500).send(e);
+    })
+
+  })
+
   // users/:user_id/quizzes/:quiz_id PUT - update quiz info from edit page
   // note: editQuiz function not yet defined
   // STRETCH
   router.put('/:user_id/quizzes/:quiz_id', (req, res) => {
     // check if the cookie user = quiz user id (creator looking at the quiz)
+    console.log('accessing route /users/:user_id/quizzes/:quiz_id')
+    console.log(res.body)
+    // console.log(req.body)
+    // req.body is an object
+    // Q# will be the question + all answers
+    // each key after that that is
+    // get quiz details to make newQuiz obj
+    const newQuiz = {
+      quizId : req.params.quiz_id,
+      owner_id: req.session.user_id,
+      title: req.body.title,
+      description: req.body.description,
+      photo_url: req.body.photo_url,
+      category: req.body.category,
+      visibility: req.body.visibility,
+      questions: {}
+    };
+
+    // remove the keys from req.body
+    delete req.body.title;
+    delete req.body.description;
+    delete req.body.photo_url;
+    delete req.body.category;
+    delete req.body.visibility;
+
+    // Messy Creation of the new Quiz Object questions
+    let formArray= Object.keys(req.body); //quiz_id
+    console.log("that is from array")
+    // console.log(formArray)
+    let questions = [];
+    let answerVal = [];
+    let count = 0;
+    for(let i = 0; i < formArray.length; i ++) {
+      // console.log(formArray[i]
+      if (Array.isArray(req.body[formArray[i]])) {
+        newQuiz.questions[formArray[i]] = {text : req.body[formArray[i]][0]};
+        req.body[formArray[i]].shift(); //remove the text of question
+        for(const val of req.body[formArray[i]]){
+          answerVal.push(val);
+        }
+      } else {
+        if (!newQuiz.questions[(formArray[i].split(" "))[0]].answers) {
+          newQuiz.questions[(formArray[i].split(" "))[0]].answers = {};
+        }
+        let answer_id =  (formArray[i].split(" "))[2];
+        newQuiz.questions[(formArray[i].split(" "))[0]].answers[answer_id] = [ answerVal[count] , req.body[formArray[i]]];
+        count ++;
+      }
+    }
+    /*
+    // console.log(questions);
+    const allAnswers = []
+    // adds the questions to the new quiz obj and removes it from the questions array
+    for (let i = 0; i < questions.length; i++) {
+      const question = questions[i].shift()
+      for(let j = 0; j < questions[i].length; j++) {
+        allAnswers.push(questions[i][j]);
+      }
+      console.log(allAnswers)
+      newQuiz.questions[question_id] = {text: question, answers: [{answer_id: [allAnswers[i], answerVal[i]] }]}
+    }*/
+    // the answers may need to be adjusted
+
     const user_id = Number(req.params.user_id);
     if (user_id === req.session.user_id) {
       const quiz_id = Number(req.params.quiz_id);
+      console.log('calling the get quiz_id function')
+      hdb.editQuiz(newQuiz)
+      .then(res.redirect(`back`))
+      .catch(e => console.log(e));
+
+      /*
       hdb.getQuizWithQuizId(quiz_id)
       .then (quiz => {
+        console.log('get the quiz_id')
+        console.log(quiz)
         if (quiz.creator_id === req.session.user_id) {
           // store new quiz info
-          const newQuizInfo = req.body;
+          console.log('creator_id checked with session and newQuiz to be passed into helper')
+          const newQuizInfo = newQuiz
+          // take quiz info and add the questions id and answers id to new Quiz
+          console.log(quiz.questions)
+          console.log(newQuiz.questions)
+
+          for (let i = 0; i < quiz.questions.length; i++) {
+            newQuiz.questions[i].question_id = quiz.questions[i].question_id;
+          }
+
+          console.log(newQuiz.questions)
+
           // updates quiz info in db
           hdb.editQuiz(newQuizInfo)
           .then( quiz => {
@@ -289,6 +392,7 @@ module.exports = (db) => {
           .catch(e => res.send(e))
         }
       })
+      */
     } else {
       res.send('you dont have access!')
     }

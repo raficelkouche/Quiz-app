@@ -97,19 +97,24 @@ const getQuizzesByUserId = function(userId) { // get all quiz from a certain use
 exports.getQuizzesByUserId = getQuizzesByUserId; //checked normal case
 
 const getQuizWithQuizId = function(quizId) { // get a quiz by id
+  console.log("in Quiz with id")
+  console.log(quizId)
   return pool.query(`
   WITH ans AS (
     SELECT
-      question_id,
+    answers.question_id,
       json_agg(
         json_build_object(
-          'answer_id', id,
-          'answer_value', value,
-          'answer_is_correct', is_correct
+          'answer_id', answers.id,
+          'answer_value', answers.value,
+          'answer_is_correct', answers.is_correct
         )
       ) AS answer
     FROM answers
-  GROUP BY question_id
+    JOIN questions ON answers.question_id = questions.id
+    JOIN quizzes ON questions.quiz_id = quizzes.id
+    where quizzes.id = $1
+  GROUP BY answers.question_id
   ), que AS (
     SELECT
       quiz_id,
@@ -142,8 +147,7 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
     ) quizzes
   FROM quizzes
   JOIN que ON quizzes.id = quiz_id
-  JOIN users ON owner_id = users.id
-  where quizzes.id = $1
+  JOIN users ON owner_id = users.id;
   ;`, [quizId])
   .then(res => res.rows[0].quizzes.quiz[0]);
 } //return JSON
@@ -185,15 +189,17 @@ Here is a reference for output
 */
 
 const addQuiz = function(quiz) {
+  console.log(typeof quiz.visibility)
+  if(!quiz.visibility) quiz.visibility = "true";
   let queryString = `
-  WITH quiz AS (
+    WITH quiz AS (
     INSERT INTO quizzes (owner_id, title, description, visibility, photo_url, category)
     VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING id
     )
     `; // use with to pass quizID for questions insert
   let queryParams = [ quiz.owner_id, quiz.title, quiz.description, quiz.visibility, quiz.photo_url, quiz.category ]
-  for (const question in quiz.questions) {
+  for (let question = Object.keys(quiz.questions).length; question > 0; question--) {
     queryParams.push(quiz.questions[question].text);
     queryString += `, q${question} AS(
       INSERT INTO questions (quiz_id, question)
@@ -202,7 +208,8 @@ const addQuiz = function(quiz) {
       RETURNING id
       )
       `; // pass questionID for answer insert
-    for (const answer in quiz.questions[question].answers) {
+    for (let answer = Object.keys(quiz.questions[question].answers).length; answer > 0; answer--) {
+      console.log(answer);
       queryParams.push(quiz.questions[question].answers[answer][0]);
       queryString += `, q${question}a${answer} AS(
         INSERT INTO answers (question_id, value, is_correct)
@@ -223,27 +230,46 @@ const addQuiz = function(quiz) {
 }
 exports.addQuiz = addQuiz; //checked, working with normal case
 
+
+
 const editQuiz =  function(newQuiz) {
-  let queryString = ``;
+  let queryString = `WITH`;
   let queryParams = [];
+  let quesCount = Object.keys(newQuiz.questions).length;
+  let ansCount = -2;
+  console.log(ansCount)
+  console.log(quesCount);
   for (const question in newQuiz.questions) {
+    quesCount--;
+    console.log(quesCount)
     queryParams.push(newQuiz.questions[question].text);
-    queryString += `
-    WITH u${queryParams.length} AS (
+    queryString += ` u${queryParams.length} AS (
     UPDATE questions
     SET question = $${queryParams.length}
     WHERE id = ${question}
-    )
-    `;
+    ),`;
     for (const answer in newQuiz.questions[question].answers) {
-      queryParams.push(newQuiz.questions[question].answers[answer][0]);
-      queryString += `, u${queryParams.length} AS (
-        UPDATE answers
-        SET value = $${queryParams.length}, is_correct = $${queryParams.length + 1}
-        WHERE id = ${answer}
-        )
-        `;
-      queryParams.push(newQuiz.questions[question].answers[answer][1]);
+      if (quesCount === 0 && ansCount < 0) {
+        ansCount = Object.keys(newQuiz.questions[question].answers).length - 1;
+      }
+      if (ansCount === 0) {
+        queryParams.push(newQuiz.questions[question].answers[answer][0]);
+        queryString += ` u${queryParams.length} AS (
+          UPDATE answers
+          SET value = $${queryParams.length}, is_correct = $${queryParams.length + 1}
+          WHERE id = ${answer}
+          )`;
+        queryParams.push(newQuiz.questions[question].answers[answer][1]);
+      } else {
+        queryParams.push(newQuiz.questions[question].answers[answer][0]);
+        queryString += ` u${queryParams.length} AS (
+          UPDATE answers
+          SET value = $${queryParams.length}, is_correct = $${queryParams.length + 1}
+          WHERE id = ${answer}
+          ),`;
+        queryParams.push(newQuiz.questions[question].answers[answer][1]);
+      }
+      ansCount--;
     }
   }
   queryString += `
@@ -271,7 +297,6 @@ exports.removeQuiz = removeQuiz; // checked normal case
 const addAttempt = function(attempt) {
   let queryString = `INSERT INTO attempts (quiz_id, `;
   let queryParams = [attempt.quizId];
-  console.log(attempt)
   if (attempt.user_id) { // check if there is a userId
     queryString += `user_id, `;
     queryParams.push(attempt.user_id); //yes then add
@@ -404,3 +429,12 @@ const login = function(email, password) {
   })
 }
 exports.login = login;
+
+const getQuizInfoWithId = function(id) {
+  return pool.query(`
+  SELECT title, visibility FROM quizzes
+  WHERE id = $1;
+  `, [id])
+  .then (res => res.rows)
+}
+exports.getQuizInfoWithId = getQuizInfoWithId;
