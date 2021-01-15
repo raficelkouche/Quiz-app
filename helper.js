@@ -233,26 +233,43 @@ exports.addQuiz = addQuiz; //checked, working with normal case
 
 
 const editQuiz =  function(newQuiz) {
-  let queryString = ``;
+  let queryString = `WITH`;
   let queryParams = [];
+  let quesCount = Object.keys(newQuiz.questions).length;
+  let ansCount = -2;
+  console.log(ansCount)
+  console.log(quesCount);
   for (const question in newQuiz.questions) {
+    quesCount--;
+    console.log(quesCount)
     queryParams.push(newQuiz.questions[question].text);
-    queryString += `
-    WITH u${queryParams.length} AS (
+    queryString += ` u${queryParams.length} AS (
     UPDATE questions
     SET question = $${queryParams.length}
     WHERE id = ${question}
-    )
-    `;
+    ),`;
     for (const answer in newQuiz.questions[question].answers) {
-      queryParams.push(newQuiz.questions[question].answers[answer][0]);
-      queryString += `, u${queryParams.length} AS (
-        UPDATE answers
-        SET value = $${queryParams.length}, is_correct = $${queryParams.length + 1}
-        WHERE id = ${answer}
-        )
-        `;
-      queryParams.push(newQuiz.questions[question].answers[answer][1]);
+      if (quesCount === 0 && ansCount < 0) {
+        ansCount = Object.keys(newQuiz.questions[question].answers).length - 1;
+      }
+      if (ansCount === 0) {
+        queryParams.push(newQuiz.questions[question].answers[answer][0]);
+        queryString += ` u${queryParams.length} AS (
+          UPDATE answers
+          SET value = $${queryParams.length}, is_correct = $${queryParams.length + 1}
+          WHERE id = ${answer}
+          )`;
+        queryParams.push(newQuiz.questions[question].answers[answer][1]);
+      } else {
+        queryParams.push(newQuiz.questions[question].answers[answer][0]);
+        queryString += ` u${queryParams.length} AS (
+          UPDATE answers
+          SET value = $${queryParams.length}, is_correct = $${queryParams.length + 1}
+          WHERE id = ${answer}
+          ),`;
+        queryParams.push(newQuiz.questions[question].answers[answer][1]);
+      }
+      ansCount--;
     }
   }
   queryString += `

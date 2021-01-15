@@ -24,8 +24,11 @@
         <div class="quiz-photo-desc">
           <img class="quiz-photo" src=<%= quiz.photo_url %>>
           <div class="quiz-detail-display">
-            <p> <%= quiz.description %> </p>
-            <p> Category: <%= quiz.category%> </p>
+            <p class="desc"> <%= quiz.description %> </p>
+            <div>
+              <p> Category: <%= quiz.category%> </p>
+              <p> Public Visibility: <%= quiz.visibility %></p>
+            </div>
           </div>
           <div class="quiz-detail-display border-left border-info">
             <p> Quiz taken: <%= quiz.total_attempts %></p>
