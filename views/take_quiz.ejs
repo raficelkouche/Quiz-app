@@ -20,48 +20,22 @@
 <body>
   <%- include('partials/_header') %>
   <main class="take-quiz">
-    <h1>Quiz Title</h1>
+    <h1><%= quizData.title %></h1>
     <div class="quiz-questions">
-      <form action="">
-        <div class="question fade">
-          <div class="question-text">
-            What is the capital of Canada?
-          </div><br>
-          <input type="radio" name="1" value="1" id="1">
-          <label for="1">Dubai</label><br>
-          <input type="radio" name="1" value="2" id="2">
-          <label for="2">Toronto</label><br>
-          <input type="radio" name="1" value="3" id="3">
-          <label for="3">Ottawa</label><br>
-          <input type="radio" name="1" value="4" id="4">
-          <label for="4">Tokyo</label><br>
-        </div>
-        <div class="question fade">
-          <div class="question-text">
-            What is the plural of fish?
-          </div><br>
-          <input type="radio" name="1" value="1">
-          <label for="">Fishes</label><br>
-          <input type="radio" name="1" value="2">
-          <label for="">Fish</label><br>
-          <input type="radio" name="1" value="3">
-          <label for="">Fishing</label><br>
-          <input type="radio" name="1" value="4">
-          <label for="">Chicken</label><br>
-        </div>
-        <div class="question fade">
-          <div class="question-text">
-            What does NaOH stand for?
-          </div><br>
-          <input type="radio" name="1" value="1">
-          <label for="">Hydrogen Sulphate</label><br>
-          <input type="radio" name="1" value="2">
-          <label for="">Sodium Nitrate</label><br>
-          <input type="radio" name="1" value="3">
-          <label for="">Sodium Hydroxide</label><br>
-          <input type="radio" name="1" value="4">
-          <label for="">Sulfuric Acid</label><br>
-        </div>
+      <form action="/quizzes/<%=quizData.quiz_id%>/attempts" method="POST">
+        <% for (const question of quizData.questions) { %>
+          <div class="question fade">
+            <div class="question-text">
+              <%= question.question %>
+            </div><br>
+            <% for (const answer of question.answers) { %>
+
+              <input type="radio" name="<%=question.question_id%>" value="<%= answer.answer_id%>" id="<%= answer.answer_id%>">
+              <label for="<%= answer.answer_id%>"><%=answer.answer_value%></label><br>
+              <%}%>
+          </div>
+        <%}%>
+
         <div class="fade" id="submit-quiz-slide">
           <p>Click submit to view your results</p>
           <button type="submit" class="btn-lg btn-primary">Submit</button>
@@ -72,12 +46,10 @@
 
     <div class="control-quiz">
         <i class="fas fa-arrow-circle-left previous"></i>
-        <!-- <button type="button" class="btn-lg btn-primary" id="cancel-button">Cancel</button> -->
         <a href="/" class="btn-lg btn-primary" id="cancel-button">Cancel</a>
         <i class="fas fa-arrow-circle-right next"></i>
     </div>
-    <div id="numOfQuestions" style="display:none;">3</div>
-    <!-- <div id="numOfQuestions" style="display:none;"><%=quizData.questions.length%></div> -->
+    <div id="numOfQuestions" style="display:none;"><%=quizData.questions.length%></div>
   </main>
 
   <!-- Bootstrap JS -->

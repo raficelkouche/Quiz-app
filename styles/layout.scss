@@ -486,23 +486,61 @@ div.score {
       width: 70%;
     }
   }
-  #load-more {
-    margin-top: 2%;
-    background-color:#244751;
-    border: 0;
-    font-family: $font-titles;
 
-  }
-  #load-more:hover{
-    background-image: linear-gradient(to left,#9E8329,#d5bd6c );
-    color: whitesmoke;
-    font-family: $font-titles;
-    border: 0;
-  }
 }
 
+#load-more {
+  margin-top: 2%;
+  background-color:#244751;
+  border: 0;
+  font-family: $font-titles;
 
+}
+#load-more:hover{
+  background-image: linear-gradient(to left,#9E8329,#d5bd6c );
+  color: whitesmoke;
+  font-family: $font-titles;
+  border: 0;
+}
 
+//View all quizzes
+
+.view-all-quizzes {
+  margin-top: 4%;
+  height: 100vh;
+
+  .all-quizzes {
+    background-color: #244751;
+    padding-top: 2%;
+  }
+  .card {
+    height:30vh;
+  }
+  .row{
+    align-items: center;
+    height: 100%;
+
+    .col-12{
+      height: 100%;
+    }
+
+    img{
+     height: 100%;
+    }
+
+    .card-content{
+      align-self: flex-start;
+
+    }
+
+    .card-controls{
+
+    }
+  }
+
+}
+
+//Take Quiz
 .take-quiz {
   height: 100vh;
   background-color: #244751;

@@ -9,24 +9,86 @@
   <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
     integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Goldman&family=Raleway:wght@400;500&display=swap" rel="stylesheet">
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
   <script type="text/javascript" src="/scripts/view_quizzes.js"></script>
 </head>
 <body>
   <%- include('partials/_header') %>
-  <main>
-    <% for (const quiz of quizzes) { %>
-      <div><%=quiz.title %></div>
-    <% } %>
-    <button id="load-more-quizzes">Load More</button>
+  <main class="view-all-quizzes">
+    <h2>Public Quizzes</h2>
+    <div class="container all-quizzes">
+      <div class="card mb-3">
+        <div class="row g-0">
+          <div class="col-12 col-md-6 d-flex">
+            <img src="https://i.imgur.com/D0Iz7.jpeg" alt="">
+          </div>
+          <div class="col-12 col-md-3">
+            <div class="card-body card-content">
+              <h5 class="card-title">Basic Maths</h5>
+              <p class="card-text">More text to describe something.</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-3">
+            <div class="card-body card-controls">
+              <a href="#" target="_blank" class="btn btn-primary">Take Quiz</a>
+              <a href="#" target="_blank" class="btn btn-primary">Share Quiz</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3">
+        <div class="row g-0">
+          <div class="col-12 col-sm-6">
+            <img src="https://i.imgur.com/D0Iz7.jpeg" alt="">
+          </div>
+          <div class="col-12 col-md-3">
+            <div class="card-body card-content">
+              <h5 class="card-title">Basic Maths</h5>
+              <p class="card-text">More text to describe something.</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-3">
+            <div class="card-body card-controls">
+              <a href="#" target="_blank" class="btn btn-primary">Take Quiz</a>
+              <a href="#" target="_blank" class="btn btn-primary">Share Quiz</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3">
+        <div class="row g-0">
+          <div class="col-12 col-sm-6">
+            <img src="https://i.imgur.com/D0Iz7.jpeg" alt="">
+          </div>
+          <div class="col-12 col-md-3">
+            <div class="card-body card-content">
+              <h5 class="card-title">Basic Maths</h5>
+              <p class="card-text">More text to describe something.</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-3">
+            <div class="card-body card-controls">
+              <a href="#" target="_blank" class="btn btn-primary">Take Quiz</a>
+              <a href="#" target="_blank" class="btn btn-primary">Share Quiz</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-
-  </main>
-  </main>
+    </div>
+    </main>
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
 </body>
 </html>
+
+
+
+<!--    <% for (const quiz of quizzes) { %>
+      <div><%=quiz.title %></div>
+    <% } %>
+    <button id="load-more-quizzes">Load More</button> -->
