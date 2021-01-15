@@ -316,3 +316,86 @@ body {
   }
 
 }
+
+
+
+div.score {
+
+  display: flex;
+  flex-direction: column;
+
+
+  div.resultArea {
+
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    margin-top: 2em;
+
+    h2 {
+      align-self: center;
+      text-align: center;
+      font-weight: 800;
+      color: #244751;
+      overflow: auto;
+    }
+
+    h2.wrongLink {
+      line-height: 2;
+    }
+
+    p {
+      align-self: center;
+      margin-top: 1em;
+    }
+
+    p.smaller {
+      font-size: small;
+    }
+
+    p.perfect {
+      font-weight: 800;
+      color: blue;
+    }
+
+    p.ace {
+      font-weight: 800;
+      color: green;
+    }
+
+    p.pass {
+      font-weight: 800;
+      color: orange;
+    }
+
+    p.fail {
+      font-weight: 800;
+      color: red;
+    }
+
+    h3 {
+      align-self: center;
+      font-weight: bold;
+      color: #244751;
+    }
+
+  }
+
+  div.react {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    margin-top: 1em;
+
+    button[id="btn-sapcing"] {
+      margin-left: 1em;
+    }
+
+  }
+
+}
+
+/*main.new_quiz {
+
+}*/

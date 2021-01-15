@@ -11,55 +11,210 @@
     integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
 </head>
+
+<script>
+  function addAnswer(x) {
+    let queNum = x.previousElementSibling.previousElementSibling.name;
+    console.log(queNum)
+    let lastAns = x.parentNode.childElementCount;
+    if (lastAns == 14) {
+      alert('Max choice (6) for a question reached')
+    } else {
+      //add new field to answer
+      let answerField = document.createElement("input");
+      answerField.setAttribute("type", "text");
+      answerField.setAttribute("name", queNum);
+      answerField.required = true;
+      let spacer = document.createElement("br");
+      x.parentNode.insertBefore(answerField, x.parentNode.lastElementChild.previousElementSibling)
+      x.parentNode.insertBefore(spacer, x.parentNode.lastElementChild.previousElementSibling)
+      //add new selector beside answer
+      let answerisTrue = document.createElement("input");
+      answerisTrue.setAttribute("type", "radio");
+      answerisTrue.setAttribute("name", queNum);
+      answerisTrue.setAttribute("value", (((Number(lastAns) - 2) / 2) + 1));
+      let answerLabel = document.createElement("label");
+      answerLabel.setAttribute('for', "");
+      answerLabel.setAttribute('style', "padding-left: 5px;");
+      answerLabel.innerHTML = " " + (((Number(lastAns) - 2) / 2) + 1);
+      let spacer2 = document.createElement("br");
+      x.parentNode.nextElementSibling.appendChild(answerisTrue);
+      x.parentNode.nextElementSibling.appendChild(answerLabel);
+      x.parentNode.nextElementSibling.appendChild(spacer2);
+    }
+  }
+
+  function removeAns(x) {
+    let lastAns = x.parentNode.childElementCount;
+    if (((Number(lastAns) - 2) / 2) == 2) {
+      alert('Min choice (2) for a question reached')
+    } else {
+      let ansField;
+      let ansSelect = x.parentNode.nextElementSibling.lastElementChild;
+      x.parentNode.nextElementSibling.removeChild(ansSelect);
+      for(let i = 0; i < 2; i++) {
+        ansField = x.parentNode.lastElementChild.previousElementSibling.previousElementSibling;
+        ansSelect = x.parentNode.nextElementSibling.lastElementChild;
+        x.parentNode.nextElementSibling.removeChild(ansSelect);
+        x.parentNode.removeChild(ansField);
+      }
+    }
+  }
+
+  function addQuestion(x) {
+    let questionAmount = document.getElementById("question_counter").innerHTML;
+
+    if(questionAmount == 10) {
+      alert('The max amount of question allow is 10')
+    } else {
+      questionAmount++;
+      //question section
+      let queTd = document.createElement("td");
+      queTd.setAttribute("style", "word-wrap:break-word; width: 60%")
+      //question input
+      let queIn = document.createElement("input");
+      queIn.setAttribute("type", "text");
+      queIn.setAttribute("name", "q" + questionAmount); // rememeber to put this after qa++
+      queIn.required = true;
+      //combine
+      queTd.appendChild(queIn); //queTd completed
+
+      //Answer section
+      let ansTd = document.createElement("td");
+      ansTd.setAttribute("style", "width: 30%; white-space:nowrap;")
+      //Answer input
+      let ansIn = document.createElement("input");
+      ansIn.setAttribute("type", "text");
+      ansIn.setAttribute("name", "q" + questionAmount); // as mention before, after qa++
+      ansIn.required = true;
+      let spacer = document.createElement("br");
+      let ansIn2 = document.createElement("input");
+      ansIn2.setAttribute("type", "text");
+      ansIn2.setAttribute("name", "q" + questionAmount); // as mention before, after qa++
+      ansIn2.required = true;
+      let spacer2 = document.createElement("br");
+      //Construct button
+      let addbtn = document.createElement("button");
+      addbtn.setAttribute('class', 'btn btn-outline-success');
+      addbtn.setAttribute('type', "button");
+      addbtn.setAttribute('onclick', "addAnswer(this)");
+      addbtn.innerHTML = "add more answer";
+      let rmbtn = document.createElement("button");
+      rmbtn.setAttribute('class', 'btn btn-outline-danger');
+      rmbtn.setAttribute('type', "button");
+      rmbtn.setAttribute('onclick', "removeAns(this)");
+      rmbtn.innerHTML = "remove answer";
+      //construct td of answer
+      ansTd.appendChild(ansIn)
+      ansTd.appendChild(spacer)
+      ansTd.appendChild(ansIn2)
+      ansTd.appendChild(spacer2)
+      ansTd.appendChild(addbtn)
+      ansTd.appendChild(rmbtn) // compelet ansTd
+
+      //construct selection area
+      let selTd = document.createElement("td");
+      selTd.setAttribute("style", "width: 10%;")
+      //construct select radio
+      let selIn = document.createElement("input");
+      selIn.setAttribute("type", "radio");
+      selIn.setAttribute("name", "q" + questionAmount);
+      selIn.setAttribute("value", '1');
+      selIn.setAttribute('checked',"checked");
+      let selLa = document.createElement("label");
+      selLa.setAttribute('for', "");
+      selLa.setAttribute('style', "padding-left: 5px;");
+      selLa.innerHTML = " " + 1;
+      let spacer3 = document.createElement("br");
+      let selIn2 = document.createElement("input");
+      selIn2.setAttribute("type", "radio");
+      selIn2.setAttribute("name", "q" + questionAmount);
+      selIn2.setAttribute("value", '2');
+      let selLa2 = document.createElement("label");
+      selLa2.setAttribute('for', "");
+      selLa2.setAttribute('style', "padding-left: 5px;");
+      selLa2.innerHTML = " " + 2;
+      let spacer4 = document.createElement("br");
+      //start construct of selTd
+      selTd.appendChild(selIn)
+      selTd.appendChild(selLa)
+      selTd.appendChild(spacer3)
+      selTd.appendChild(selIn2)
+      selTd.appendChild(selLa2)
+      selTd.appendChild(spacer4) //complete construct of selTd
+
+      //Oh yeah, it's all coming together 😏
+      let tr = document.createElement("tr");
+      tr.appendChild(queTd)
+      tr.appendChild(ansTd)
+      tr.appendChild(selTd)
+
+      // the below statment is where I will add the tr I constructed
+      x.previousElementSibling.lastElementChild.appendChild(tr)
+
+      document.getElementById("question_counter").innerHTML = questionAmount;
+    }
+  }
+
+  function rmQuestion(x) {
+    let questionAmount = document.getElementById("question_counter").innerHTML;
+    if (questionAmount == 1) {
+      alert('The min amount of question allow is 1')
+    } else {
+      let lasQue = x.previousElementSibling.previousElementSibling.previousElementSibling.lastElementChild.lastElementChild;
+      questionAmount--;
+      x.previousElementSibling.previousElementSibling.previousElementSibling.lastElementChild.removeChild(lasQue);
+      document.getElementById("question_counter").innerHTML = questionAmount;
+    }
+  }
+</script>
 <body>
   <%- include('partials/_header') %>
-  <main>
+  <main class="new_quiz">
     <form action="/quizzes/" method="POST">
-      <label for="">title</label>
-        <input type="text" name="title"><br>
-      <label for="">description</label>
-        <input type="text" name="description"><br>
-      <label for="">visibility</label>
-        <input type="checkbox" name="visibility" value="true">
-        <label for="">public</label>
-        <input type="checkbox" name="visibility" value="false">
-        <label for="">private</label><br>
+      <label for="">Title :</label>
+        <input type="text" name="title" required><br>
+      <label for="">Description :</label>
+        <input type="text" name="description" required><br>
+      <label for="">Hide Quiz from Public:</label>
+        <input type="checkbox" name="visibility" value="false"><br>
       <label for="">Photo URL</label>
-        <input type="text" name="photo_url"><br>
+        <input type="text" name="photo_url" required><br>
       <label for="">Category</label>
-        <input type="text" name="category"><br>
-      <label for="">question 1</label>
-        <input type="text" name="q1"><br>
-        <label for="">Answers</label>
-          <input type="text" name="q1">
-          <input type="text" name="q1">
-          <input type="text" name="q1">
-          <br>
-        <label for="">Correct</label>
-          <input type="radio" name="q1" value=1>
-            <label for="">1</label>
-          <input type="radio" name="q1" value=2>
-            <label for="">2</label>
-          <input type="radio" name="q1" value=3>
-            <label for="">3</label>
-      <br>
-      <label for="">question 2</label>
-        <input type="text" name="q2"><br>
-        <label for="">Answers</label>
-          <input type="text" name="q2">
-          <input type="text" name="q2">
-          <input type="text" name="q2">
-          <br>
-        <label for="">Correct</label>
-          <input type="radio" name="q2" value=1>
-            <label for="">1</label>
-          <input type="radio" name="q2" value=2>
-            <label for="">2</label>
-          <input type="radio" name="q2" value=3>
-            <label for="">3</label>
-      <br>
-      <button>submit</button>
+        <input type="text" name="category" required><br>
+      <table class="table user-quiz-questions" >
+        <thead>
+          <tr>
+            <th style="width: 60%;">Question : </th>
+            <th style="width: 30%; ">Answer : </th>
+            <th style="width: 15%; ">Select Answer : </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="word-wrap:break-word; width: 60%"> <!--question field of q1 -->
+              <input type="text" name="q1" required><br>
+            </td>
+            <td style="width: 30%; white-space:nowrap;">
+              <input type="text" name="q1" required> <br><!--answer field of q1 -->
+              <input type="text" name="q1" required><br>
+              <button class="btn btn-outline-success" type="button" onclick="addAnswer(this)">add more answer</button>
+              <button class="btn btn-outline-danger" type="button" onclick="removeAns(this)">remove answer</button>
+            </td>
+            <td style="width: 10%;">
+              <input type="radio" name="q1" value='1' checked="checked" required>
+              <label for="">1</label><br>
+              <input type="radio" name="q1" value='2'>
+              <label for="">2</label><br>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="btn btn-outline-success" type="button" onclick="addQuestion(this)">add more question</button><br>
+      <button class="btn btn-outline-danger" type="button" onclick="rmQuestion(this)">remove question</button><br>
+      <button class="btn btn-outline-primary" type="submit">submit</button>
     </form>
+    <p id="question_counter" style="visibility: hidden;"> 1 </p>
 
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

@@ -103,7 +103,6 @@ module.exports = (db) => {
   router.get("/:user_id/quizzes/new", (req, res) => {
     const user_id = req.session.user_id;
     const templateVars = {user_id};
-
     if (req.params.user_id == user_id) { //case where the user_id in the URL belongs to the logged in user
       res.render("new_quiz", templateVars)
     }
@@ -111,7 +110,7 @@ module.exports = (db) => {
       res.render("error", {user_id, error: "Access Denied!"})
     }
     else { //case where the user is not logged in
-      res.render("user_login")
+      res.render("user_login", templateVars)
     }
   });
 
