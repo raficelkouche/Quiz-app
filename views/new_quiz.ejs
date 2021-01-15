@@ -14,7 +14,7 @@
 
 <script>
   function addAnswer(x) {
-    let queNum = x.previousElementSibling.previousElementSibling.name;
+    let queNum = x.previousElementSibling.previousElementSibling.previousElementSibling.name;
     console.log(queNum)
     let lastAns = x.parentNode.childElementCount;
     if (lastAns == 20) {
