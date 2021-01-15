@@ -63,15 +63,17 @@
           <label for="">Sulfuric Acid</label><br>
         </div>
         <div class="fade" id="submit-quiz-slide">
-          <button>Submit</button>
+          <p>Click submit to view your results</p>
+          <button type="submit" class="btn-lg btn-primary">Submit</button>
         </div>
       </form>
+      <div class="question-counter">1 / 4</div>
     </div>
 
     <div class="control-quiz">
         <i class="fas fa-arrow-circle-left previous"></i>
-        <button type="button" class="btn-lg btn-primary">Home</button>
-        <button type="button" class="btn-lg btn-primary">Submit</button>
+        <!-- <button type="button" class="btn-lg btn-primary" id="cancel-button">Cancel</button> -->
+        <a href="/" class="btn-lg btn-primary" id="cancel-button">Cancel</a>
         <i class="fas fa-arrow-circle-right next"></i>
     </div>
     <div id="numOfQuestions" style="display:none;">3</div>
