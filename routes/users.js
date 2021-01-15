@@ -14,7 +14,6 @@ const hdb = require('../helper')
 
 
 module.exports = (db) => {
-
   // to see current users database - for dev
   router.get("/", (req, res) => {
     hdb.getAllUsers(`SELECT * FROM users;`)
@@ -40,23 +39,22 @@ module.exports = (db) => {
     }
     const templateVars = {user_id: req.session.user_id};
     res.render("user_new", templateVars);
-  })
+  });
 
   // users/:user_id/login GET - get login page - temp, will update to be more dynamci
   // this is for validation purposes
   router.get("/login", (req, res) =>  {
     // if user is already logged in
     if (req.session.user_id) {
-      res.redirect('../'); // redirect to homepage?
+      res.redirect('../');
     }
     const templateVars = {user_id: req.session.user_id};
     res.render("user_login", templateVars);
-  })
+  });
 
   // users POST - create new account, add to users db, redirect to homepage
   router.post("/", (req, res) => {
     const user = req.body;
-    // user.password = bycrypt.hashSync(user.password, #) // if we are encrypting
     hdb.addUser(user)
     .then(user => {
       // if user was not returned from db.addUser
@@ -66,13 +64,11 @@ module.exports = (db) => {
       }
       // if sucessful, user will be logged in and cookie assigned with user_id
       req.session.user_id = user.id;
-      // console.log('new user added, id:', req.session.user_id)
       // will redirect to user_page with new info rendered
       res.redirect(`/users/${user.id}`);
     })
     .catch(e => res.send(e));
-
-  })
+  });
 
   // ---- USER INFO AND MANAGEMENT (USER, LOGIN, LOGOUT, DELETE & EDIT) --------
 
@@ -87,30 +83,28 @@ module.exports = (db) => {
           user_id: req.session.user_id,
             // this user object will have all info from users db
           user: user
-        }
+        };
         // shows user_page with the user info based on templateVars
         res.render("user_page", templateVars);
       })
       .catch(e => res.send(e));
-
     } else {
-      res.send('you dont have access to this page!')
+      res.send('you dont have access to this page!');
     }
-
-  })
+  });
 
   // users/:user_id/quizzes/new GET - if logged in, take to new quizzes page
   router.get("/:user_id/quizzes/new", (req, res) => {
     const user_id = req.session.user_id;
     const templateVars = {user_id};
     if (req.params.user_id == user_id) { //case where the user_id in the URL belongs to the logged in user
-      res.render("new_quiz", templateVars)
+      res.render("new_quiz", templateVars);
     }
     else if (user_id) { //case where the user is logged in but wants to access another user's route
-      res.render("error", {user_id, error: "Access Denied!"})
+      res.render("error", {user_id, error: "Access Denied!"});
     }
     else { //case where the user is not logged in
-      res.render("user_login", templateVars)
+      res.render("user_login", templateVars);
     }
   });
 
@@ -125,14 +119,13 @@ module.exports = (db) => {
         // resets cookie session
         req.session = null;
         // redirect to homepage
-        res.redirect('/')
+        res.redirect('/');
       })
-      .catch(e => {res.send(e)})
+      .catch(e => {res.send(e)});
     } else {
-      res.send("user not logged in!")
+      res.send("user not logged in!");
     }
-
-  })
+  });
 
   // users/:user_id/login POST - verify login field with user db, update session cookie if info correct
   router.post("/login", (req, res) => {
@@ -148,36 +141,32 @@ module.exports = (db) => {
         }
         // on success, cookie assigned with user_id
         req.session.user_id = user.id;
-        // console.log(req.session.user_id)
         // redirects to user page
-        res.redirect(`/users/${user.id}`)
+        res.redirect(`/users/${user.id}`);
       })
       .catch(e => res.send(e));
-
-  })
+  });
 
   // users/:user_id/logout POST - logout user by erasing session cookie
   router.post("/logout", (req, res) => {
     req.session = null;
     res.redirect("../");
-  })
+  });
 
   // users/:user_id/edit GET - goes to user edit page
-  // STRETCH
   router.get('/:user_id/edit', (req, res) => {
     const user_id = Number(req.params.user_id);
     // check if the user has access to this page
     if (user_id === req.session.user_id) {
       // render the page with the fields for edit
-      const templateVars = { user_id: req.session.user_id }
-      res.render('user_edit', templateVars)
+      const templateVars = { user_id: req.session.user_id };
+      res.render('user_edit', templateVars);
     } else {
-      res.send('you dont have access!')
+      res.send('you dont have access!');
     }
-  })
+  });
 
   // users/:user_id PUT - edit user info by update user db and refresh page to show updated user info
-  // STRETCH
   router.put('/:user_id', (req, res) => {
     const user_id = Number(req.params.user_id);
     // check if logged user is trying to edit owns page
@@ -187,7 +176,7 @@ module.exports = (db) => {
         name: req.body.name,
         email: req.body.email,
         password: req.body.password
-      }
+      };
       // editUser helper should take two parameters, user_id and new info
       // it then updates the db
       hdb.editUser(new_info)
@@ -195,10 +184,10 @@ module.exports = (db) => {
         // with the new user info returned, cookie does not need to be updated
         // since user_id should remain the same
         // re-render the user_id page with new info
-        res.redirect(`../`)
+        res.redirect(`../`);
       })
     }
-  })
+  });
 
   // ----- USER QUIZ ACCESS (ALL QUIZ LIST OR SINGLE QUIZ INFO) -------
 
@@ -216,9 +205,9 @@ module.exports = (db) => {
       })
       .catch(e => res.send(e));
     } else {
-      res.send('you dont have access!')
+      res.send('you dont have access!');
     }
-  })
+  });
 
   // users/:user_id/quizzes/:quiz_id GET - goes to quiz page with creator access
   router.get('/:user_id/quizzes/:quiz_id', (req, res) => {
@@ -228,26 +217,19 @@ module.exports = (db) => {
       const quiz_id = (req.params.quiz_id);
       hdb.getQuizWithQuizId(quiz_id)
       .then (quiz => {
-        // const quiz = res.quizzes.quiz[0];
         // check if the cookie user = quiz user id (creator looking at the quiz)
         if (Number(quiz.creator_id) === req.session.user_id) {
           // quiz info here to render
           const templateVars = { quiz: quiz, user_id: req.params.user_id };
           // page rendering for quiz to be viewed by creator
           res.render('user_quiz', templateVars);
-
         } else {
-            // need to get the owner_id not name
-          res.send('you dont have access!')
+          res.send('you dont have access!');
         }
-
       })
       .catch(e => res.send(e));
-
     }
-  })
-
-  // ROUTES TO BE ADDED - JAN 11
+  });
 
   // users/:user_id/quizzes/:quiz_id/edit GET - goes to quiz edit page with creator access
   router.get('/:user_id/quizzes/:quiz_id/edit', (req, res) => {
@@ -269,16 +251,16 @@ module.exports = (db) => {
         if (Number(quiz.creator_id) === req.session.user_id) {
           // quiz info here to render
           const templateVars = { quiz: quiz, user_id: req.session.user_id };
-        // render the page with the fields for edit
-        res.render('user_quiz_edit', templateVars)
+          // render the page with the fields for edit
+          res.render('user_quiz_edit', templateVars);
 
-      } else {
-        res.send('you dont have access!')
-      }
-    })
+        } else {
+          res.send('you dont have access!');
+        }
+      })
       .catch(e => res.send(e));
-   }
-  })
+    }
+  });
 
   // added visibility change to update quiz page
   // users/:user_id/quizzes/:quiz_id/edit PUT - change visibility
@@ -286,25 +268,17 @@ module.exports = (db) => {
     const quiz_id = req.params.quiz_id;
     hdb.editVisibility(quiz_id)
     .then(result => {
-
-      res.redirect(`back`)
+      res.redirect(`back`);
     })
     .catch (e => {
-      console.error(e)
       res.status(500).send(e);
     })
-
-  })
+  });
 
   // users/:user_id/quizzes/:quiz_id PUT - update quiz info from edit page
-  // note: editQuiz function not yet defined
-  // STRETCH
   router.put('/:user_id/quizzes/:quiz_id', (req, res) => {
     // check if the cookie user = quiz user id (creator looking at the quiz)
-    console.log('accessing route /users/:user_id/quizzes/:quiz_id')
-    console.log(req.body.visibility)
-    // console.log(req.body)
-    // req.body is an object
+    // console.log(req.body.visibility);
     // Q# will be the question + all answers
     // each key after that that is
     // get quiz details to make newQuiz obj
@@ -328,8 +302,7 @@ module.exports = (db) => {
 
     // Messy Creation of the new Quiz Object questions
     let formArray= Object.keys(req.body); //quiz_id
-    console.log("that is from array")
-    // console.log(formArray)
+    // console.log("that is from array");
     let questions = [];
     let answerVal = [];
     let count = 0;
@@ -338,7 +311,7 @@ module.exports = (db) => {
       if (Array.isArray(req.body[formArray[i]])) {
         newQuiz.questions[formArray[i]] = {text : req.body[formArray[i]][0]};
         req.body[formArray[i]].shift(); //remove the text of question
-        for(const val of req.body[formArray[i]]){
+        for (const val of req.body[formArray[i]]) {
           answerVal.push(val);
         }
       } else {
@@ -350,61 +323,18 @@ module.exports = (db) => {
         count ++;
       }
     }
-    /*
-    // console.log(questions);
-    const allAnswers = []
-    // adds the questions to the new quiz obj and removes it from the questions array
-    for (let i = 0; i < questions.length; i++) {
-      const question = questions[i].shift()
-      for(let j = 0; j < questions[i].length; j++) {
-        allAnswers.push(questions[i][j]);
-      }
-      console.log(allAnswers)
-      newQuiz.questions[question_id] = {text: question, answers: [{answer_id: [allAnswers[i], answerVal[i]] }]}
-    }*/
-    // the answers may need to be adjusted
 
     const user_id = Number(req.params.user_id);
     if (user_id === req.session.user_id) {
       const quiz_id = Number(req.params.quiz_id);
-      console.log('calling the get quiz_id function')
+      // console.log('calling the get quiz_id function')
       hdb.editQuiz(newQuiz)
       .then(res.redirect(`back`))
       .catch(e => console.log(e));
-
-      /*
-      hdb.getQuizWithQuizId(quiz_id)
-      .then (quiz => {
-        console.log('get the quiz_id')
-        console.log(quiz)
-        if (quiz.creator_id === req.session.user_id) {
-          // store new quiz info
-          console.log('creator_id checked with session and newQuiz to be passed into helper')
-          const newQuizInfo = newQuiz
-          // take quiz info and add the questions id and answers id to new Quiz
-          console.log(quiz.questions)
-          console.log(newQuiz.questions)
-
-          for (let i = 0; i < quiz.questions.length; i++) {
-            newQuiz.questions[i].question_id = quiz.questions[i].question_id;
-          }
-
-          console.log(newQuiz.questions)
-
-          // updates quiz info in db
-          hdb.editQuiz(newQuizInfo)
-          .then( quiz => {
-            // on success, redirect to quiz page
-            res.redirect(`/${req.params.user_id}/quizzes/${quiz.id}`)
-          })
-          .catch(e => res.send(e))
-        }
-      })
-      */
     } else {
       res.send('you dont have access!')
     }
-  })
+  });
 
   // users/:user_id/quizzies/:quiz_id/delete - deletes quiz from quizzes db
   router.delete('/:user_id/quizzes/:quiz_id/delete', (req, res) => {
@@ -414,20 +344,18 @@ module.exports = (db) => {
       const quiz_id = Number(req.params.quiz_id);
       hdb.getQuizWithQuizId(quiz_id)
       .then (quiz => {
-        // console.log(quiz)
           hdb.removeQuiz(quiz.quiz_id)
           .then ( result => {
             // redirect to user's quizzes page
-            res.redirect(`../`)
+            res.redirect(`../`);
           })
           .catch(e => res.send(e));
         // }
       })
-
     } else {
       res.send('you dont have access!')
     }
-  })
+  });
 
   return router;
 };
