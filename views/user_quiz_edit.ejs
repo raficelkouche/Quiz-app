@@ -69,7 +69,7 @@
                     <th> Correct Answer:</th>
                     <th> Update Question: </th>
                     <th>
-                        <input type="text" name="<%= question.question_id %>" value="<%= question.question%>" require> <!-- name need to be questionID-->
+                        <input type="text" name="Q<%= question.question_id %>" value="<%= question.question%>" require> <!-- name need to be questionID-->
                     </th>
                     <th>Correct Answer</th>
                   </tr>
@@ -82,15 +82,13 @@
                       <td> Update <%= String.fromCharCode(question.answers.indexOf(answer) + 65) %>: </td>
                       <td>
 
-                          <input type="text" value="<%= answer.answer_value %>" name="<%= question.question_id %>" required>
+                          <input type="text" value="<%= answer.answer_value %>" name="Q<%= question.question_id %>A<%= answer.answer_id %>" required>
 
                       </td>
                       <td>
 
-                          <input type="radio" name="<%= question.question_id %> A <%= answer.answer_id %>" value="true" >
+                          <input type="radio" name="Correct_<%= question.question_id %>" value="<%= answer.answer_id %>" checked="checked" required>
                           <label>True</label>
-                          <input type="radio" name="<%= question.question_id %> A <%= answer.answer_id %>" value="false" checked="checked">
-                          <label>False</label>
 
                       </td>
                   </tr>

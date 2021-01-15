@@ -39,6 +39,7 @@ function copyUrl() {
     <div class="score">
       <div class="resultArea">
       <% if (!title) { %>
+        <!--if there quiz quiz_id not exist, or if the quiz_id and attempt_id does not match but the quiz is hidden -->
         <h2 class="wrongLink">The result of quiz you are looking for<br>
           Is not open for public, or<br>
           Does not exist!</h2>
@@ -48,6 +49,7 @@ function copyUrl() {
             </form>
           </div>
       <% } else if (!matchingQuiz) { %>
+        <!--if the attempt is not for this quiz, or attempt_id not exist-->
         <h2 class="wrongLink">The result you are trying to get for<br>
           The quiz: <%= title %><br>
           Does not exist!</h2>
@@ -57,6 +59,8 @@ function copyUrl() {
             </form>
           </div>
       <% } else if (name && Attempter) { %>
+        <!--if the attempter is logged in and viewing his own attempt-->
+        <!--Give custom msg and color based on score-->
         <% if (percentage === 1) { %>
           <h2>Congratulation, <%= name %>!</h3>
           <p class="smaller">You have scored</p>
@@ -94,6 +98,7 @@ function copyUrl() {
           </form>
         </div>
       <% } else { %>
+        <!--if user is not logged in when attempt the quiz, or is viewing someone else result-->
           <% if (name) { %>
             <h2><%= name %></h3>
           <% } else { %>

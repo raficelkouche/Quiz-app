@@ -162,23 +162,21 @@ module.exports = () => {
   //load the results for a given quiz-attempt
   router.get("/:quiz_id/attempts/:attempt_id", (req, res) => {
     const user_id = req.session.user_id;
-    db.getAttempt(req.params.attempt_id)
+    db.getAttempt(req.params.attempt_id) // get attempt info
       .then(results => {
-        if (results && req.params.quiz_id == results.quiz_id && req.params.attempt_id == results.id) {
+        if (results && req.params.quiz_id == results.quiz_id && req.params.attempt_id == results.id) { // if attempt exist and quiz_id match attempt's quiz
           let percentage = results.score/results.question_amount;
           const templateVars = {percentage: percentage, score: results.score, quiz_id: results.quiz_id, id: results.id, numOfQuestions: results.question_amount, name: results.user, user_id, title: results.quiz_title, Attempter: user_id === results.attempter_id, matchingQuiz: true}
           console.log(templateVars)
           res.render("view_result", templateVars)
-        } else {
+        } else { //if the the attempt is not for quiz or attempt  does not exist
           db.getQuizInfoWithId(req.params.quiz_id)
             .then(resu => {
               let result = resu[0] || {title: undefined};
-              console.log('why')
-              console.log(!results)
-              if (!results || (result.title && result.visibility)) {
+              if (!results || (result.title && result.visibility)) { //if attempt does not exist or the quiz exist but not public
                 const templateVars = {matchingQuiz: false, user_id, quiz_id: req.params.quiz_id, title: result.title}
                 res.render("view_result", templateVars);
-              } else {
+              } else { //all other condition
                 const templateVars = {matchingQuiz: false, user_id, quiz_id: req.params.quiz_id, title: null}
                 res.render("view_result", templateVars);
               }
