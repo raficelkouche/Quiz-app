@@ -25,9 +25,7 @@
           <div class="quiz-photo-desc">
             <img class="quiz-photo" src=<%= quiz.photo_url %>>
             <div class="quiz-detail-display">
-
               <p class="desc"> <%= quiz.description %> </p>
-
               <div>
                 <p> Category: <%= quiz.category%> </p>
                 <p> Public Visibility: <b><%= quiz.visibility %></b> </p>
@@ -38,8 +36,20 @@
                 <button type="submit" class="btn btn-outline-info">Change Visibility</button>
               </form>
             </div>
-            </div>
           </div>
+        </div>
+      </div>
+      <!-- update quiz details -->
+      <form method="POST" action="/users/<%= quiz.creator_id %>/quizzes/<%= quiz.quiz_id %>?_method=PUT" class="new-details">
+      <div style="margin: 1em">
+          <label>Title:</label><input type="text" name="title" value="<%= quiz.title %>" require>
+          <label>Description:</label><input type="text" name="description" value="<%= quiz.description %>" require>
+          <br>
+          <label>Photo Url:</label><input type="text" name="photo_url" value="<%= quiz.photo_url %>" require>
+          <label>Category:</label><input type="text" name="category" value="<%= quiz.category %>" require>
+          <br>
+          <label>Public Visibility: False</label> <input type="radio" name="visibility" value="false">
+          <label>Public Visibility: True</label> <input type="radio" name="visibility" value="true">
       </div>
       <div class="edit-quiz">
         <div>
@@ -51,9 +61,7 @@
                     <th> Correct Answer:</th>
                     <th> Update Question: </th>
                     <th>
-                      <form>
-                        <input type="text" name="newQuestion">
-                      </form>
+                        <input type="text" name="<%= question.question_id %>" value="<%= question.question%>" require> <!-- name need to be questionID-->
                     </th>
                     <th>Correct Answer</th>
                   </tr>
@@ -65,17 +73,17 @@
                       <td> <%= answer.answer_is_correct%></td>
                       <td> Update <%= String.fromCharCode(question.answers.indexOf(answer) + 65) %>: </td>
                       <td>
-                        <form>
-                          <input type="text" name="newAnswer">
-                        </form>
+
+                          <input type="text" value="<%= answer.answer_value %>" name="<%= question.question_id %>" required>
+
                       </td>
                       <td>
-                        <form>
-                          <input type="radio" name="is_correct" value="true">
+
+                          <input type="radio" name="<%= question.question_id %> A <%= answer.answer_id %>" value="true" >
                           <label>True</label>
-                          <input type="radio" name="is_correct" value="false">
+                          <input type="radio" name="<%= question.question_id %> A <%= answer.answer_id %>" value="false" checked="checked">
                           <label>False</label>
-                        </form>
+
                       </td>
                   </tr>
                   <% } %>
@@ -83,27 +91,11 @@
             </table>
           <% } %>
         </div>
-        <!-- <div class="new-quiz">
-          <% for (let question of quiz.questions) { %>
-            <table class="table user-quiz-questions">
-                <thead>
-                  <tr>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% for (let answer of question.answers)  { %>
-                  <tr>
-                  </tr>
-                  <% } %>
-                </tbody>
-            </table>
-            <% } %>
-        </div> -->
       </div>
 
       <div class="user-quiz-buttons">
         <!-- submit edit quiz info to db, need to update helper function to get the creator id number -->
-        <form method="POST" action="/users/<%= quiz.creator_id %>/quizzes/<%= quiz.quiz_id %>/edit">
+        <!-- <form method="POST" action="/users/<%= quiz.creator_id %>/quizzes/<%= quiz.quiz_id %>?_method=PUT"> -->
           <button type="submit" class="btn btn-outline-info">Update Quiz</button>
         </form>
       </div>
