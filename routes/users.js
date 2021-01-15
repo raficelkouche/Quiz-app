@@ -302,7 +302,6 @@ module.exports = (db) => {
   router.put('/:user_id/quizzes/:quiz_id', (req, res) => {
     // check if the cookie user = quiz user id (creator looking at the quiz)
     console.log('accessing route /users/:user_id/quizzes/:quiz_id')
-    console.log(req.body.visibility)
     // console.log(req.body)
     // req.body is an object
     // Q# will be the question + all answers
@@ -328,13 +327,21 @@ module.exports = (db) => {
 
     // Messy Creation of the new Quiz Object questions
     let formArray= Object.keys(req.body); //quiz_id
-    console.log("that is from array")
     // console.log(formArray)
     let questions = [];
     let answerVal = [];
     let count = 0;
     for(let i = 0; i < formArray.length; i ++) {
+      if(formArray[i].split("A")[1])
+      {
+        newQuiz.questions[formArray[i].split("Q")[1].split("A")[0]].answers[formArray[i].split("A")[1]] = [req.body[formArray[i]], false]; // add answer
+      } else if (formArray[i].split("_")[1]) {
+        newQuiz.questions[formArray[i].split("_")[1]].answers[req.body[formArray[i]]][1] = true; // add the correct answer
+      } else {
+        newQuiz.questions[formArray[i].split("Q")[1]] = { text : req.body[formArray[i]], answers : {}} // add question
+      }
       // console.log(formArray[i]
+      /*
       if (Array.isArray(req.body[formArray[i]])) {
         newQuiz.questions[formArray[i]] = {text : req.body[formArray[i]][0]};
         req.body[formArray[i]].shift(); //remove the text of question
@@ -349,6 +356,7 @@ module.exports = (db) => {
         newQuiz.questions[(formArray[i].split(" "))[0]].answers[answer_id] = [ answerVal[count] , req.body[formArray[i]]];
         count ++;
       }
+      */
     }
     /*
     // console.log(questions);
