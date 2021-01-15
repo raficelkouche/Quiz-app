@@ -294,7 +294,25 @@ module.exports = (db) => {
     // Q# will be the question + all answers
     // each key after that that is
 
-    // Messy Creation of the new Quiz Object
+    // get quiz details to make newQuiz obj
+    const newQuiz = {
+      owner_id: req.session.user_id,
+      title: req.body.title,
+      description: req.body.description,
+      photo_url: req.body.photo_url,
+      category: req.body.category,
+      visibility: req.body.visibility,
+      questions: []
+    };
+
+    // remove the keys from req.body
+    delete req.body.title;
+    delete req.body.description;
+    delete req.body.photo_url;
+    delete req.body.category;
+    delete req.body.visibility;
+
+    // Messy Creation of the new Quiz Object questions
     const formArray= Object.values(req.body);
     // console.log(formArray)
     let questions = [];
@@ -308,7 +326,6 @@ module.exports = (db) => {
       }
     }
     // console.log(questions);
-    const newQuiz = { questions: [] };
     const allAnswers = []
     // adds the questions to the new quiz obj and removes it from the questions array
     for (let i = 0; i < questions.length; i++) {
@@ -316,21 +333,25 @@ module.exports = (db) => {
       for(let j = 0; j < questions[i].length; j++) {
         allAnswers.push(questions[i][j]);
       }
-      newQuiz.questions[i] = {text: question, answers: [{answer: allAnswers[i], is_correct:answerVal[i] }]}
+      newQuiz.questions[i] = {text: question, answers: [{answer: [allAnswers[i], answerVal[i]] }]}
     }
     console.log(newQuiz)
     console.log(newQuiz.questions[0].text)
-    console.log(newQuiz.questions[0].answers[0].answer)
-    console.log(newQuiz.questions[0].answers[0].is_correct)
+    console.log(newQuiz.questions[0].answers[0].answer[0])
+    console.log(newQuiz.questions[0].answers[0].answer[1])
     // the answers may need to be adjusted
 
     const user_id = Number(req.params.user_id);
     if (user_id === req.session.user_id) {
       const quiz_id = Number(req.params.quiz_id);
+      console.log('calling the get quiz_id function')
       hdb.getQuizWithQuizId(quiz_id)
       .then (quiz => {
+        console.log('get the quiz_id')
+        console.log(quiz)
         if (quiz.creator_id === req.session.user_id) {
           // store new quiz info
+          console.log('creator_id checked with session and newQuiz to be passed into helper')
           const newQuizInfo = newQuiz
           // updates quiz info in db
           hdb.editQuiz(newQuizInfo)
