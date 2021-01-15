@@ -439,6 +439,12 @@ div.score {
 
     margin:1em;
     font-size: 110%;
+    display:flex;
+    justify-content: space-between;
+
+    label {
+      width: 7em;
+    }
 
   }
 

@@ -188,7 +188,7 @@
     }
   }
 </script>
-<body>
+<body style='background-color:  #EEE'>
   <%- include('partials/_header') %>
   <main class="new-quiz-page">
     <h2>New Quiz</h2>
@@ -198,12 +198,12 @@
           <input type="text" name="title" maxlength="30" required><br>
         <label for="">Description :</label>
           <input type="text" name="description" maxlength="140" required><br>
-        <label for="">Hide Quiz from Public:</label>
-          <input type="checkbox" name="visibility" value="false"><br>
         <label for="">Photo URL:</label>
           <input type="text" name="photo_url" maxlength="200" required><br>
         <label for="">Category:</label>
           <input type="text" name="category" maxlength="20" required><br>
+        <label for="">Hide Quiz from Public:</label>
+          <input type="checkbox" name="visibility" value="false"><br>
     </div>
       <table class="table table-striped user-quiz-questions" >
         <thead class="thead-dark">
