@@ -256,8 +256,16 @@ module.exports = (db) => {
       const quiz_id = (req.params.quiz_id);
       hdb.getQuizWithQuizId(quiz_id)
       .then (quiz => {
-        console.log(quiz.questions[0].question_id)
-        console.log(quiz.questions[0].answers[0].answer_id)
+
+        let orderQues = quiz.questions;
+        orderQues.sort(function(a, b) {
+        let keyA = a.question_id;
+        let keyB = b.question_id;
+        if (keyA < keyB) return -1;
+        if (keyA > keyB) return 1;
+        return 0;
+        });
+
         if (Number(quiz.creator_id) === req.session.user_id) {
           // quiz info here to render
           const templateVars = { quiz: quiz, user_id: req.session.user_id };
