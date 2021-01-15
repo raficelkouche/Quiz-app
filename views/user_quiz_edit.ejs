@@ -42,11 +42,11 @@
       <!-- update quiz details -->
       <form method="POST" action="/users/<%= quiz.creator_id %>/quizzes/<%= quiz.quiz_id %>?_method=PUT" class="new-details">
       <div style="margin: 1em">
-          <label>Title:</label><input type="text" name="title">
-          <label>Description:</label><input type="text" name="description">
+          <label>Title:</label><input type="text" name="title" value="<%= quiz.title %>" require>
+          <label>Description:</label><input type="text" name="description" value="<%= quiz.description %>" require>
           <br>
-          <label>Photo Url:</label><input type="text" name="photo_url">
-          <label>Category:</label><input type="text" name="category">
+          <label>Photo Url:</label><input type="text" name="photo_url" value="<%= quiz.photo_url %>" require>
+          <label>Category:</label><input type="text" name="category" value="<%= quiz.category %>" require>
           <br>
           <label>Public Visibility: False</label> <input type="radio" name="visibility" value="false">
           <label>Public Visibility: True</label> <input type="radio" name="visibility" value="true">
@@ -61,7 +61,7 @@
                     <th> Correct Answer:</th>
                     <th> Update Question: </th>
                     <th>
-                        <input type="text" name="Q<%= quiz.questions.indexOf(question) + 1 %>">
+                        <input type="text" name="<%= question.question_id %>" value="<%= question.question%>" require> <!-- name need to be questionID-->
                     </th>
                     <th>Correct Answer</th>
                   </tr>
@@ -74,14 +74,14 @@
                       <td> Update <%= String.fromCharCode(question.answers.indexOf(answer) + 65) %>: </td>
                       <td>
 
-                          <input type="text" name="Q<%= quiz.questions.indexOf(question) + 1 %>">
+                          <input type="text" value="<%= answer.answer_value %>" name="<%= question.question_id %>" required>
 
                       </td>
                       <td>
 
-                          <input type="radio" name="Q<%= quiz.questions.indexOf(question) + 1 %>A<%= question.answers.indexOf(answer) + 1 %>" value="true">
+                          <input type="radio" name="<%= question.question_id %> A <%= answer.answer_id %>" value="true" >
                           <label>True</label>
-                          <input type="radio" name="Q<%= quiz.questions.indexOf(question) + 1 %>A<%= question.answers.indexOf(answer) + 1 %>" value="false">
+                          <input type="radio" name="<%= question.question_id %> A <%= answer.answer_id %>" value="false" checked="checked">
                           <label>False</label>
 
                       </td>
