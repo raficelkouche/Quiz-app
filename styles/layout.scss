@@ -505,8 +505,20 @@ div.score {
 //View all quizzes
 
 .view-all-quizzes {
-  margin-top: 4%;
-  height: 100vh;
+  margin-top: 2%;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    align-self: center;
+    font-family: $font-titles;
+    font-size: 2.8rem;
+    color: black;
+    width: 70%;
+    border-bottom: 4px solid #adb3b2;
+    text-transform: capitalize;
+  }
 
   .all-quizzes {
     background-color: #244751;
@@ -525,6 +537,7 @@ div.score {
 
     img{
      height: 100%;
+     width: 70%;
     }
 
     .card-content{
@@ -533,7 +546,8 @@ div.score {
     }
 
     .card-controls{
-
+      display: flex;
+      justify-content: space-between;
     }
   }
 
