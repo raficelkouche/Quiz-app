@@ -318,5 +318,111 @@ body {
   @include button();
 }
 
+.take-quiz {
+  height: 100vh;
+  background-color: #244751;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+
+  h1{
+    color: #67CEEB;
+    font-family: $font-titles;
+    font-size: 5rem;
+  }
+
+  .quiz-questions {
+    border: 2px solid #9E8329;
+    box-shadow: 0 0 20px #9E8329 ;
+    border-radius: 25px;
+    background-image: linear-gradient(to right, silver, whitesmoke);
+    width: 40%;
+    height: 30vw;
+    min-width: 300px;
+    min-height: 500px;
+
+    .question {
+      display: none;
+
+      .question-text {
+        font-weight: bold;
+        color: #9E8329;
+        font-size: 2.4rem;
+      }
+
+      label:hover{
+        transform: scale(1.1) translateX(10px);
+        cursor: pointer;
+      }
+    }
+
+    form {
+      padding: 5%;
+      font-family: 'Yusei Magic', sans-serif;
+      font-size: 2.2rem;
+
+    }
+
+    #submit-quiz-slide {
+      display: none;
+    }
+
+  }
+  .next, .previous {
+    cursor: pointer;
+    color: #67CEEB;
+    font-size: 4rem;
+  }
+  .next:hover, .previous:hover{
+    color: whitesmoke;
+  }
 
 
+  .control-quiz{
+    display: flex;
+    flex-direction: row;
+    height: 15vh;
+    justify-content: space-around;
+    align-items: center;
+    width: 30vw;
+
+    button{
+      background-image: linear-gradient(to right, silver, whitesmoke);
+      color: #9E8329;
+      border: 0;
+      cursor: pointer;
+      font-family: $font-others;
+    }
+  }
+  @media only screen and (max-width: 1300px) {
+    .quiz-questions{
+      height: 40vw;
+      width: 70%;
+    }
+
+    .control-quiz{
+      width: 80vw;
+    }
+  }
+  .fade {
+    animation: fadeIn ease 1s;
+    -webkit-animation: fadeIn ease 1s;
+    -moz-animation: fadeIn ease 1s;
+    animation-fill-mode: forwards;
+}
+
+  @keyframes fadeIn {
+    0% {opacity: .2;}
+    100% {opacity: 1;}
+  }
+  @-webkit-keyframes fadeIn {
+    0% {opacity: .2;}
+    100% {opacity: 1;}
+  }
+  @-moz-keyframes fadeIn {
+    0% {opacity: .2;}
+    100% {opacity: 1;}
+  }
+}

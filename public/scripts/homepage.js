@@ -23,7 +23,7 @@ $(document).ready(function() {
                   <div class="card-body">
                     <h5 class="card-title">${elm.title}</h5>
                     <p class="card-text">${elm.description}</p>
-                    <a href="#" class="btn btn-primary">Take Quiz</a>
+                    <a href="/quizzes/${elm.id}" target="_blank" class="btn btn-primary">Take Quiz</a>
                   </div>
                 </div>
               </div>`)
