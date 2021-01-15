@@ -21,7 +21,7 @@ const getUserWithEmail = function(email) {
   `, [`${email}`])
   .then(res => res.rows[0] ?  res.rows[0] : null);
 } // will return Object of 1 user with all info, return null if not found. Object Key [register_on, id, name, email, password]
-exports.getUserWithEmail = getUserWithEmail; //checked, if not found will
+exports.getUserWithEmail = getUserWithEmail;
 
 const getUserWithId = function(id) {
   return pool.query(`
@@ -30,7 +30,7 @@ const getUserWithId = function(id) {
   `, [id])
   .then(res => res.rows[0] ? res.rows[0] : null);
 } // will return Object of 1 user with all info, return null if not found.  Object Key [register_on, id, name, email, password]
-exports.getUserWithId = getUserWithId; //checked , working, will sent null if not found
+exports.getUserWithId = getUserWithId;
 
 const addUser = function(user) {
   return pool.query(`
@@ -49,7 +49,7 @@ const editUser =  function(user) { //user shall be object contain id, email, pas
   RETURNING *;`, [user.name, user.email, user.password, user.id])
   .then(res => res.rows[0]);
 } // will return Object of the edited user with all info, Info shall be check if valid before using this function.  Object Key [register_on, id, name, email, password]
-exports.editUser = editUser; // checked normal case
+exports.editUser = editUser;
 
 const removeUser =  function(id) { // user id shall be pass
   return pool.query(`
@@ -59,16 +59,16 @@ const removeUser =  function(id) { // user id shall be pass
   `, [id])
   .then(res => res.rows[0]);
 } // will return Object of the removed user with all info
-exports.removeUser = removeUser; //checked normal case, should add security
+exports.removeUser = removeUser;
 
-const getQuizzes = function(limit = 3, count = 0, category) { // count shall be the number of time this been call in the same page, it shall start at 0, default 0
+const getQuizzes = function(limit = 3, count = 0, category) { // count shall be the number of time this been call in the same page, it shall start at 0, default 0, limit is how many result you want to get
   // category is not implement yet.
   let queryString = `
   SELECT quizzes.*, COUNT(attempts.*) AS total_attempt
   FROM quizzes
   LEFT JOIN attempts ON quiz_id = quizzes.id
   WHERE visibility = true`
-  if(category) { // get quizzes in this cate only, might break, not tested
+  if(category) { // get quizzes in this category only, might break, not tested
     queryString += `WHERE category LIKE '%${category}%'`;
   }
   queryString += `
@@ -79,7 +79,7 @@ const getQuizzes = function(limit = 3, count = 0, category) { // count shall be 
   `
   return pool.query(queryString, [limit, count*limit])
   .then(res => res.rows);
-} // will return array of 3 object sort by popularity(attempt), as the count increment, it will the next 3.
+} // will return array of 3 object sort by popularity(attempt)default
 exports.getQuizzes = getQuizzes; //checked normal case
 
 const getQuizzesByUserId = function(userId) { // get all quiz from a certain user
@@ -94,11 +94,9 @@ const getQuizzesByUserId = function(userId) { // get all quiz from a certain use
   `, [userId]) // this will shown newest first as default
   .then(res => res.rows);
 } // will return array of Object containing all info from quiz table. Object Key [id, creator, title, description, visibilty, photo_url, category, total_attempts, average_score]
-exports.getQuizzesByUserId = getQuizzesByUserId; //checked normal case
+exports.getQuizzesByUserId = getQuizzesByUserId;
 
 const getQuizWithQuizId = function(quizId) { // get a quiz by id
-  console.log("in Quiz with id")
-  console.log(quizId)
   return pool.query(`
   WITH ans AS (
     SELECT
@@ -150,11 +148,10 @@ const getQuizWithQuizId = function(quizId) { // get a quiz by id
   JOIN users ON owner_id = users.id;
   ;`, [quizId])
   .then(res => res.rows[0].quizzes.quiz[0]);
-} //return JSON
+} //return something similar to JSON
 exports.getQuizWithQuizId = getQuizWithQuizId; // checked normal case
 /*
 Here is a reference for output
-[{"quiz" : [
   {
     "creator" : "Lloyd Jefferson",
     "quiz_id" : 18,
@@ -184,12 +181,10 @@ Here is a reference for output
         ]
       }, and goes on if there are more question.
     }]
-  }]
-}]
+  }
 */
 
 const addQuiz = function(quiz) {
-  console.log(typeof quiz.visibility)
   if(!quiz.visibility) quiz.visibility = "true";
   let queryString = `
     WITH quiz AS (
@@ -209,7 +204,6 @@ const addQuiz = function(quiz) {
       )
       `; // pass questionID for answer insert
     for (let answer = Object.keys(quiz.questions[question].answers).length; answer > 0; answer--) {
-      console.log(answer);
       queryParams.push(quiz.questions[question].answers[answer][0]);
       queryString += `, q${question}a${answer} AS(
         INSERT INTO answers (question_id, value, is_correct)
@@ -228,20 +222,17 @@ const addQuiz = function(quiz) {
   .then(res => getQuizWithQuizId(res.rows[0].id)) //call upon getQuizWIthQuizId to return the whole quiz
   .catch(e => e);
 }
-exports.addQuiz = addQuiz; //checked, working with normal case
+exports.addQuiz = addQuiz;
 
 
 
 const editQuiz =  function(newQuiz) {
   let queryString = `WITH`;
   let queryParams = [];
-  let quesCount = Object.keys(newQuiz.questions).length;
-  let ansCount = -2;
-  console.log(ansCount)
-  console.log(quesCount);
+  let quesCount = Object.keys(newQuiz.questions).length; //since it no questions no long order from 1, get count
+  let ansCount = -2;// counter start at negative untill condition hit
   for (const question in newQuiz.questions) {
     quesCount--;
-    console.log(quesCount)
     queryParams.push(newQuiz.questions[question].text);
     queryString += ` u${queryParams.length} AS (
     UPDATE questions
@@ -250,9 +241,9 @@ const editQuiz =  function(newQuiz) {
     ),`;
     for (const answer in newQuiz.questions[question].answers) {
       if (quesCount === 0 && ansCount < 0) {
-        ansCount = Object.keys(newQuiz.questions[question].answers).length - 1;
+        ansCount = Object.keys(newQuiz.questions[question].answers).length - 1; //reset ansCoount for last question
       }
-      if (ansCount === 0) {
+      if (ansCount === 0) { // if last answer, end the chain by not adding ,
         queryParams.push(newQuiz.questions[question].answers[answer][0]);
         queryString += ` u${queryParams.length} AS (
           UPDATE answers
@@ -282,7 +273,7 @@ const editQuiz =  function(newQuiz) {
   return pool.query(queryString, queryParams)
   .then(res => getQuizWithQuizId(res.rows[0].id));
 } // will automatically call getQuizWithQuizId, so it should return the updated quiz. NOT TESTED YET
-exports.editQuiz = editQuiz; //need to discuss before further coding
+exports.editQuiz = editQuiz;
 
 const removeQuiz =  function(quizId) { // user id shall be pass
   return pool.query(`
@@ -299,7 +290,7 @@ const addAttempt = function(attempt) {
   let queryParams = [attempt.quizId];
   if (attempt.user_id) { // check if there is a userId
     queryString += `user_id, `;
-    queryParams.push(attempt.user_id); //yes then add
+    queryParams.push(attempt.user_id); //yes then add userid too
   }
   queryString += `score)
   VALUES ($1, $2`
@@ -310,8 +301,8 @@ const addAttempt = function(attempt) {
   queryParams.push(attempt.score);
   return pool.query(queryString, queryParams)
   .then(res => res.rows[0]);
-} // will return Object of the newly added user with all info, Info shall be check if valid before using this function.  Object Key [attempt_on, id, name, email, password]
-exports.addAttempt = addAttempt; //checked no userId and with userId
+} // will return Object of the newly added attempt with all info, Info shall be check if valid before using this function.
+exports.addAttempt = addAttempt;
 
 const getAttempt =  function(attemptId) { //get the attempt result with id
   return pool.query(`
@@ -324,10 +315,10 @@ const getAttempt =  function(attemptId) { //get the attempt result with id
   GROUP BY 1, 2, 3, 4, 5, 6, 7;
   `, [attemptId])
   .then(res => res.rows[0]);
-} // will return Object of the attempt.  Object Key [attempt_on, id, score, user (undefined if play as guest), quiz_title]
-exports.getAttempt = getAttempt; //checked normal case
+} // will return Object of the attempt.
+exports.getAttempt = getAttempt;
 
-const editVisibility =  function(quizId) { //togglt visibility of quiz
+const editVisibility =  function(quizId) { //toggle visibility of quiz
   return pool.query(`
   UPDATE quizzes
   SET visibility = NOT visibility
@@ -335,12 +326,10 @@ const editVisibility =  function(quizId) { //togglt visibility of quiz
   RETURNING *;
   `, [quizId])
   .then(res => res.rows[0]);
-} // return the new state of the quiz
+} // return the new visibility state of the quiz
 exports.editVisibility = editVisibility;
 
 const getAllAttempts = function(quizId) { //get all attempts given a quizID
-  /*
-  */
   return pool.query(`
   WITH att AS (
     SELECT
@@ -380,7 +369,7 @@ const getAllAttempts = function(quizId) { //get all attempts given a quizID
   .then(res => res.rows);
 }
 exports.getAllAttempts = getAllAttempts;
-/* example output
+/*
 [{
   "quiz" : [
     {
@@ -414,7 +403,7 @@ const getCorrectAnswer = function(quizId) {
   WHERE q.id = $1 AND a.is_correct = TRUE;
   `, [quizId])
   .then(res => res.rows);
-}
+} //return all correct answers' answer_id with the question_id
 exports.getCorrectAnswer = getCorrectAnswer;
 
 // helper function to login user with given creds
@@ -430,7 +419,7 @@ const login = function(email, password) {
 }
 exports.login = login;
 
-const getQuizInfoWithId = function(id) {
+const getQuizInfoWithId = function(id) { // a smaller version of get quizInfo when you do not need all the info
   return pool.query(`
   SELECT title, visibility FROM quizzes
   WHERE id = $1;
