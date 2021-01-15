@@ -294,7 +294,7 @@ module.exports = (db) => {
   router.put('/:user_id/quizzes/:quiz_id', (req, res) => {
     // check if the cookie user = quiz user id (creator looking at the quiz)
     console.log('accessing route /users/:user_id/quizzes/:quiz_id')
-    console.log(res.body)
+    console.log(req.body.visibility)
     // console.log(req.body)
     // req.body is an object
     // Q# will be the question + all answers

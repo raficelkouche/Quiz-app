@@ -48,8 +48,16 @@
           <label>Photo Url:</label><input type="text" name="photo_url" value="<%= quiz.photo_url %>" require>
           <label>Category:</label><input type="text" name="category" value="<%= quiz.category %>" require>
           <br>
-          <label>Public Visibility: False</label> <input type="radio" name="visibility" value="false">
-          <label>Public Visibility: True</label> <input type="radio" name="visibility" value="true">
+          <label>Public Visibility: False</label>
+          <% if (!quiz.visibility) { %>
+            <input type="radio" name="visibility" value="false" checked="checked">
+            <label>Public Visibility: True</label>
+            <input type="radio" name="visibility" value="true" >
+          <% } else { %>
+            <input type="radio" name="visibility" value="false" checked="checked">
+            <label>Public Visibility: True</label>
+            <input type="radio" name="visibility" value="true" checked="checked">
+          <% } %>
       </div>
       <div class="edit-quiz">
         <div>

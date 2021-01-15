@@ -60,13 +60,13 @@ module.exports = () => {
       }
     };
     db.addQuiz(quizInfo)
-      .then(result => {
-        db.getQuizzes(result.quiz_id)
+      .then(
+        db.getQuizzes(3)
         .then(quizzes => {
           res.render("index", { quizzes, user_id });
         })
 
-      })
+      )
       .catch(err => {
         console.log("query error", err.stack);
       })
