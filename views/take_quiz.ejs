@@ -8,31 +8,82 @@
   <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
     integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    type="text/css">
+  <link href="https://fonts.googleapis.com/css2?family=Goldman&family=Raleway:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap" rel="stylesheet">
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+  <script type="text/javascript" src="/scripts/take_quiz.js"></script>
   <title>Take Quiz</title>
 </head>
 <body>
   <%- include('partials/_header') %>
-  <main>
-    <div><%= quizData.title %></div>
-    <div><%= quizData.description %></div>
-    <form action="/quizzes/<%=quizData.quiz_id%>/attempts" method="POST">
-    <% for (const question of quizData.questions) { %>
-          <div><%= question.question %></div>
-      <%    for (const answer of question.answers) { %>
-          <input type="radio" name="<%=question.question_id%>" value="<%= answer.answer_id%>">
-          <label for=""><%=answer.answer_value%></label>
-          <% } %>
-          <br>
-    <% } %>
-    <button>Submit</button>
-    </form>
-    <!-- Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-    <script type="text/javascript" src="/scripts/homepage.js"></script>
+  <main class="take-quiz">
+    <h1>Quiz Title</h1>
+    <div class="quiz-questions">
+      <form action="">
+        <div class="question fade">
+          <div class="question-text">
+            What is the capital of Canada?
+          </div><br>
+          <input type="radio" name="1" value="1" id="1">
+          <label for="1">Dubai</label><br>
+          <input type="radio" name="1" value="2" id="2">
+          <label for="2">Toronto</label><br>
+          <input type="radio" name="1" value="3" id="3">
+          <label for="3">Ottawa</label><br>
+          <input type="radio" name="1" value="4" id="4">
+          <label for="4">Tokyo</label><br>
+        </div>
+        <div class="question fade">
+          <div class="question-text">
+            What is the plural of fish?
+          </div><br>
+          <input type="radio" name="1" value="1">
+          <label for="">Fishes</label><br>
+          <input type="radio" name="1" value="2">
+          <label for="">Fish</label><br>
+          <input type="radio" name="1" value="3">
+          <label for="">Fishing</label><br>
+          <input type="radio" name="1" value="4">
+          <label for="">Chicken</label><br>
+        </div>
+        <div class="question fade">
+          <div class="question-text">
+            What does NaOH stand for?
+          </div><br>
+          <input type="radio" name="1" value="1">
+          <label for="">Hydrogen Sulphate</label><br>
+          <input type="radio" name="1" value="2">
+          <label for="">Sodium Nitrate</label><br>
+          <input type="radio" name="1" value="3">
+          <label for="">Sodium Hydroxide</label><br>
+          <input type="radio" name="1" value="4">
+          <label for="">Sulfuric Acid</label><br>
+        </div>
+        <div class="fade" id="submit-quiz-slide">
+          <p>Click submit to view your results</p>
+          <button type="submit" class="btn-lg btn-primary">Submit</button>
+        </div>
+      </form>
+      <div class="question-counter">1 / 4</div>
+    </div>
+
+    <div class="control-quiz">
+        <i class="fas fa-arrow-circle-left previous"></i>
+        <!-- <button type="button" class="btn-lg btn-primary" id="cancel-button">Cancel</button> -->
+        <a href="/" class="btn-lg btn-primary" id="cancel-button">Cancel</a>
+        <i class="fas fa-arrow-circle-right next"></i>
+    </div>
+    <div id="numOfQuestions" style="display:none;">3</div>
+    <!-- <div id="numOfQuestions" style="display:none;"><%=quizData.questions.length%></div> -->
   </main>
+
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
 </body>
 </html>

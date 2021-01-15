@@ -5,7 +5,10 @@
   INSERT INTO quizzes (
   owner_id, title, description, visibility, photo_url, category)
   VALUES (
-  2, 'Fun Math for kids!', 'Basic multiplication', 'TRUE', 'https://i.imgur.com/UmJMQd.jpeg', 'Education');
+  2, 'Fun Math for kids!', 'Basic multiplication', 'TRUE', 'https:
+//encrypted-tbn0.gstatic.com/images?q=
+tbn:
+ANd9GcRaixULGZCRgSsry-Ha8chS1q4DUPaIUew6JQ&usqp=CAU', 'Education');
 
   INSERT INTO quizzes (
   owner_id, title, description, visibility, photo_url, category)
@@ -25,8 +28,7 @@
   INSERT INTO quizzes (
   owner_id, title, description, visibility, photo_url, category)
   VALUES (
-  7, 'Do you feel Lucky?', '👌👍👌👍👌👍👌👍👌👍good luck go౦ԁ luck👌 have ✔ some good👌👌luck right👌👌there👌👌👌 right✔there ✔✔if i do ƽaү so my self 💯 i say so 💯 thats what im luckin fur right there right there (chorus: ʳᶦᵍʰᵗ ᵗʰᵉʳᵉ) gUUUUUUD💯 👌👌 👌LO0ОଠOOOOOОଠଠOoooᵒᵒᵒᵒᵒᵒᵒᵒᵒ👌 👌👌 👌 💯 👌 💪🏼🙈🙉👌👌Good luck
-', 'TRUE', 'https://i.imgur.com/dA6qCJO.png', 'Misc.');
+  7, 'Do you feel Lucky?', 'Try your luck', 'TRUE', 'https://i.imgur.com/dA6qCJO.png', 'Misc.');
 
   INSERT INTO quizzes (
   owner_id, title, description, visibility, photo_url, category)
@@ -51,7 +53,8 @@
   INSERT INTO quizzes (
   owner_id, title, description, visibility, photo_url, category)
   VALUES (
-  20, 'Super Test!', 'Are you a Mario fan? Try this quiz out!', 'TRUE', 'https://i.imgur.com/4wQXNrx.jpeg', 'Gaming');
+  20, 'Super Test!', 'Are you a Mario fan? Try this quiz out!', 'TRUE', 'https:
+//1734811051.rsc.cdn77.org/data/images/full/371188/mario.jpg', 'Gaming');
 
   INSERT INTO quizzes (
   owner_id, title, description, visibility, photo_url, category)
