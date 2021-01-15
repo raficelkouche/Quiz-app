@@ -50,10 +50,11 @@ module.exports = () => {
         for (let i = 1; i < lengthOfAnswerArray - 1; i++) {
           //return true only when the index of the current answer matches the last element of the array
           isCorrect = (i === Number(req.body[key][lengthOfAnswerArray - 1])) ? true : false;
-          quizInfo.questions[questionCounter].answers[`answer${answerCounter}`] = [req.body[key][i], isCorrect];
+          quizInfo.questions[questionCounter].answers[`${answerCounter}`] = [req.body[key][i], isCorrect];
           answerCounter++;
         }
         questionCounter++;
+        answerCounter = 1;
       } else {
         quizInfo[key] = req.body[key];
       }

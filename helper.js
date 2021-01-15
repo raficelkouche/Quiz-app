@@ -97,6 +97,8 @@ const getQuizzesByUserId = function(userId) { // get all quiz from a certain use
 exports.getQuizzesByUserId = getQuizzesByUserId; //checked normal case
 
 const getQuizWithQuizId = function(quizId) { // get a quiz by id
+  console.log("in Quiz with id")
+  console.log(quizId)
   return pool.query(`
   WITH ans AS (
     SELECT
@@ -190,14 +192,14 @@ const addQuiz = function(quiz) {
   console.log(typeof quiz.visibility)
   if(!quiz.visibility) quiz.visibility = "true";
   let queryString = `
-  WITH quiz AS (
+    WITH quiz AS (
     INSERT INTO quizzes (owner_id, title, description, visibility, photo_url, category)
     VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING id
     )
     `; // use with to pass quizID for questions insert
   let queryParams = [ quiz.owner_id, quiz.title, quiz.description, quiz.visibility, quiz.photo_url, quiz.category ]
-  for (const question in quiz.questions) {
+  for (let question = Object.keys(quiz.questions).length; question > 0; question--) {
     queryParams.push(quiz.questions[question].text);
     queryString += `, q${question} AS(
       INSERT INTO questions (quiz_id, question)
@@ -206,7 +208,8 @@ const addQuiz = function(quiz) {
       RETURNING id
       )
       `; // pass questionID for answer insert
-    for (const answer in quiz.questions[question].answers) {
+    for (let answer = Object.keys(quiz.questions[question].answers).length; answer > 0; answer--) {
+      console.log(answer);
       queryParams.push(quiz.questions[question].answers[answer][0]);
       queryString += `, q${question}a${answer} AS(
         INSERT INTO answers (question_id, value, is_correct)
@@ -226,6 +229,8 @@ const addQuiz = function(quiz) {
   .catch(e => e);
 }
 exports.addQuiz = addQuiz; //checked, working with normal case
+
+
 
 const editQuiz =  function(newQuiz) {
   let queryString = ``;
