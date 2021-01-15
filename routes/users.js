@@ -288,8 +288,42 @@ module.exports = (db) => {
   // STRETCH
   router.put('/:user_id/quizzes/:quiz_id', (req, res) => {
     // check if the cookie user = quiz user id (creator looking at the quiz)
-    console.log('accessing route /users/:user_id/quizzes/:quiz_id PUT')
-    console.log(req.body)
+    console.log('accessing route /users/:user_id/quizzes/:quiz_id')
+    // console.log(req.body)
+    // req.body is an object
+    // Q# will be the question + all answers
+    // each key after that that is
+
+    // Messy Creation of the new Quiz Object
+    const formArray= Object.values(req.body);
+    // console.log(formArray)
+    let questions = [];
+    let answerVal = [];
+    for(let i = 0; i < formArray.length; i ++) {
+      // console.log(formArray[i])
+      if (Array.isArray(formArray[i])) {
+        questions.push(formArray[i])
+      } else {
+        answerVal.push(formArray[i])
+      }
+    }
+    // console.log(questions);
+    const newQuiz = { questions: [] };
+    const allAnswers = []
+    // adds the questions to the new quiz obj and removes it from the questions array
+    for (let i = 0; i < questions.length; i++) {
+      const question = questions[i].shift()
+      for(let j = 0; j < questions[i].length; j++) {
+        allAnswers.push(questions[i][j]);
+      }
+      newQuiz.questions[i] = {text: question, answers: [{answer: allAnswers[i], is_correct:answerVal[i] }]}
+    }
+    console.log(newQuiz)
+    console.log(newQuiz.questions[0].text)
+    console.log(newQuiz.questions[0].answers[0].answer)
+    console.log(newQuiz.questions[0].answers[0].is_correct)
+    // the answers may need to be adjusted
+
     const user_id = Number(req.params.user_id);
     if (user_id === req.session.user_id) {
       const quiz_id = Number(req.params.quiz_id);
@@ -297,7 +331,7 @@ module.exports = (db) => {
       .then (quiz => {
         if (quiz.creator_id === req.session.user_id) {
           // store new quiz info
-          const newQuizInfo = req.body;
+          const newQuizInfo = newQuiz
           // updates quiz info in db
           hdb.editQuiz(newQuizInfo)
           .then( quiz => {

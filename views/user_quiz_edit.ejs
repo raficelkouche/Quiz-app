@@ -53,7 +53,6 @@
                     <th>
                       <form method="POST" action="/users/<%= quiz.creator_id %>/quizzes/<%= quiz.quiz_id %>?_method=PUT">
                         <input type="text" name="Q<%= quiz.questions.indexOf(question) + 1 %>">
-                      </form>
                     </th>
                     <th>Correct Answer</th>
                   </tr>
@@ -65,17 +64,17 @@
                       <td> <%= answer.answer_is_correct%></td>
                       <td> Update <%= String.fromCharCode(question.answers.indexOf(answer) + 65) %>: </td>
                       <td>
-                        <form method="POST" action="/users/<%= quiz.creator_id %>/quizzes/<%= quiz.quiz_id %>?_method=PUT">
-                          <input type="text" name="Q<%= quiz.questions.indexOf(question) + 1 %>A<%= question.answers.indexOf(answer) + 1 %>">
-                        </form>
+
+                          <input type="text" name="Q<%= quiz.questions.indexOf(question) + 1 %>">
+
                       </td>
                       <td>
-                        <form method="POST" action="/users/<%= quiz.creator_id %>/quizzes/<%= quiz.quiz_id %>?_method=PUT">
-                          <input type="radio" name="Q<%= quiz.questions.indexOf(question) + 1 %>A<%= question.answers.indexOf(answer) + 1 %>V<%= question.answers.indexOf(answer) +1 %>" value="true">
+
+                          <input type="radio" name="Q<%= quiz.questions.indexOf(question) + 1 %>A<%= question.answers.indexOf(answer) + 1 %>" value="true">
                           <label>True</label>
-                          <input type="radio" name="Q<%= quiz.questions.indexOf(question) + 1 %>A<%= question.answers.indexOf(answer) + 1 %>V<%= question.answers.indexOf(answer) +1 %>" value="false">
+                          <input type="radio" name="Q<%= quiz.questions.indexOf(question) + 1 %>A<%= question.answers.indexOf(answer) + 1 %>" value="false">
                           <label>False</label>
-                        </form>
+
                       </td>
                   </tr>
                   <% } %>
@@ -87,7 +86,7 @@
 
       <div class="user-quiz-buttons">
         <!-- submit edit quiz info to db, need to update helper function to get the creator id number -->
-        <form method="POST" action="/users/<%= quiz.creator_id %>/quizzes/<%= quiz.quiz_id %>?_method=PUT">
+        <!-- <form method="POST" action="/users/<%= quiz.creator_id %>/quizzes/<%= quiz.quiz_id %>?_method=PUT"> -->
           <button type="submit" class="btn btn-outline-info">Update Quiz</button>
         </form>
       </div>
