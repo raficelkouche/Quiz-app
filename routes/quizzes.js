@@ -35,6 +35,7 @@ module.exports = () => {
      owner_id: user_id,
      questions: {}
     };
+    console.log(req.body)
     let questionCounter = 1;
     let answerCounter = 1;
     const regex = /q\d/;

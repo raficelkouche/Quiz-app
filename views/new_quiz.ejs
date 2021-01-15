@@ -192,8 +192,8 @@
   <%- include('partials/_header') %>
   <main class="new-quiz-page">
     <h2>New Quiz</h2>
+    <form action="/quizzes/" method="POST" >
     <div class="new-quiz-details">
-      <form action="/quizzes/" method="POST" >
         <label for="">Title :</label>
           <input type="text" name="title" maxlength="30" required><br>
         <label for="">Description :</label>
