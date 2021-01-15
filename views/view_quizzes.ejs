@@ -18,64 +18,31 @@
   <main class="view-all-quizzes">
     <h2>Public Quizzes</h2>
     <div class="container all-quizzes">
-      <div class="card mb-3">
-        <div class="row g-0">
-          <div class="col-12 col-md-6 d-flex">
-            <img src="https://i.imgur.com/D0Iz7.jpeg" alt="">
-          </div>
-          <div class="col-12 col-md-3">
-            <div class="card-body card-content">
-              <h5 class="card-title">Basic Maths</h5>
-              <p class="card-text">More text to describe something.</p>
-            </div>
-          </div>
-          <div class="col-12 col-md-3">
-            <div class="card-body card-controls">
-              <a href="#" target="_blank" class="btn btn-primary">Take Quiz</a>
-              <a href="#" target="_blank" class="btn btn-primary">Share Quiz</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card mb-3">
-        <div class="row g-0">
-          <div class="col-12 col-sm-6">
-            <img src="https://i.imgur.com/D0Iz7.jpeg" alt="">
-          </div>
-          <div class="col-12 col-md-3">
-            <div class="card-body card-content">
-              <h5 class="card-title">Basic Maths</h5>
-              <p class="card-text">More text to describe something.</p>
-            </div>
-          </div>
-          <div class="col-12 col-md-3">
-            <div class="card-body card-controls">
-              <a href="#" target="_blank" class="btn btn-primary">Take Quiz</a>
-              <a href="#" target="_blank" class="btn btn-primary">Share Quiz</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card mb-3">
-        <div class="row g-0">
-          <div class="col-12 col-sm-6">
-            <img src="https://i.imgur.com/D0Iz7.jpeg" alt="">
-          </div>
-          <div class="col-12 col-md-3">
-            <div class="card-body card-content">
-              <h5 class="card-title">Basic Maths</h5>
-              <p class="card-text">More text to describe something.</p>
-            </div>
-          </div>
-          <div class="col-12 col-md-3">
-            <div class="card-body card-controls">
-              <a href="#" target="_blank" class="btn btn-primary">Take Quiz</a>
-              <a href="#" target="_blank" class="btn btn-primary">Share Quiz</a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <% for (const quiz of quizzes) {%>
 
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-12 col-md-6 d-flex">
+              <img src="<%= quiz.photo_url %>" alt="">
+            </div>
+            <div class="col-12 col-md-3">
+              <div class="card-body card-content">
+                <h5 class="card-title"><%=quiz.title%></h5>
+                <p class="card-text"><%= quiz.description%></p>
+              </div>
+            </div>
+            <div class="col-12 col-md-3">
+              <div class="card-body card-controls">
+                <a href="/quizzes/<%=quiz.id%>" target="_blank" class="btn btn-primary">Take Quiz</a>
+                <a href="#" target="_blank" class="btn btn-primary">Share Quiz</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      <%}%>
+    </div>
+    <div class="row justify-content-center">
+      <button type="button" id="load-more-quizzes" class="btn-lg btn-primary ">Load More</button>
     </div>
     </main>
   <!-- Bootstrap JS -->
@@ -86,9 +53,3 @@
 </body>
 </html>
 
-
-
-<!--    <% for (const quiz of quizzes) { %>
-      <div><%=quiz.title %></div>
-    <% } %>
-    <button id="load-more-quizzes">Load More</button> -->
