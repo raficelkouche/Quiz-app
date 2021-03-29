@@ -5,13 +5,12 @@ A web application that allows users to take public quizzes or create and share t
 
 ## Getting Started
 
-1. Create the `.env` by using `.env.example` as a reference: `cp .env.example .env`
+1. Create the `.env` by using `.env.example` as a reference: `cp .env.example .env`.
 2. Update the .env file with your correct local information (for the database connection).
 3. Install the dependencies: `npm install`.
 4. Fix binaries for sass: `npm rebuild node-sass`.
-5. Reset the database: `npm run db:reset`
-  - Check the db folder to see what gets created and seeded in the DB.
-7. Run the server: `npm run local`.
+5. Reset the database: `npm run db:reset`.
+6. Run the server: `npm run local`.
 
 ## Dependencies
 - Node 10.x or above
